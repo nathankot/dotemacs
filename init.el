@@ -21,7 +21,6 @@
 (setq scroll-margin 5 scroll-conservatively 9999 scroll-step 1) ;; Smooth scrolling
 (setq gc-cons-threshold 20000000) ;; Increase garbage collection limit
 
-;; Setup package repository
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
@@ -59,7 +58,7 @@
   :config (sml/apply-theme 'respectful))
 
 (use-package evil
-  ; We always want this to load
+  :commands evil-mode
   :ensure t
   :init (progn
           (setq evil-want-C-u-scroll t
@@ -67,6 +66,7 @@
                 evil-intercept-maps nil
                 evil-shift-width 2)
           (evil-mode 1))
+  ; These aren't exactly evil-specific, but they are fundamental to the workflow.
   :bind ("C-q" . delete-window)
   :config (progn
             (global-evil-search-highlight-persist t)
@@ -95,6 +95,9 @@
               :commands (evil-mode evil-surround-mode)
               :init (global-evil-surround-mode 1))
 
+            (define-key evil-normal-state-map (kbd "C-q") 'delete-window)
+            (define-key evil-normal-state-map (kbd "C-v") 'split-window-vertically)
+            (define-key evil-normal-state-map (kbd "C-V") 'split-window-horizontally)
             (define-key evil-normal-state-map (kbd "C-j") 'evil-window-next)
             (define-key evil-normal-state-map (kbd "C-k") 'evil-window-prev)
             (define-key evil-normal-state-map (kbd "C-l") 'evil-window-increase-width)
@@ -127,7 +130,10 @@
   :ensure t
   :init (require 'helm-config)
   :config (progn
-            (define-key helm-map (kbd "C-d") 'helm-delete-current-selection)))
+            (define-key helm-map (kbd "C-p") 'helm-keyboard-quit)
+            (define-key helm-map (kbd "C-j") 'helm-next-line)
+            (define-key helm-map (kbd "C-k") 'helm-previous-line)
+            (define-key helm-map (kbd "C-d") 'helm-buffer-run-kill-persistent)))
 
 ;; Projectile
 (use-package projectile
