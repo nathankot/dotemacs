@@ -163,8 +163,8 @@
   :ensure t
   :commands smex
   :init (progn
-          (define-key evil-motion-state-map ":" 'smex)
-          (define-key evil-motion-state-map ";" 'evil-ex)))
+          (define-key evil-motion-state-map (kbd ":") 'smex)
+          (define-key evil-motion-state-map (kbd "C-;") 'evil-ex)))
 
 ;; Git gutter +
 ; (define-key evil-normal-state-map (kbd "] c") 'git-gutter+-next-hunk)
