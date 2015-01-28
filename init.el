@@ -26,21 +26,12 @@
 (package-initialize)
 (require 'use-package)
 
+;; ESSENTIAL PACKAGES
+;; ================================================================================
+
 (use-package darkmine-theme
   :ensure t
   :init (load-theme 'darkmine t))
-
-(use-package relative-line-numbers
-  :ensure t
-  :init
-  (progn
-    ;; Function for displaying line numbers
-    (defun linum-format-func (line)
-      (concat " " (number-to-string (abs line)) " "))
-    (setq relative-line-numbers-format 'linum-format-func)
-    (add-hook 'prog-mode-hook 'relative-line-numbers-mode t)
-    (add-hook 'prog-mode-hook 'line-number-mode t)
-    (add-hook 'prog-mode-hook 'column-number-mode t)))
 
 (use-package company
   :ensure t
@@ -158,19 +149,34 @@
             (use-package helm-projectile :ensure t)
             (use-package helm-ag :ensure t)))
 
+
+;; NON-ESSENTIAL PACKAGES (NO ENSURE)
+;; ================================================================================
+
 ;; Smex
 (use-package smex
-  :ensure t
   :commands smex
   :init (progn
           (define-key evil-motion-state-map (kbd ":") 'smex)
+          (define-key evil-normal-state-map (kbd "C-;") 'evil-ex)
           (define-key evil-motion-state-map (kbd "C-;") 'evil-ex)))
 
-;; Git gutter +
-; (define-key evil-normal-state-map (kbd "] c") 'git-gutter+-next-hunk)
-; (define-key evil-normal-state-map (kbd "[ c") 'git-gutter+-previous-hunk)
-(evil-leader/set-key "g a" 'git-gutter+-stage-hunks)
-(add-hook 'after-init-hook 'global-git-gutter+-mode)
+;; Git gutter
+(use-package git-gutter
+  :commands git-gutter-mode
+  :init (global-git-gutter-mode +1)
+  :config (progn
+            (git-gutter:linum-setup)
+            (define-key evil-normal-state-map (kbd "] c") 'git-gutter:next-hunk)
+            (define-key evil-normal-state-map (kbd "[ c") 'git-gutter:previous-hunk)
+            (evil-leader/set-key "g a" 'git-gutter:stage-hunk)
+            (evil-leader/set-key "g r" 'git-gutter:revert-hunk)))
+
+(use-package linum-relative
+  :init (progn
+          (setq linum-relative-format "%3s   ")
+          (linum-on)
+          (global-linum-mode)))
 
 ;; Flycheck
 (require 'flycheck)
