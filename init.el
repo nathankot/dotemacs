@@ -133,7 +133,6 @@
             (define-key helm-map (kbd "C-k") 'helm-previous-line)
             (define-key helm-map (kbd "C-d") 'helm-buffer-run-kill-persistent)))
 
-;; Projectile
 (use-package projectile
   :ensure t
   :bind (("C-p" . helm-projectile)
@@ -153,7 +152,6 @@
 ;; NON-ESSENTIAL PACKAGES (NO ENSURE)
 ;; ================================================================================
 
-;; Smex
 (use-package smex
   :commands smex
   :init (progn
@@ -161,7 +159,6 @@
           (define-key evil-normal-state-map (kbd "C-;") 'evil-ex)
           (define-key evil-motion-state-map (kbd "C-;") 'evil-ex)))
 
-;; Git gutter
 (use-package git-gutter
   :commands git-gutter-mode
   :init (global-git-gutter-mode +1)
@@ -177,6 +174,22 @@
           (setq linum-relative-format "%3s   ")
           (linum-on)
           (global-linum-mode)))
+
+(use-package magit
+  :commands (magit-status magit-commit magit-commit-ammend
+             magit-diff-unstaged magit-diff-staged magit-blame-mode)
+  :init (progn
+            (evil-leader/set-key "g c" 'magit-commit)
+            (evil-leader/set-key "g C" 'magit-commit-amend)
+            (evil-leader/set-key "g s" 'magit-status)
+            (evil-leader/set-key "g d" 'magit-diff-unstaged)
+            (evil-leader/set-key "g D" 'magit-diff-staged)
+            (evil-leader/set-key "g b" 'magit-blame-mode))
+  :config (progn
+            (define-key magit-diff-mode-map (kbd "j") 'magit-goto-next-section)
+            (define-key magit-diff-mode-map (kbd "k") 'magit-goto-previous-section)
+            (define-key magit-status-mode-map (kbd "j") 'next-line)
+            (define-key magit-status-mode-map (kbd "k") 'previous-line)))
 
 ;; Flycheck
 (require 'flycheck)
@@ -222,14 +235,6 @@
 (add-to-list 'magic-mode-alist '("\/\*\*.*@jsx" . web-mode))
 (eval-after-load 'web-mode
   '(define-key prog-mode-map (kbd "C-x /") 'web-mode-element-close))
-
-;; Magit keybindings
-(evil-leader/set-key "g c" 'magit-commit)
-(evil-leader/set-key "g C" 'magit-commit-amend)
-(evil-leader/set-key "g s" 'magit-status)
-(evil-leader/set-key "g d" 'magit-diff-unstaged)
-(evil-leader/set-key "g D" 'magit-diff-staged)
-(evil-leader/set-key "g b" 'magit-blame-mode)
 
 ;; Auto-pair
 (require 'autopair)
