@@ -42,7 +42,9 @@
               :ensure t
               :init (progn
                       (add-to-list 'company-backends 'company-tern)
-                      (add-hook 'js-mode-hook (lambda() (tern-mode t))))))
+                      (add-hook 'js-mode-hook (lambda() (tern-mode t)))))
+            (define-key company-active-map (kbd "C-i") company-select-next)
+            (define-key company-active-map (kbd "C-o") company-select-previous))
   :idle (global-company-mode))
 
 (use-package smart-mode-line
