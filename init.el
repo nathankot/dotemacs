@@ -146,7 +146,7 @@
 (use-package projectile
   :ensure t
   :bind (("C-p" . helm-projectile)
-         ("C-s" . helm-projectile-ag))
+         ("C-P" . helm-projectile-ag))
   :init (define-key evil-normal-state-map (kbd "C-p") 'helm-projectile)
   :config (progn
             (add-to-list 'projectile-globally-ignored-directories ".cache")
