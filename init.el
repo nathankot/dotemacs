@@ -214,6 +214,13 @@
                   (flycheck-select-checker 'jsxhint-checker)
                   (flycheck-mode)))))))
 
+(use-package emmet
+  :commands emmet-mode
+  :init (progn
+          (add-hook 'sgml-mode-hook 'emmet-mode)
+          (add-hook 'css-mode-hook  'emmet-mode)
+          (add-hook 'web-mode-hook 'emmet-mode)))
+
 ;; LANGUAGE PACKS
 ;; ================================================================================
 
@@ -237,12 +244,5 @@
           (add-to-list 'magic-mode-alist '("\/\*\*.*@jsx" . web-mode)))
   :config (progn
             (define-key prog-mode-map (kbd "C-x /") 'web-mode-element-close)))
-
-(use-package emmet
-  :commands emmet-mode
-  :init (progn
-          (add-hook 'sgml-mode-hook 'emmet-mode)
-          (add-hook 'css-mode-hook  'emmet-mode)
-          (add-hook 'web-mode-hook 'emmet-mode)))
 
 (use-package php-mode)
