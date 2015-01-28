@@ -191,7 +191,8 @@
           (evil-leader/set-key "g d" 'magit-diff-unstaged)
           (evil-leader/set-key "g D" 'magit-diff-staged)
           (evil-leader/set-key "g b" 'magit-blame-mode)
-          (evil-leader/set-key "g w" 'magit-stage-all))
+          (evil-leader/set-key "g w" 'magit-stage-all)
+          (add-to-list 'evil-insert-state-modes 'magit-commit-mode))
   :config (progn
             (define-key magit-diff-mode-map (kbd "j") 'magit-goto-next-section)
             (define-key magit-diff-mode-map (kbd "k") 'magit-goto-previous-section)
