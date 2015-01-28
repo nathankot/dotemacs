@@ -167,6 +167,8 @@
   :ensure t
   :init (autopair-global-mode))
 
+(use-package editorconfig :ensure t)
+
 
 ;; NON-ESSENTIAL PACKAGES (NO ENSURE)
 ;; ================================================================================
