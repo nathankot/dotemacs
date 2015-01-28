@@ -224,6 +224,12 @@
           (add-hook 'css-mode-hook  'emmet-mode)
           (add-hook 'web-mode-hook 'emmet-mode)))
 
+(use-package rainbow-delimiters
+  :commands rainbow-delimiters-mode
+  :init (progn
+          (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)))
+
+
 ;; LANGUAGE PACKS
 ;; ================================================================================
 
