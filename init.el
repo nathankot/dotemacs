@@ -1,7 +1,8 @@
-;;; Package: Nathan's Emacs
+;;; package --- Nathan's Emacs
 ;;; Commentary:
 ;;; Extensive use of `use-package`
 
+;;; Code:
 (custom-set-variables
   '(custom-safe-themes
      (quote
@@ -44,8 +45,8 @@
               :init (progn
                       (add-to-list 'company-backends 'company-tern)
                       (add-hook 'js-mode-hook (lambda() (tern-mode t)))))
-            (define-key company-active-map (kbd "C-i") company-select-next)
-            (define-key company-active-map (kbd "C-o") company-select-previous))
+            (define-key company-active-map (kbd "C-i") 'company-select-next)
+            (define-key company-active-map (kbd "C-o") 'company-select-previous))
   :idle (global-company-mode))
 
 (use-package yasnippet
@@ -157,7 +158,7 @@
 
 (use-package projectile
   :ensure t
-  :bind (("C-p" . helm-projectile)
+  :bind ("C-p" . helm-projectile)
   :init (progn
           (define-key evil-normal-state-map (kbd "C-p") 'helm-projectile)
           (define-key evil-normal-state-map (kbd "C-s") 'helm-projectile-ag))
@@ -185,7 +186,8 @@
   :ensure t
   :init (autopair-global-mode))
 
-(use-package editorconfig :ensure t)
+(use-package editorconfig
+  :ensure t)
 
 
 ;; NON-ESSENTIAL PACKAGES (NO ENSURE)
@@ -216,7 +218,7 @@
           (global-linum-mode)))
 
 (use-package magit
-  :commands (magit-log magit-status magit-commit magit-commit-ammend
+  :commands (magit-log magit-status magit-commit magit-commit-amend
              magit-diff-unstaged magit-diff-staged magit-blame-mode
              magit-stage-all)
   :init (progn
@@ -239,6 +241,7 @@
   :commands global-flycheck-mode
   :idle (global-flycheck-mode)
   :config (progn
+            (evil-leader/set-key "e" 'flycheck-list-errors)
             (define-key evil-normal-state-map (kbd "] e") 'next-error)
             (define-key evil-normal-state-map (kbd "[ e") 'previous-error)
             (flycheck-define-checker jsxhint-checker
@@ -293,3 +296,6 @@
             (define-key prog-mode-map (kbd "C-x /") 'web-mode-element-close)))
 
 (use-package php-mode)
+
+(provide 'init)
+;;; init.el ends here
