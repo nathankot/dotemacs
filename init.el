@@ -128,7 +128,12 @@
 
 (use-package helm
   :ensure t
-  :init (require 'helm-config)
+  :init (progn
+          (require 'helm-config)
+          (setq helm-display-function (lambda (buf)
+            (split-window-vertically)
+            (other-window 1)
+            (switch-to-buffer buf))))
   :config (progn
             (define-key helm-map (kbd "C-p") 'helm-keyboard-quit)
             (define-key helm-map (kbd "C-j") 'helm-next-line)
