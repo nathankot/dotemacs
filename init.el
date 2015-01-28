@@ -86,6 +86,11 @@
               :commands (evil-mode evil-surround-mode)
               :init (global-evil-surround-mode 1))
 
+            (use-package evil-matchit
+              :ensure t
+              :commands (global-evil-matchit-mode evil-matchit-mode)
+              :init (global-evil-matchit-mode 1))
+
             (define-key evil-normal-state-map (kbd "C-q") 'delete-window)
             (define-key evil-normal-state-map (kbd "C-v") 'split-window-vertically)
             (define-key evil-normal-state-map (kbd "C-V") 'split-window-horizontally)
