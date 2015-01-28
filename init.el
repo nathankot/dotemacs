@@ -214,6 +214,8 @@
   :commands global-flycheck-mode
   :idle (global-flycheck-mode)
   :config (progn
+            (define-key evil-normal-state-map (kbd "] e") 'next-error)
+            (define-key evil-normal-state-map (kbd "[ e") 'previous-error)
             (flycheck-define-checker jsxhint-checker
               "A JSX syntax and style checker based on JSXHint."
               :command ("jsxhint" source)
