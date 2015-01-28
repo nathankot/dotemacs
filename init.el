@@ -130,6 +130,8 @@
   :ensure t
   :init (progn
           (require 'helm-config)
+          ; Make sure that helm always displayed below
+          ; the current window
           (setq helm-display-function (lambda (buf)
             (split-window-vertically)
             (other-window 1)
