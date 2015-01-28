@@ -36,6 +36,7 @@
 (use-package company
   :ensure t
   :commands global-company-mode
+  :idle-priority 1
   :config (progn
             (use-package company-tern
               :commands tern-mode
@@ -46,6 +47,18 @@
             (define-key company-active-map (kbd "C-i") company-select-next)
             (define-key company-active-map (kbd "C-o") company-select-previous))
   :idle (global-company-mode))
+
+(use-package yasnippet
+  :ensure t
+  :idle-priority 2
+  :commands yas-global-mode
+  :init (progn
+          (setq yas-snippet-dirs
+            '("~/.snippets/yasnippet-snippets"
+              "~/.snippets/personal")))
+  :config (progn
+            (push '(company-semantic :with company-yasnippet) company-backends))
+  :idle (yas-global-mode 1))
 
 (use-package smart-mode-line
   :ensure t
