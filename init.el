@@ -148,6 +148,10 @@
             (use-package helm-projectile :ensure t)
             (use-package helm-ag :ensure t)))
 
+(use-package autopair
+  :ensure t
+  :init (autopair-global-mode))
+
 
 ;; NON-ESSENTIAL PACKAGES (NO ENSURE)
 ;; ================================================================================
@@ -191,59 +195,51 @@
             (define-key magit-status-mode-map (kbd "j") 'next-line)
             (define-key magit-status-mode-map (kbd "k") 'previous-line)))
 
-;; Flycheck
-(require 'flycheck)
-(add-hook 'after-init-hook #'global-flycheck-mode)
-; (define-key evil-normal-state-map (kbd "] e") 'flycheck-next-error)
-; (define-key evil-normal-state-map (kbd "[ e") 'flycheck-previous-error)
-; New jsx checker
-(flycheck-define-checker jsxhint-checker
-  "A JSX syntax and style checker based on JSXHint."
-  :command ("jsxhint" source)
-  :error-patterns
-  ((error line-start (1+ nonl) ": line " line ", col " column ", " (message) line-end))
-  :modes (web-mode))
-(add-to-list 'flycheck-checkers 'jsxhint-checker)
-; Select the jsx checker under correct circumstances
-(add-hook 'web-mode-hook
-  (lambda ()
-    (when (equal web-mode-content-type "jsx")
-      ;; enable flycheck
-      (flycheck-select-checker 'jsxhint-checker)
-                    (flycheck-mode))))
+(use-package flycheck
+  :commands global-flycheck-mode
+  :idle (global-flycheck-mode)
+  :config (progn
+            (flycheck-define-checker jsxhint-checker
+              "A JSX syntax and style checker based on JSXHint."
+              :command ("jsxhint" source)
+              :error-patterns
+              ((error line-start (1+ nonl) ": line " line ", col " column ", " (message) line-end))
+              :modes (web-mode))
+            (add-to-list 'flycheck-checkers 'jsxhint-checker)
+            (when 'web-mode-hook
+              (add-hook 'web-mode-hook
+              (lambda ()
+                (when (equal web-mode-content-type "jsx")
+                  (flycheck-select-checker 'jsxhint-checker)
+                  (flycheck-mode)))))))
 
-;; Javascript
-(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-(add-to-list 'interpreter-mode-alist '("node" . js2-mode))
-; Setup jsx
-(add-to-list 'auto-mode-alist '("\\.jsx\\'" . jsx-mode))
-(defadvice web-mode-highlight-part (around tweak-jsx activate)
-  (if (equal web-mode-content-type "jsx")
-    (let ((web-mode-enable-part-face nil))
-      ad-do-it)
-    ad-do-it))
+(use-package js2-mode
+  :commands js2-mode
+  :init (progn
+          (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+          (add-to-list 'interpreter-mode-alist '("node" . js2-mode))))
 
-;; Web-mode
-(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-(add-to-list 'magic-mode-alist '("\/\*\*.*@jsx" . web-mode))
-(eval-after-load 'web-mode
-  '(define-key prog-mode-map (kbd "C-x /") 'web-mode-element-close))
 
-;; Auto-pair
-(require 'autopair)
-(autopair-global-mode)
+(use-package web-mode
+  :commands web-mode
+  :init (progn
+          (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+          (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+          (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+          (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+          (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+          (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+          (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+          (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+          (add-to-list 'magic-mode-alist '("\/\*\*.*@jsx" . web-mode)))
+  :config (progn
+            (define-key prog-mode-map (kbd "C-x /") 'web-mode-element-close)))
 
-;; Emmet
-(add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
-(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
-(add-hook 'web-mode-hook 'emmet-mode)
+(use-package emmet
+  :commands emmet-mode
+  :init (progn
+          (add-hook 'sgml-mode-hook 'emmet-mode)
+          (add-hook 'css-mode-hook  'emmet-mode)
+          (add-hook 'web-mode-hook 'emmet-mode)))
 
-;; PHP
-(require 'php-mode)
+(use-package php-mode)
