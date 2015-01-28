@@ -38,9 +38,11 @@
   :commands global-company-mode
   :config (progn
             (use-package company-tern
+              :commands tern-mode
               :ensure t
-              :init (add-to-list 'company-backends 'company-tern)
-              :config (add-hook 'js-mode-hook (lambda() (tern-mode t)))))
+              :init (progn
+                      (add-to-list 'company-backends 'company-tern)
+                      (add-hook 'js-mode-hook (lambda() (tern-mode t))))))
   :idle (global-company-mode))
 
 (use-package smart-mode-line
