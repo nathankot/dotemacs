@@ -180,15 +180,16 @@
           (global-linum-mode)))
 
 (use-package magit
-  :commands (magit-status magit-commit magit-commit-ammend
+  :commands (magit-log magit-status magit-commit magit-commit-ammend
              magit-diff-unstaged magit-diff-staged magit-blame-mode)
   :init (progn
-            (evil-leader/set-key "g c" 'magit-commit)
-            (evil-leader/set-key "g C" 'magit-commit-amend)
-            (evil-leader/set-key "g s" 'magit-status)
-            (evil-leader/set-key "g d" 'magit-diff-unstaged)
-            (evil-leader/set-key "g D" 'magit-diff-staged)
-            (evil-leader/set-key "g b" 'magit-blame-mode))
+          (evil-leader/set-key "g l" 'magit-log)
+          (evil-leader/set-key "g c" 'magit-commit)
+          (evil-leader/set-key "g C" 'magit-commit-amend)
+          (evil-leader/set-key "g s" 'magit-status)
+          (evil-leader/set-key "g d" 'magit-diff-unstaged)
+          (evil-leader/set-key "g D" 'magit-diff-staged)
+          (evil-leader/set-key "g b" 'magit-blame-mode))
   :config (progn
             (define-key magit-diff-mode-map (kbd "j") 'magit-goto-next-section)
             (define-key magit-diff-mode-map (kbd "k") 'magit-goto-previous-section)
