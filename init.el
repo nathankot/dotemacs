@@ -125,7 +125,9 @@
 
 (use-package helm
   :ensure t
-  :init (require 'helm-config))
+  :init (require 'helm-config)
+  :config (progn
+            (define-key helm-map (kbd "C-d") 'helm-delete-current-selection)))
 
 ;; Projectile
 (use-package projectile
@@ -144,9 +146,12 @@
             (use-package helm-ag :ensure t)))
 
 ;; Smex
-(global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "M-X") 'smex-major-mode-commands)
-(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+(use-package smex
+  :ensure t
+  :commands smex
+  :init (progn
+          (define-key evil-motion-state-map ":" 'smex)
+          (define-key evil-motion-state-map ";" 'evil-ex)))
 
 ;; Git gutter +
 ; (define-key evil-normal-state-map (kbd "] c") 'git-gutter+-next-hunk)
