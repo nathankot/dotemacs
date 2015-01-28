@@ -148,6 +148,16 @@
             (use-package helm-projectile :ensure t)
             (use-package helm-ag :ensure t)))
 
+(use-package perspective
+  :ensure t
+  :commands (persp-mode persp-kill persp-switch persp-next persp-prev)
+  :init (persp-mode)
+  :config (progn
+            (use-package persp-projectile :ensure t)
+            (define-key evil-normal-state-map (kbd "C-@") 'persp-switch)
+            (define-key evil-normal-state-map (kbd "TAB") 'persp-next)
+            (define-key evil-normal-state-map (kbd "DEL") 'persp-prev)))
+
 (use-package autopair
   :ensure t
   :init (autopair-global-mode))
@@ -158,6 +168,7 @@
 
 (use-package smex
   :commands smex
+  :bind ("M-x" . smex)
   :init (progn
           (define-key evil-motion-state-map (kbd ":") 'smex)
           (define-key evil-normal-state-map (kbd "C-;") 'evil-ex)
