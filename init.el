@@ -56,6 +56,8 @@
           (eval-after-load "flycheck" '(diminish 'flycheck-mode " f"))
           (eval-after-load "git-gutter" '(diminish 'git-gutter-mode))
           (eval-after-load "autopair" '(diminish 'autopair-mode))
+          (eval-after-load "js2-mode" '(diminish 'js2-minor-mode))
+          (eval-after-load "tern" '(diminish 'tern-mode " T"))
           (eval-after-load "projectile" '(diminish 'projectile-mode))))
 
 (use-package evil
@@ -117,19 +119,30 @@
 
 (use-package company
   :ensure t
-  :commands global-company-mode
+  :commands (global-company-mode company-mode)
   :idle-priority 1
   :config (progn
-            (use-package company-tern
-              :commands tern-mode
-              :ensure t
-              :init (progn
-                      (add-to-list 'company-backends 'company-tern)
-                      (add-hook 'js-mode-hook (lambda() (tern-mode t)))))
+            ; Add custom backends
+            (add-to-list 'company-backends 'company-tern)
+            ; Swap some keybindings
             (define-key company-active-map (kbd "C-i") 'company-select-next)
-            (define-key company-active-map (kbd "C-o") 'company-select-previous)
-            (add-hook 'less-css-mode-hook (lambda () (set-q-local company-backends '((company-css))))))
+            (define-key company-active-map (kbd "C-o") 'company-select-previous))
   :idle (global-company-mode))
+
+(use-package company-css
+  :commands (company-css)
+  :init (progn
+          (add-hook 'less-css-mode-hook (lambda () (setq-local company-backends '((company-css)))))))
+
+(use-package tern
+  :commands (tern-mode)
+  :ensure t
+  :init (progn
+          (add-hook 'js-mode-hook 'tern-mode)))
+
+(use-package company-tern
+  :ensure t
+  :commands (company-mode company-tern))
 
 (use-package yasnippet
   :ensure t
@@ -310,10 +323,11 @@
 ;; ================================================================================
 
 (use-package js2-mode
-  :commands js2-mode
+  :commands (js2-mode js-mode js2-minor-mode)
   :init (progn
-          (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-          (add-to-list 'interpreter-mode-alist '("node" . js2-mode))))
+          ; Use js2-mode as a minor mode (preferred way)
+          (add-hook 'js-mode-hook 'js2-minor-mode)
+          (add-to-list 'interpreter-mode-alist '("node" . js-mode))))
 
 (use-package web-mode
   :commands web-mode
@@ -326,7 +340,8 @@
           (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
           (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
           (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-          (add-to-list 'magic-mode-alist '("\/\*\*.*@jsx" . web-mode)))
+          (add-to-list 'magic-mode-alist '("\/\*\*.*@jsx" . web-mode))
+          (add-to-list 'magic-mode-alist '("\/\*\*.*@jsx" . js2-minor-mode)))
   :config (progn
             (define-key prog-mode-map (kbd "C-x /") 'web-mode-element-close)))
 
