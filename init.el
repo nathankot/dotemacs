@@ -239,11 +239,7 @@
 
 (use-package smex
   :commands smex
-  :bind ("M-x" . smex)
-  :init (progn
-          (define-key evil-motion-state-map (kbd ":") 'smex)
-          (define-key evil-normal-state-map (kbd "C-;") 'evil-ex)
-          (define-key evil-motion-state-map (kbd "C-;") 'evil-ex)))
+  :bind ("M-x" . smex))
 
 (use-package git-gutter
   :commands git-gutter-mode
