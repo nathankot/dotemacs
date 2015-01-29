@@ -132,6 +132,8 @@
 (use-package company-css
   :commands (company-css)
   :init (progn
+          ;; For stylus and jade mode
+          (add-hook 'sws-mode-hook (lambda () (setq-local company-backends '((company-css)))))
           (add-hook 'less-css-mode-hook (lambda () (setq-local company-backends '((company-css)))))))
 
 (use-package tern
@@ -349,6 +351,11 @@
   :commands less-css-mode
   :init (progn
           (add-to-list 'auto-mode-alist '("\\.less\\'" . less-css-mode))))
+
+(use-package stylus-mode
+  :commands stylus-mode
+  :init (progn
+          (add-to-list 'auto-mode-alist '("\\.stylus\\'" . stylus-mode))))
 
 (use-package php-mode)
 
