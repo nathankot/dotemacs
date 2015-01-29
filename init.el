@@ -49,6 +49,7 @@
 (use-package diminish
   :ensure t
   :init (progn
+          (eval-after-load "emmet" '(diminish 'emmet-mode " e"))
           (eval-after-load "undo-tree" '(diminish 'undo-tree-mode))
           (eval-after-load "company" '(diminish 'company-mode " c"))
           (eval-after-load "yasnippet" '(diminish 'yas-minor-mode " y"))
