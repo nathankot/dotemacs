@@ -103,7 +103,8 @@
                       (add-to-list 'company-backends 'company-tern)
                       (add-hook 'js-mode-hook (lambda() (tern-mode t)))))
             (define-key company-active-map (kbd "C-i") 'company-select-next)
-            (define-key company-active-map (kbd "C-o") 'company-select-previous))
+            (define-key company-active-map (kbd "C-o") 'company-select-previous)
+            (add-hook 'less-css-mode-hook (lambda () (set-q-local company-backends '((company-css))))))
   :idle (global-company-mode))
 
 (use-package yasnippet
@@ -296,6 +297,11 @@
           (add-to-list 'magic-mode-alist '("\/\*\*.*@jsx" . web-mode)))
   :config (progn
             (define-key prog-mode-map (kbd "C-x /") 'web-mode-element-close)))
+
+(use-package less-css-mode
+  :commands less-css-mode
+  :init (progn
+          (add-to-list 'auto-mode-alist '("\\.less\\'" . less-css-mode))))
 
 (use-package php-mode)
 
