@@ -20,6 +20,10 @@
 (prefer-coding-system 'utf-8)
 (setq current-language-environment "UTF-8")
 (setenv "LC_CTYPE" "UTF-8")
+
+;; Auto-fill on text buffers
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+
 ;; Other stuff
 (setenv "PATH" (concat (getenv "PATH") ":/opt/boxen/homebrew/bin"))
 (setq exec-path (append exec-path '("/opt/boxen/homebrew/bin")))
