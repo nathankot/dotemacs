@@ -12,7 +12,15 @@
 
 (custom-set-faces)
 
-;; Env
+;; Use UTF-8 encoding
+(setq locale-coding-system 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+(setq current-language-environment "UTF-8")
+(setenv "LC_CTYPE" "UTF-8")
+;; Other stuff
 (setenv "PATH" (concat (getenv "PATH") ":/opt/boxen/homebrew/bin"))
 (setq exec-path (append exec-path '("/opt/boxen/homebrew/bin")))
 (menu-bar-mode -1) ;; Disable menu bar
