@@ -121,6 +121,8 @@
   :ensure t
   :commands (global-company-mode company-mode)
   :idle-priority 1
+  :init (progn
+          (setq company-dabbrev-downcase nil))
   :config (progn
             ; Add custom backends
             (add-to-list 'company-backends 'company-tern)
