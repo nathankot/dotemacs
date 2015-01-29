@@ -256,9 +256,15 @@
   :commands global-flycheck-mode
   :idle (global-flycheck-mode)
   :config (progn
-            (evil-leader/set-key "e" 'flycheck-list-errors)
             (define-key evil-normal-state-map (kbd "] e") 'next-error)
             (define-key evil-normal-state-map (kbd "[ e") 'previous-error)
+
+            (use-package helm-flycheck
+              :ensure t
+              :commands helm-flycheck
+              :init (evil-leader/set-key "e" 'helm-flycheck))
+
+            ; Custom checkers
             (flycheck-define-checker jsxhint-checker
               "A JSX syntax and style checker based on JSXHint."
               :command ("jsxhint" source)
@@ -266,6 +272,8 @@
               ((error line-start (1+ nonl) ": line " line ", col " column ", " (message) line-end))
               :modes (web-mode))
             (add-to-list 'flycheck-checkers 'jsxhint-checker)
+
+            ; Checkers for formats
             (when 'web-mode-hook
               (add-hook 'web-mode-hook
               (lambda ()
