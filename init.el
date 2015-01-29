@@ -46,6 +46,17 @@
   :ensure t
   :init (load-theme 'darkmine t))
 
+(use-package diminish
+  :ensure t
+  :init (progn
+          (eval-after-load "undo-tree" '(diminish 'undo-tree-mode))
+          (eval-after-load "company" '(diminish 'company-mode " c"))
+          (eval-after-load "yasnippet" '(diminish 'yas-minor-mode " y"))
+          (eval-after-load "flycheck" '(diminish 'flycheck-mode " f"))
+          (eval-after-load "git-gutter" '(diminish 'git-gutter-mode))
+          (eval-after-load "autopair" '(diminish 'autopair-mode))
+          (eval-after-load "projectile" '(diminish 'projectile-mode))))
+
 (use-package evil
   :commands evil-mode
   :ensure t
