@@ -116,7 +116,8 @@
               "~/.snippets/personal")))
   :config (progn
             (push '(company-semantic :with company-yasnippet) company-backends)
-            (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand))
+            (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand)
+            (add-hook 'web-mode-hook (lambda () (yas-activate-extra-mode 'js-mode))))
   :idle (yas-global-mode 1))
 
 (use-package smart-mode-line
