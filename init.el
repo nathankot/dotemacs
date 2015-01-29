@@ -327,6 +327,9 @@
 (use-package js2-mode
   :commands (js2-mode js-mode js2-minor-mode)
   :init (progn
+          (setq js2-highlight-level 3)
+          (setq js2-mode-show-parse-errors nil)
+          (setq js2-mode-show-strict-warnings nil)
           ; Use js2-mode as a minor mode (preferred way)
           (add-hook 'js-mode-hook 'js2-minor-mode)
           (add-to-list 'interpreter-mode-alist '("node" . js-mode))))
