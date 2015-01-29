@@ -34,38 +34,6 @@
   :ensure t
   :init (load-theme 'darkmine t))
 
-(use-package company
-  :ensure t
-  :commands global-company-mode
-  :idle-priority 1
-  :config (progn
-            (use-package company-tern
-              :commands tern-mode
-              :ensure t
-              :init (progn
-                      (add-to-list 'company-backends 'company-tern)
-                      (add-hook 'js-mode-hook (lambda() (tern-mode t)))))
-            (define-key company-active-map (kbd "C-i") 'company-select-next)
-            (define-key company-active-map (kbd "C-o") 'company-select-previous))
-  :idle (global-company-mode))
-
-(use-package yasnippet
-  :ensure t
-  :idle-priority 2
-  :commands yas-global-mode
-  :init (progn
-          (setq yas-snippet-dirs
-            '("~/.snippets/yasnippet-snippets"
-              "~/.snippets/personal")))
-  :config (progn
-            (push '(company-semantic :with company-yasnippet) company-backends))
-  :idle (yas-global-mode 1))
-
-(use-package smart-mode-line
-  :ensure t
-  :init (sml/setup)
-  :config (sml/apply-theme 'respectful))
-
 (use-package evil
   :commands evil-mode
   :ensure t
@@ -122,6 +90,39 @@
             (define-key evil-normal-state-map (kbd "S-SPC") 'evil-search-backward)
             (define-key evil-normal-state-map (kbd "] l") 'occur-next)
             (define-key evil-normal-state-map (kbd "[ l") 'occur-prev)))
+
+(use-package company
+  :ensure t
+  :commands global-company-mode
+  :idle-priority 1
+  :config (progn
+            (use-package company-tern
+              :commands tern-mode
+              :ensure t
+              :init (progn
+                      (add-to-list 'company-backends 'company-tern)
+                      (add-hook 'js-mode-hook (lambda() (tern-mode t)))))
+            (define-key company-active-map (kbd "C-i") 'company-select-next)
+            (define-key company-active-map (kbd "C-o") 'company-select-previous))
+  :idle (global-company-mode))
+
+(use-package yasnippet
+  :ensure t
+  :idle-priority 2
+  :commands yas-global-mode
+  :init (progn
+          (setq yas-snippet-dirs
+            '("~/.snippets/yasnippet-snippets"
+              "~/.snippets/personal")))
+  :config (progn
+            (push '(company-semantic :with company-yasnippet) company-backends)
+            (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand))
+  :idle (yas-global-mode 1))
+
+(use-package smart-mode-line
+  :ensure t
+  :init (sml/setup)
+  :config (sml/apply-theme 'respectful))
 
 (use-package ido
   :commands ido-mode
@@ -254,7 +255,7 @@
             (when 'web-mode-hook
               (add-hook 'web-mode-hook
               (lambda ()
-                (when (equal web-mode-content-type "jsx")
+                (when (equal 'web-mode-content-type "jsx")
                   (flycheck-select-checker 'jsxhint-checker)
                   (flycheck-mode)))))))
 
