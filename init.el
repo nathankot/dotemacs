@@ -81,6 +81,7 @@
               :config (progn
                         (evil-leader/set-leader ",")
                         (evil-leader/set-key "w" 'save-buffer)
+                        (evil-leader/set-key "i" 'evil-window-move-far-left)
                         (evil-leader/set-key "SPC" 'evil-search-highlight-persist-remove-all)))
 
             (use-package evil-commentary
@@ -110,6 +111,8 @@
             (define-key evil-normal-state-map (kbd "C-k") 'evil-window-prev)
             (define-key evil-normal-state-map (kbd "C-l") 'evil-window-increase-width)
             (define-key evil-normal-state-map (kbd "C-h") 'evil-window-decrease-width)
+            (define-key evil-normal-state-map (kbd "C-H") 'evil-window-move-far-left)
+            (define-key evil-normal-state-map (kbd "C-L") 'evil-window-move-far-right)
             (define-key evil-visual-state-map (kbd "SPC") 'evil-search-forward)
             (define-key evil-normal-state-map (kbd "SPC") 'evil-search-forward)
             (define-key evil-visual-state-map (kbd "S-SPC") 'evil-search-backward)
