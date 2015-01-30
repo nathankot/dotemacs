@@ -237,15 +237,16 @@
 (use-package editorconfig
   :ensure t)
 
-
-;; NON-ESSENTIAL PACKAGES (NO ENSURE)
-;; ================================================================================
+(use-package helm-dash
+  :ensure t)
 
 (use-package smex
+  :ensure t
   :commands smex
   :bind ("M-x" . smex))
 
 (use-package git-gutter
+  :ensure t
   :commands git-gutter-mode
   :init (global-git-gutter-mode +1)
   :config (progn
@@ -256,12 +257,14 @@
             (evil-leader/set-key "g r" 'git-gutter:revert-hunk)))
 
 (use-package linum-relative
+  :ensure t
   :init (progn
           (setq linum-relative-format "%3s   ")
           (linum-on)
           (global-linum-mode)))
 
 (use-package magit
+  :ensure t
   :commands (magit-log magit-status magit-commit magit-commit-amend
              magit-diff-unstaged magit-diff-staged magit-blame-mode
              magit-stage-all)
@@ -282,6 +285,7 @@
             (define-key magit-status-mode-map (kbd "k") 'previous-line)))
 
 (use-package flycheck
+  :ensure t
   :commands global-flycheck-mode
   :idle (global-flycheck-mode)
   :config (progn
@@ -311,6 +315,7 @@
                   (flycheck-mode)))))))
 
 (use-package emmet
+  :ensure t
   :commands emmet-mode
   :init (progn
           (add-hook 'sgml-mode-hook 'emmet-mode)
@@ -318,6 +323,7 @@
           (add-hook 'web-mode-hook 'emmet-mode)))
 
 (use-package rainbow-delimiters
+  :ensure t
   :commands rainbow-delimiters-mode
   :init (progn
           (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)))
@@ -327,6 +333,7 @@
 ;; ================================================================================
 
 (use-package js2-mode
+  :ensure t
   :commands (js2-mode js-mode js2-minor-mode)
   :init (progn
           (setq js2-highlight-level 3)
@@ -337,6 +344,7 @@
           (add-to-list 'interpreter-mode-alist '("node" . js-mode))))
 
 (use-package web-mode
+  :ensure t
   :commands web-mode
   :init (progn
           (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
@@ -352,16 +360,19 @@
             (define-key prog-mode-map (kbd "C-x /") 'web-mode-element-close)))
 
 (use-package less-css-mode
+  :ensure t
   :commands less-css-mode
   :init (progn
           (add-to-list 'auto-mode-alist '("\\.less\\'" . less-css-mode))))
 
 (use-package stylus-mode
+  :ensure t
   :commands stylus-mode
   :init (progn
           (add-to-list 'auto-mode-alist '("\\.stylus\\'" . stylus-mode))))
 
-(use-package php-mode)
+(use-package php-mode
+  :ensure t)
 
 (provide 'init)
 ;;; init.el ends here
