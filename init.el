@@ -240,11 +240,21 @@
 
 (use-package helm-dash
   :ensure t
-  :commands (helm-dash helm-dash-at-point)
   :init (progn
           (setq helm-dash-docsets-path "~/.docset")
           (evil-leader/set-key "f" 'helm-dash-at-point)
-          (define-key evil-normal-state-map (kbd "C-f") 'helm-dash)))
+          (define-key evil-normal-state-map (kbd "C-f") 'helm-dash))
+  :config (progn
+            (defun js-doc()
+              (interactive)
+              (setq-local helm-dash-docsets '("AngularJS" "BackboneJS" "Lo-Dash" "Javascript" "NodeJS" "jQuery" "Chai")))
+
+            (defun web-doc()
+              (interactive)
+              (setq-local helm-dash-docsets '("Javascript" "HTML" "CSS" "Lo-Dash" "jQuery" "Bootstrap_3")))
+
+            (add-hook 'js-mode-hook 'js-doc)
+            (add-hook 'web-mode-hook 'web-doc)))
 
 (use-package smex
   :ensure t
