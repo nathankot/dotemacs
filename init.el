@@ -199,6 +199,7 @@
             (other-window 1)
             (switch-to-buffer buf))))
   :config (progn
+            (define-key helm-map (kbd "ESC") 'helm-keyboard-quit)
             (define-key helm-map (kbd "C-p") 'helm-keyboard-quit)
             (define-key helm-map (kbd "C-j") 'helm-next-line)
             (define-key helm-map (kbd "C-k") 'helm-previous-line)
