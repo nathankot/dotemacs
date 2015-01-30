@@ -239,7 +239,12 @@
   :ensure t)
 
 (use-package helm-dash
-  :ensure t)
+  :ensure t
+  :commands (helm-dash helm-dash-at-point)
+  :init (progn
+          (setq helm-dash-docsets-path "~/.docset")
+          (evil-leader/set-key "f" 'helm-dash-at-point)
+          (define-key evil-normal-state-map (kbd "C-f") 'helm-dash)))
 
 (use-package smex
   :ensure t
