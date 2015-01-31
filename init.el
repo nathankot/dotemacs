@@ -58,6 +58,9 @@
   :ensure t
   :init (load-theme 'darkmine t))
 
+(use-package :diminish
+  :ensure t)
+
 (use-package "undo-tree"
   :diminish undo-tree-mode)
 
