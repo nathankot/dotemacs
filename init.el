@@ -4,13 +4,23 @@
 
 ;;; Code:
 (custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
   '(custom-safe-themes
      (quote
-       ("c5a044ba03d43a725bd79700087dea813abcb6beb6be08c7eb3303ed90782482"
-        "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f"
-        default))))
+       ("c5a044ba03d43a725bd79700087dea813abcb6beb6be08c7eb3303ed90782482" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default)))
+ '(global-yascroll-bar-mode t)
+ '(yascroll:scroll-bar (quote (right-fringe left-fringe text-area))))
 
-(custom-set-faces)
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(yascroll:thumb-fringe ((t (:background "black" :foreground "black"))))
+ '(yascroll:thumb-text-area ((t (:background "black")))))
 
 ;; Use UTF-8 encoding
 (setq locale-coding-system 'utf-8)
@@ -48,19 +58,8 @@
   :ensure t
   :init (load-theme 'darkmine t))
 
-(use-package diminish
-  :ensure t
-  :init (progn
-          (eval-after-load "emmet-mode" '(diminish 'emmet-mode " e"))
-          (eval-after-load "undo-tree" '(diminish 'undo-tree-mode))
-          (eval-after-load "company" '(diminish 'company-mode " c"))
-          (eval-after-load "yasnippet" '(diminish 'yas-minor-mode " y"))
-          (eval-after-load "flycheck" '(diminish 'flycheck-mode " f"))
-          (eval-after-load "git-gutter" '(diminish 'git-gutter-mode))
-          (eval-after-load "autopair" '(diminish 'autopair-mode))
-          (eval-after-load "js2-mode" '(diminish 'js2-minor-mode))
-          (eval-after-load "tern" '(diminish 'tern-mode " T"))
-          (eval-after-load "projectile" '(diminish 'projectile-mode))))
+(use-package "undo-tree"
+  :diminish undo-tree-mode)
 
 (use-package evil
   :commands evil-mode
@@ -124,6 +123,7 @@
 
 (use-package company
   :ensure t
+  :diminish " c"
   :commands (global-company-mode company-mode)
   :idle-priority 1
   :init (progn
@@ -147,6 +147,7 @@
 
 (use-package tern
   :commands (tern-mode)
+  :diminish " T"
   :ensure t
   :init (progn
           (add-hook 'js-mode-hook 'tern-mode)))
@@ -157,6 +158,7 @@
 
 (use-package yasnippet
   :ensure t
+  :diminish (yas-minor-mode . " y")
   :idle-priority 2
   :commands yas-global-mode
   :init (progn
@@ -210,6 +212,7 @@
 
 (use-package projectile
   :ensure t
+  :diminish projectile-mode
   :bind ("C-p" . helm-projectile)
   :init (progn
           (define-key evil-normal-state-map (kbd "C-p") 'helm-projectile)
@@ -236,6 +239,7 @@
 
 (use-package autopair
   :ensure t
+  :diminish autopair-mode
   :init (autopair-global-mode))
 
 (use-package editorconfig
@@ -266,6 +270,7 @@
 
 (use-package git-gutter
   :ensure t
+  :diminish git-gutter-mode
   :commands git-gutter-mode
   :init (global-git-gutter-mode +1)
   :config (progn
@@ -305,6 +310,7 @@
 
 (use-package flycheck
   :ensure t
+  :diminish " f"
   :commands global-flycheck-mode
   :idle (global-flycheck-mode)
   :config (progn
@@ -334,6 +340,7 @@
                   (flycheck-mode)))))))
 
 (use-package emmet-mode
+  :diminish " e"
   :ensure t
   :commands emmet-mode
   :init (progn
@@ -347,12 +354,19 @@
   :init (progn
           (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)))
 
+(use-package yascroll
+  :ensure t
+  :diminish
+  :commands (yascroll-bar-mode)
+  :init (global-yascroll-bar-mode 1))
+
 
 ;; LANGUAGE PACKS
 ;; ================================================================================
 
 (use-package js2-mode
   :ensure t
+  :diminish js2-minor-mode
   :commands (js2-mode js-mode js2-minor-mode)
   :init (progn
           (setq js2-highlight-level 3)
