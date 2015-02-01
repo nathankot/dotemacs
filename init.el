@@ -357,12 +357,6 @@
   :init (progn
           (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)))
 
-(use-package yascroll
-  :ensure t
-  :diminish
-  :commands (yascroll-bar-mode)
-  :init (global-yascroll-bar-mode 1))
-
 
 ;; LANGUAGE PACKS
 ;; ================================================================================
