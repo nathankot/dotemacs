@@ -44,6 +44,8 @@
 (setq scroll-margin 5 scroll-conservatively 9999 scroll-step 1) ;; Smooth scrolling
 (setq gc-cons-threshold 20000000) ;; Increase garbage collection limit
 (setq make-backup-files nil)
+(setq backup-by-copying t)
+(setq backup-directory-alist '(("." . "~/.emacs.saves")))
 (setq visible-bell 1)
 
 (require 'package)
