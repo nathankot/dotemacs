@@ -405,5 +405,9 @@
 (use-package php-mode
   :ensure t)
 
+(use-package markdown-mode
+  :ensure t
+  :commands markdown-mode)
+
 (provide 'init)
 ;;; init.el ends here
