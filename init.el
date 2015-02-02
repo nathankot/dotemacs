@@ -411,5 +411,9 @@
   :ensure t
   :commands markdown-mode)
 
+(use-package lua-mode
+  :ensure t
+  :commands lua-mode)
+
 (provide 'init)
 ;;; init.el ends here
