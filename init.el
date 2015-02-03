@@ -147,13 +147,20 @@
   :commands (company-css)
   :init (progn
           ;; For stylus and jade mode
-          (add-hook 'sws-mode-hook (lambda () (setq-local company-backends '((company-css)))))
-          (add-hook 'less-css-mode-hook (lambda () (setq-local company-backends '((company-css)))))))
+          (add-hook 'sws-mode-hook
+            (lambda ()
+              (setq-local company-backends (add 'company-css company-backends))))
+
+          (add-hook 'less-css-mode-hook
+            (lambda ()
+              (setq-local company-backends (add 'company-css company-backends))))))
 
 (use-package company-xcode
   :commands (company-xcode)
   :init (progn
-          (add-hook 'swift-mode-hook (lambda () (setq-local company-backends '((company-xcode) (company-dabbrev)))))))
+          (add-hook 'swift-mode-hook
+            (lambda ()
+              (setq-local company-backends (add 'company-xcode company-backends))))))
 
 (use-package tern
   :commands (tern-mode)
@@ -176,7 +183,8 @@
             '("~/.snippets/yasnippet-snippets"
               "~/.snippets/personal")))
   :config (progn
-            (push '(company-semantic :with company-yasnippet) company-backends)
+            (setq company-backends (remove 'company-dabbrev company-backends))
+            (setq company-backends (append company-backends '(company-yasnippet company-dabbrev-code)))
             (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand)
             (add-hook 'web-mode-hook (lambda () (yas-activate-extra-mode 'js-mode))))
   :idle (yas-global-mode 1))
