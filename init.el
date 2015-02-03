@@ -150,6 +150,11 @@
           (add-hook 'sws-mode-hook (lambda () (setq-local company-backends '((company-css)))))
           (add-hook 'less-css-mode-hook (lambda () (setq-local company-backends '((company-css)))))))
 
+(use-package company-xcode
+  :commands (company-xcode)
+  :init (progn
+          add-hook 'swift-mode-hook (lambda () (setq-local company-backends '((company-xcode) (company-dabbrev))))))
+
 (use-package tern
   :commands (tern-mode)
   :diminish " T"
@@ -414,6 +419,10 @@
 (use-package lua-mode
   :ensure t
   :commands lua-mode)
+
+(use-package swift-mode
+  :ensure t
+  :commands swift-mode)
 
 (provide 'init)
 ;;; init.el ends here
