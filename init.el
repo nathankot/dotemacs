@@ -153,7 +153,7 @@
 (use-package company-xcode
   :commands (company-xcode)
   :init (progn
-          add-hook 'swift-mode-hook (lambda () (setq-local company-backends '((company-xcode) (company-dabbrev))))))
+          (add-hook 'swift-mode-hook (lambda () (setq-local company-backends '((company-xcode) (company-dabbrev)))))))
 
 (use-package tern
   :commands (tern-mode)
@@ -340,6 +340,7 @@
               ((error line-start (1+ nonl) ": line " line ", col " column ", " (message) line-end))
               :modes (web-mode))
             (add-to-list 'flycheck-checkers 'jsxhint-checker)
+            (add-to-list 'flycheck-checkers 'swift)
 
             ; Checkers for formats
             (when 'web-mode-hook
