@@ -303,6 +303,7 @@
             (evil-define-key 'normal neotree-mode-map "q" 'neotree-hide)
             (evil-define-key 'normal neotree-mode-map "o" 'neotree-enter)
             (evil-define-key 'normal neotree-mode-map "r" 'neotree-refresh)
+            (evil-define-key 'normal neotree-mode-map "h" 'neotree-hidden-file-toggle)
             (evil-define-key 'normal neotree-mode-map (kbd "m d") 'neotree-delete-node)
             (evil-define-key 'normal neotree-mode-map (kbd "m a") 'neotree-create-node)
             (evil-define-key 'normal neotree-mode-map (kbd "m m") 'neotree-rename-node)))
