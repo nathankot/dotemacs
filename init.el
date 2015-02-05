@@ -66,6 +66,11 @@
 (use-package "undo-tree"
   :diminish undo-tree-mode)
 
+(use-package "saveplace"
+  :init (progn
+          (setq save-place-file "~/.emacs/saveplaces")
+          (setq-default save-place t)))
+
 (use-package evil
   :commands evil-mode
   :ensure t
