@@ -69,12 +69,10 @@
 (use-package diminish
   :ensure t)
 
-(use-package "undo-tree"
-  :commands global-undo-tree-mode
-  :diminish undo-tree-mode
-  :init global-undo-tree-mode)
+(use-package undo-tree
+  :diminish undo-tree-mode)
 
-(use-package "saveplace"
+(use-package saveplace
   :init (progn
           (setq save-place-file "~/.emacs/saveplaces")
           (setq-default save-place t)))
@@ -99,7 +97,10 @@
   ; These aren't exactly evil-specific, but they are fundamental to the workflow.
   :bind ("C-q" . delete-window)
   :config (progn
-            (global-evil-search-highlight-persist t)
+            (use-package evil-search-highlight-persist
+               :ensure t
+               :commands global-evil-search-highlight-persist
+               :init (global-evil-search-highlight-persist))
 
             (use-package evil-leader
               :ensure t
