@@ -117,6 +117,16 @@
                       (define-key evil-normal-state-map (kbd "+") 'evil-numbers/inc-at-pt)
                       (define-key evil-normal-state-map (kbd "-") 'evil-numbers/dec-at-pt)))
 
+
+            ; Make `esc` more useful
+            (define-key evil-normal-state-map [escape] 'keyboard-quit)
+            (define-key evil-visual-state-map [escape] 'keyboard-quit)
+            (define-key minibuffer-local-map [escape] 'keyboard-quit)
+            (define-key minibuffer-local-ns-map [escape] 'keyboard-quit)
+            (define-key minibuffer-local-completion-map [escape] 'keyboard-quit)
+            (define-key minibuffer-local-must-match-map [escape] 'keyboard-quit)
+            (define-key minibuffer-local-isearch-map [escape] 'keyboard-quit)
+
             (define-key evil-normal-state-map (kbd "C-q") 'delete-window)
             (define-key evil-normal-state-map (kbd "C-v") 'split-window-vertically)
             (define-key evil-normal-state-map (kbd "C-V") 'split-window-horizontally)
@@ -230,7 +240,7 @@
             (switch-to-buffer buf))))
   :config (progn
             (define-key helm-map (kbd "C-b") 'helm-buffer-list)
-            (define-key helm-map (kbd "ESC") 'helm-keyboard-quit)
+            (define-key helm-map [escape] 'helm-keyboard-quit)
             (define-key helm-map (kbd "C-p") 'helm-keyboard-quit)
             (define-key helm-map (kbd "C-j") 'helm-next-line)
             (define-key helm-map (kbd "C-k") 'helm-previous-line)
