@@ -110,6 +110,13 @@
               :commands (global-evil-matchit-mode evil-matchit-mode)
               :init (global-evil-matchit-mode 1))
 
+            (use-package evil-numbers
+              :ensure t
+              :commands (evil-numbers/dec-at-pt evil-numbers/inc-at-pt)
+              :init (progn
+                      (define-key evil-normal-state-map (kbd "+") 'evil-numbers/inc-at-pt)
+                      (define-key evil-normal-state-map (kbd "-") 'evil-numbers/dec-at-pt)))
+
             (define-key evil-normal-state-map (kbd "C-q") 'delete-window)
             (define-key evil-normal-state-map (kbd "C-v") 'split-window-vertically)
             (define-key evil-normal-state-map (kbd "C-V") 'split-window-horizontally)
