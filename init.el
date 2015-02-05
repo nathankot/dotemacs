@@ -484,7 +484,8 @@
           (add-to-list 'auto-mode-alist '("\\.stylus\\'" . stylus-mode))))
 
 (use-package php-mode
-  :ensure t)
+  :ensure t
+  :commands php-mode)
 
 (use-package markdown-mode
   :ensure t
@@ -497,6 +498,10 @@
 (use-package swift-mode
   :ensure t
   :commands swift-mode)
+
+(use-package puppet-mode
+  :ensure t
+  :commands puppet-mode)
 
 (provide 'init)
 ;;; init.el ends here
