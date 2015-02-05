@@ -247,6 +247,24 @@
             (use-package helm-projectile :ensure t)
             (use-package helm-ag :ensure t)))
 
+(use-package neotree
+  :ensure t
+  :commands (neotree-dir)
+  :init (progn
+          (defun projectile-neotree-project-root ()
+            (interactive)
+            (neotree-dir (projectile-project-root)))
+          (define-key evil-normal-state-map (kbd "C-t") 'projectile-neotree-project-root))
+  :config (progn
+            (evil-add-hjkl-bindings neotree-mode-map 'normal)
+            (evil-define-key 'normal neotree-mode-map (kbd "C-t") 'neotree-hide)
+            (evil-define-key 'normal neotree-mode-map "q" 'neotree-hide)
+            (evil-define-key 'normal neotree-mode-map "o" 'neotree-enter)
+            (evil-define-key 'normal neotree-mode-map "r" 'neotree-refresh)
+            (evil-define-key 'normal neotree-mode-map (kbd "m d") 'neotree-delete-node)
+            (evil-define-key 'normal neotree-mode-map (kbd "m a") 'neotree-create-node)
+            (evil-define-key 'normal neotree-mode-map (kbd "m m") 'neotree-rename-node)))
+
 (use-package perspective
   :ensure t
   :commands (persp-mode persp-kill persp-switch persp-next persp-prev)
@@ -374,24 +392,6 @@
   :commands rainbow-delimiters-mode
   :init (progn
           (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)))
-
-(use-package neotree
-  :ensure t
-  :commands (neotree-dir)
-  :init (progn
-          (defun projectile-neotree-project-root ()
-            (interactive)
-            (neotree-dir (projectile-project-root)))
-          (define-key evil-normal-state-map (kbd "C-t") 'projectile-neotree-project-root))
-  :config (progn
-            (evil-add-hjkl-bindings neotree-mode-map 'normal)
-            (evil-define-key 'normal neotree-mode-map (kbd "C-t") 'neotree-hide)
-            (evil-define-key 'normal neotree-mode-map "q" 'neotree-hide)
-            (evil-define-key 'normal neotree-mode-map "o" 'neotree-enter)
-            (evil-define-key 'normal neotree-mode-map "r" 'neotree-refresh)
-            (evil-define-key 'normal neotree-mode-map (kbd "m d") 'neotree-delete-node)
-            (evil-define-key 'normal neotree-mode-map (kbd "m a") 'neotree-create-node)
-            (evil-define-key 'normal neotree-mode-map (kbd "m m") 'neotree-rename-node)))
 
 
 ;; LANGUAGE PACKS
