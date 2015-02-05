@@ -503,5 +503,9 @@
   :ensure t
   :commands puppet-mode)
 
+(use-package yaml-mode
+  :ensure t
+  :commands yaml-mode)
+
 (provide 'init)
 ;;; init.el ends here
