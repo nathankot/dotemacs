@@ -31,13 +31,12 @@
 (setq current-language-environment "UTF-8")
 (setenv "LC_CTYPE" "UTF-8")
 
-;; Auto-fill on text buffers
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
-
 ;; Other stuff
+(setq inhibit-startup-screen t)
 (setenv "PATH" (concat (getenv "PATH") ":/opt/boxen/homebrew/bin"))
 (setq exec-path (append exec-path '("/opt/boxen/homebrew/bin")))
 (menu-bar-mode -1) ;; Disable menu bar
+(when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (setq-default tab-width 2 indent-tabs-mode nil) ;; Spaces
 (auto-save-mode -1) ;; Disable autosaving
 (show-paren-mode t) ;; Show matching parens
@@ -45,8 +44,15 @@
 (setq gc-cons-threshold 20000000) ;; Increase garbage collection limit
 (setq make-backup-files nil)
 (setq backup-by-copying t)
-(setq backup-directory-alist '(("." . "~/.emacs.saves")))
+(setq backup-directory-alist '(("." . "~/.emacs/saves")))
 (setq visible-bell 1)
+(setq blink-matching-paren nil)
+(setq require-final-newline t)
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; RUN
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+(global-auto-revert-mode 1)
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
@@ -64,7 +70,9 @@
   :ensure t)
 
 (use-package "undo-tree"
-  :diminish undo-tree-mode)
+  :commands global-undo-tree-mode
+  :diminish undo-tree-mode
+  :init global-undo-tree-mode)
 
 (use-package "saveplace"
   :init (progn
@@ -78,7 +86,15 @@
           (setq evil-want-C-u-scroll t
                 evil-overriding-maps nil
                 evil-intercept-maps nil
-                evil-shift-width 2)
+                evil-shift-width 2
+                evil-esc-delay 0 ; Prevent esc from translating to meta key in terminal mode
+                ; Cursor
+                evil-emacs-state-cursor  '("red" box)
+                evil-normal-state-cursor '("gray" box)
+                evil-visual-state-cursor '("gray" box)
+                evil-insert-state-cursor '("gray" bar)
+                evil-motion-state-cursor '("gray" box))
+
           (evil-mode 1))
   ; These aren't exactly evil-specific, but they are fundamental to the workflow.
   :bind ("C-q" . delete-window)
@@ -122,31 +138,35 @@
                       (define-key evil-normal-state-map (kbd "+") 'evil-numbers/inc-at-pt)
                       (define-key evil-normal-state-map (kbd "-") 'evil-numbers/dec-at-pt)))
 
-
-            ; Make `esc` more useful
-            (define-key evil-normal-state-map [escape] 'keyboard-quit)
-            (define-key evil-visual-state-map [escape] 'keyboard-quit)
-            (define-key minibuffer-local-map [escape] 'keyboard-quit)
-            (define-key minibuffer-local-ns-map [escape] 'keyboard-quit)
-            (define-key minibuffer-local-completion-map [escape] 'keyboard-quit)
-            (define-key minibuffer-local-must-match-map [escape] 'keyboard-quit)
-            (define-key minibuffer-local-isearch-map [escape] 'keyboard-quit)
-
+            ; Window management
             (define-key evil-normal-state-map (kbd "C-q") 'delete-window)
-            (define-key evil-normal-state-map (kbd "C-v") 'split-window-vertically)
-            (define-key evil-normal-state-map (kbd "C-V") 'split-window-horizontally)
             (define-key evil-normal-state-map (kbd "C-j") 'evil-window-next)
             (define-key evil-normal-state-map (kbd "C-k") 'evil-window-prev)
             (define-key evil-normal-state-map (kbd "C-l") 'evil-window-increase-width)
             (define-key evil-normal-state-map (kbd "C-h") 'evil-window-decrease-width)
             (define-key evil-normal-state-map (kbd "C-S-h") 'evil-window-move-far-left)
             (define-key evil-normal-state-map (kbd "C-S-l") 'evil-window-move-far-right)
+
+            (define-key evil-normal-state-map (kbd "-")
+              (lambda ()
+                (interactive)
+                (split-window-vertically)
+                (other-window 1)))
+
+            (define-key evil-normal-state-map (kbd "|")
+              (lambda ()
+                (interactive)
+                (split-window-horizontally)
+                    (other-window 1)))
+
+            ; Buffer Management
             (define-key evil-visual-state-map (kbd "SPC") 'evil-search-forward)
             (define-key evil-normal-state-map (kbd "SPC") 'evil-search-forward)
             (define-key evil-visual-state-map (kbd "S-SPC") 'evil-search-backward)
             (define-key evil-normal-state-map (kbd "S-SPC") 'evil-search-backward)
             (define-key evil-normal-state-map (kbd "] l") 'occur-next)
             (define-key evil-normal-state-map (kbd "[ l") 'occur-prev)))
+
 
 (use-package company
   :ensure t
@@ -245,7 +265,6 @@
             (switch-to-buffer buf))))
   :config (progn
             (define-key helm-map (kbd "C-b") 'helm-buffer-list)
-            (define-key helm-map [escape] 'helm-keyboard-quit)
             (define-key helm-map (kbd "C-p") 'helm-keyboard-quit)
             (define-key helm-map (kbd "C-j") 'helm-next-line)
             (define-key helm-map (kbd "C-k") 'helm-previous-line)
@@ -365,6 +384,7 @@
   :config (progn
             (evil-add-hjkl-bindings magit-log-mode-map 'emacs)
             (evil-add-hjkl-bindings magit-status-mode-map 'emacs)
+            (evil-add-hjkl-bindings magit-branch-manager-mode-map 'emacs)
             (define-key magit-diff-mode-map (kbd "j") 'magit-goto-next-section)
             (define-key magit-diff-mode-map (kbd "k") 'magit-goto-previous-section)))
 
