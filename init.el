@@ -246,13 +246,20 @@
           (ido-everywhere 1)
           (flx-ido-mode 1)))
 
+(use-package popwin
+  :ensure t
+  :commands popwin-mode
+  :init (popwin-mode 1)
+  :config (progn
+            (push '("^\\*helm.*\\*$" :regexp t) popwin:special-display-config)))
+
 (use-package helm
   :ensure t
   :commands (helm-buffer-list helm-mode)
   :init (progn
           (require 'helm-config))
   :config (progn
-            (define-key helm-map (kbd "C-b") 'helm-buffer-list)
+            (define-key helm-map (kbd "C-b") 'helm-buffers-list)
             (define-key helm-map (kbd "C-p") 'helm-keyboard-quit)
             (define-key helm-map (kbd "C-j") 'helm-next-line)
             (define-key helm-map (kbd "C-k") 'helm-previous-line)
@@ -286,6 +293,24 @@
   :bind ("C-s" . helm-projectile-ag)
   :init (progn
           (define-key evil-normal-state-map (kbd "C-s") 'helm-projectile-ag)))
+
+(use-package helm-dash
+  :ensure t
+  :init (progn
+          (setq helm-dash-docsets-path "~/.docset")
+          (evil-leader/set-key "f" 'helm-dash-at-point)
+          (define-key evil-normal-state-map (kbd "C-f") 'helm-dash))
+  :config (progn
+            (defun js-doc()
+              (interactive)
+              (setq-local helm-dash-docsets '("AngularJS" "BackboneJS" "Lo-Dash" "Javascript" "NodeJS" "jQuery" "Chai")))
+
+            (defun web-doc()
+              (interactive)
+              (setq-local helm-dash-docsets '("Javascript" "HTML" "CSS" "Lo-Dash" "jQuery" "Bootstrap_3")))
+
+            (add-hook 'js-mode-hook 'js-doc)
+            (add-hook 'web-mode-hook 'web-doc)))
 
 (use-package neotree
   :ensure t
@@ -324,24 +349,6 @@
 
 (use-package editorconfig
   :ensure t)
-
-(use-package helm-dash
-  :ensure t
-  :init (progn
-          (setq helm-dash-docsets-path "~/.docset")
-          (evil-leader/set-key "f" 'helm-dash-at-point)
-          (define-key evil-normal-state-map (kbd "C-f") 'helm-dash))
-  :config (progn
-            (defun js-doc()
-              (interactive)
-              (setq-local helm-dash-docsets '("AngularJS" "BackboneJS" "Lo-Dash" "Javascript" "NodeJS" "jQuery" "Chai")))
-
-            (defun web-doc()
-              (interactive)
-              (setq-local helm-dash-docsets '("Javascript" "HTML" "CSS" "Lo-Dash" "jQuery" "Bootstrap_3")))
-
-            (add-hook 'js-mode-hook 'js-doc)
-            (add-hook 'web-mode-hook 'web-doc)))
 
 (use-package smex
   :ensure t
