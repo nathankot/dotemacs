@@ -187,7 +187,6 @@
   :idle (global-company-mode))
 
 (use-package company-css
-  :commands (company-css)
   :init (progn
           ;; For stylus and jade mode
           (add-hook 'sws-mode-hook
@@ -199,22 +198,19 @@
               (setq-local company-backends (add 'company-css company-backends))))))
 
 (use-package company-xcode
-  :commands (company-xcode)
   :init (progn
           (add-hook 'swift-mode-hook
             (lambda ()
               (setq-local company-backends (add 'company-xcode company-backends))))))
 
 (use-package tern
-  :commands (tern-mode)
   :diminish " T"
   :ensure t
   :init (progn
           (add-hook 'js-mode-hook 'tern-mode)))
 
 (use-package company-tern
-  :ensure t
-  :commands (company-mode company-tern))
+  :ensure t)
 
 (use-package yasnippet
   :ensure t
@@ -250,14 +246,9 @@
 
 (use-package helm
   :ensure t
+  :commands (helm-buffer-list helm-mode)
   :init (progn
-          (require 'helm-config)
-          ; Make sure that helm always displayed below
-          ; the current window
-          (setq helm-display-function (lambda (buf)
-            (split-window-vertically)
-            (other-window 1)
-            (switch-to-buffer buf))))
+          (require 'helm-config))
   :config (progn
             (define-key helm-map (kbd "C-b") 'helm-buffer-list)
             (define-key helm-map (kbd "C-p") 'helm-keyboard-quit)
