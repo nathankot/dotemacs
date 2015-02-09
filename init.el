@@ -10,17 +10,13 @@
  ;; If there is more than one, they won't work right.
   '(custom-safe-themes
      (quote
-       ("c5a044ba03d43a725bd79700087dea813abcb6beb6be08c7eb3303ed90782482" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default)))
- '(global-yascroll-bar-mode t)
- '(yascroll:scroll-bar (quote (right-fringe left-fringe text-area))))
+       ("c5a044ba03d43a725bd79700087dea813abcb6beb6be08c7eb3303ed90782482" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(yascroll:thumb-fringe ((t (:background "black" :foreground "black"))))
- '(yascroll:thumb-text-area ((t (:background "black")))))
+ ;; If there is more than one, they won't work right.)
 
 ;; Use UTF-8 encoding
 (setq locale-coding-system 'utf-8)
