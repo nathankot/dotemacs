@@ -139,6 +139,8 @@
                       (define-key evil-normal-state-map (kbd "+") 'evil-numbers/inc-at-pt)
                       (define-key evil-normal-state-map (kbd "-") 'evil-numbers/dec-at-pt)))
 
+            (evil-add-hjkl-bindings outline-mode-map 'normal)
+
             ; Window management
             (define-key evil-normal-state-map (kbd "C-q") 'delete-window)
             (define-key evil-normal-state-map (kbd "C-j") 'evil-window-next)
