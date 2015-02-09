@@ -237,8 +237,7 @@
   :init (sml/setup)
   :config (sml/apply-theme 'respectful))
 
-(use-package ido
-  :commands ido-mode
+(use-package flx-ido
   :ensure t
   :commands (flx-ido-mode)
   :init (progn
@@ -268,21 +267,32 @@
 
 (use-package projectile
   :ensure t
-  :commands (helm-projectile projectile-mode projectile-project-root)
+  :commands (projectile-global-mode projectile-mode projectile-project-root)
   :diminish projectile-mode
-  :bind ("C-p" . helm-projectile)
   :init (progn
-          (define-key evil-normal-state-map (kbd "C-p") 'helm-projectile)
-          (define-key evil-normal-state-map (kbd "C-s") 'helm-projectile-ag))
+          (setq projectile-enable-caching t)
+          (setq projectile-completion-system 'ido))
+          (projectile-global-mode +1)
   :config (progn
             (add-to-list 'projectile-globally-ignored-directories ".cache")
             (add-to-list 'projectile-globally-ignored-directories ".tmp")
             (add-to-list 'projectile-globally-ignored-directories "tmp")
             (add-to-list 'projectile-globally-ignored-directories "node_modules")
-            (add-to-list 'projectile-globally-ignored-directories "bower_components")
-            (projectile-global-mode)
-            (use-package helm-projectile :ensure t)
-            (use-package helm-ag :ensure t)))
+            (add-to-list 'projectile-globally-ignored-directories "bower_components")))
+
+(use-package helm-projectile
+  :ensure t
+  :commands (helm-projectile)
+  :bind ("C-p" . helm-projectile)
+  :init (progn
+          (define-key evil-normal-state-map (kbd "C-p") 'helm-projectile)))
+
+(use-package helm-ag
+  :ensure t
+  :commands (helm-projectile-ag)
+  :bind ("C-s" . helm-projectile-ag)
+  :init (progn
+          (define-key evil-normal-state-map (kbd "C-s") 'helm-projectile-ag)))
 
 (use-package neotree
   :ensure t
