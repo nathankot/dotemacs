@@ -240,19 +240,14 @@
 (use-package ido
   :commands ido-mode
   :ensure t
-  :init   (progn
-            (setq ido-enable-flex-matching t)
-            (setq ido-use-faces nil))
-            (ido-mode 1)
-            (ido-everywhere 1))
-
-(use-package flx
-  :ensure t
-  :config (progn
-            (use-package flx-ido
-              :ensure t
-              :commands ido-mode
-              :init (flx-ido-mode 1))))
+  :commands (flx-ido-mode)
+  :init (progn
+          (setq ido-enable-flex-matching t)
+          (setq ido-use-faces nil)
+          (setq flx-ido-threshold 10000)
+          (ido-mode 1)
+          (ido-everywhere 1)
+          (flx-ido-mode 1)))
 
 (use-package helm
   :ensure t
