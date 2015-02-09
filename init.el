@@ -291,7 +291,6 @@
 (use-package helm-ag
   :ensure t
   :commands (helm-projectile-ag)
-  :bind ("C-s" . helm-projectile-ag)
   :init (progn
           (define-key evil-normal-state-map (kbd "C-s") 'helm-projectile-ag)))
 
