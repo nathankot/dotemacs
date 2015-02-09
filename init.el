@@ -50,11 +50,6 @@
 (global-auto-revert-mode 1)
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
-; Mac Specific
-(cond ((eq system-type 'darwin)
-  (setq delete-by-moving-to-trash t
-                 trash-directory "~/.Trash/")))
-
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
