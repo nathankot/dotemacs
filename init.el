@@ -2,7 +2,6 @@
 ;;; Commentary:
 ;;; Extensive use of `use-package`
 
-;;; Code:
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -11,12 +10,12 @@
   '(custom-safe-themes
      (quote
        ("c5a044ba03d43a725bd79700087dea813abcb6beb6be08c7eb3303ed90782482" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default))))
-
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.)
+ ;; If there is more than one, they won't work right.
+ )
 
 ;; Use UTF-8 encoding
 (setq locale-coding-system 'utf-8)
@@ -42,13 +41,13 @@
 (setq backup-by-copying t)
 (setq backup-directory-alist '(("." . "~/.emacs/saves")))
 (setq visible-bell 1)
+(setq ring-bell-function 'ignore)
 (setq blink-matching-paren nil)
 (setq require-final-newline t)
+(setq initial-scratch-message ";; Hello, NK")
 (fset 'yes-or-no-p 'y-or-n-p)
-
-;; RUN
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
 (global-auto-revert-mode 1)
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
@@ -137,8 +136,6 @@
             (define-key evil-normal-state-map (kbd "C-k") 'evil-window-prev)
             (define-key evil-normal-state-map (kbd "C-l") 'evil-window-increase-width)
             (define-key evil-normal-state-map (kbd "C-h") 'evil-window-decrease-width)
-            (define-key evil-normal-state-map (kbd "C-S-h") 'evil-window-move-far-left)
-            (define-key evil-normal-state-map (kbd "C-S-l") 'evil-window-move-far-right)
 
             (define-key evil-normal-state-map (kbd "-")
               (lambda ()
@@ -262,8 +259,9 @@
   :diminish projectile-mode
   :init (progn
           (setq projectile-enable-caching t)
-          (setq projectile-completion-system 'ido))
-          (projectile-global-mode +1)
+          (setq projectile-completion-system 'ido)
+          (setq projectile-indexing-method 'alien)
+          (projectile-global-mode +1))
   :config (progn
             (add-to-list 'projectile-globally-ignored-directories ".cache")
             (add-to-list 'projectile-globally-ignored-directories ".tmp")
@@ -501,6 +499,9 @@
 (use-package yaml-mode
   :ensure t
   :commands yaml-mode)
+
+;; Non-packaged stuff
+;; ================================================================================
 
 (provide 'init)
 ;;; init.el ends here
