@@ -128,14 +128,8 @@
               :commands (global-evil-matchit-mode evil-matchit-mode)
               :init (global-evil-matchit-mode 1))
 
-            (use-package evil-numbers
-              :ensure t
-              :commands (evil-numbers/dec-at-pt evil-numbers/inc-at-pt)
-              :init (progn
-                      (define-key evil-normal-state-map (kbd "+") 'evil-numbers/inc-at-pt)
-                      (define-key evil-normal-state-map (kbd "-") 'evil-numbers/dec-at-pt)))
-
-            (evil-add-hjkl-bindings outline-mode-map 'normal)
+            (evil-add-hjkl-bindings package-menu-mode-map 'emacs)
+            (evil-add-hjkl-bindings outline-mode-map 'emacs)
 
             ; Window management
             (define-key evil-normal-state-map (kbd "C-q") 'delete-window)
