@@ -10,6 +10,7 @@
   '(custom-safe-themes
      (quote
        ("c5a044ba03d43a725bd79700087dea813abcb6beb6be08c7eb3303ed90782482" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default))))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -48,6 +49,11 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-auto-revert-mode 1)
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
+
+; Mac Specific
+(cond ((eq system-type 'darwin)
+  (setq delete-by-moving-to-trash t
+                 trash-directory "~/.Trash/")))
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
