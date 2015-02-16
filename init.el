@@ -432,6 +432,12 @@
   :init (progn
           (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)))
 
+(use-package column-marker
+  :ensure t
+  :commands (column-marker-1 column-marker-2 column-marker-3)
+  :init (progn
+          (add-hook 'prog-mode-hook (lambda () (interactive) (column-marker-3 80)))))
+
 
 ;; LANGUAGE PACKS
 ;; ================================================================================
