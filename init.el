@@ -239,7 +239,8 @@
   :commands popwin-mode
   :init (popwin-mode 1)
   :config (progn
-            (push '("^\\*helm.*\\*$" :regexp t) popwin:special-display-config)))
+            (push '("^\\*helm.*\\*$" :regexp t) popwin:special-display-config)
+            (push '("^\\*magit.*\\*$" :regexp t) popwin:special-display-config)))
 
 (use-package helm
   :ensure t
