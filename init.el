@@ -128,6 +128,11 @@
               :commands (global-evil-matchit-mode evil-matchit-mode)
               :init (global-evil-matchit-mode 1))
 
+            (use-package evil-jumper
+              :ensure t
+              :commands (evil-jumper-mode)
+              :init (evil-jumper-mode 1))
+
             (evil-add-hjkl-bindings package-menu-mode-map 'emacs)
             (evil-add-hjkl-bindings outline-mode-map 'emacs)
 
