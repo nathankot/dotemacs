@@ -32,10 +32,15 @@
 (setq current-language-environment "UTF-8")
 (setenv "LC_CTYPE" "UTF-8")
 
+;; Mac Specific
+(if (eq system-type 'darwin)
+  (push "/opt/boxen/homebrew/bin" exec-path)
+  (push "/usr/local/bin" exec-path)
+  (setenv "PATH" (concat (getenv "PATH") ":/opt/boxen/homebrew/bin"))
+  (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin")))
+
 ;; Other stuff
 (setq inhibit-startup-screen t)
-(setenv "PATH" (concat (getenv "PATH") ":/opt/boxen/homebrew/bin"))
-(setq exec-path (append exec-path '("/opt/boxen/homebrew/bin")))
 (menu-bar-mode -1) ;; Disable menu bar
 (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (setq-default tab-width 2 indent-tabs-mode nil) ;; Spaces
