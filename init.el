@@ -34,13 +34,13 @@
 (menu-bar-mode -1) ;; Disable menu bar
 (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (setq-default tab-width 2 indent-tabs-mode nil) ;; Spaces
+(setq make-backup-files nil)
+(setq backup-inhibited t)
+(setq auto-save-default nil)
 (auto-save-mode -1) ;; Disable autosaving
 (show-paren-mode t) ;; Show matching parens
 (setq scroll-margin 5 scroll-conservatively 9999 scroll-step 1) ;; Smooth scrolling
 (setq gc-cons-threshold 20000000) ;; Increase garbage collection limit
-(setq make-backup-files nil)
-(setq backup-by-copying t)
-(setq backup-directory-alist '(("." . "~/.emacs/saves")))
 (setq visible-bell 1)
 (setq ring-bell-function 'ignore)
 (setq blink-matching-paren nil)
