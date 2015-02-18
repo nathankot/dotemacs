@@ -9,7 +9,10 @@
  ;; If there is more than one, they won't work right.
   '(custom-safe-themes
      (quote
-       ("c5a044ba03d43a725bd79700087dea813abcb6beb6be08c7eb3303ed90782482" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default))))
+       ("c5a044ba03d43a725bd79700087dea813abcb6beb6be08c7eb3303ed90782482" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default)))
+ '(fci-rule-character ?│)
+ '(fci-rule-character-color "cyan")
+ '(fci-rule-column 80))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -49,6 +52,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-auto-revert-mode 1)
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
+(setq-default fill-column 80)
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
@@ -440,11 +444,12 @@
   :init (progn
           (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)))
 
-(use-package column-marker
+(use-package fill-column-indicator
   :ensure t
-  :commands (column-marker-1 column-marker-2 column-marker-3)
+  :commands fci-mode
   :init (progn
-          (add-hook 'prog-mode-hook (lambda () (interactive) (column-marker-3 80)))))
+          (setq fci-rule-column 80)
+          (add-hook 'prog-mode-hook #'fci-mode)))
 
 
 ;; LANGUAGE PACKS
