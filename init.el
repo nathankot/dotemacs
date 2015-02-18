@@ -306,11 +306,13 @@
   :config (progn
             (defun js-doc()
               (interactive)
-              (setq-local helm-dash-docsets '("AngularJS" "BackboneJS" "Lo-Dash" "Javascript" "NodeJS" "jQuery" "Chai")))
+              (setq-local helm-dash-docsets '("AngularJS" "BackboneJS" "Lo-Dash" "Javascript" "NodeJS" "jQuery" "Chai"))
+              (setq helm-current-buffer (current-buffer)))
 
             (defun web-doc()
               (interactive)
-              (setq-local helm-dash-docsets '("Javascript" "HTML" "CSS" "Lo-Dash" "jQuery" "Bootstrap_3")))
+              (setq-local helm-dash-docsets '("Javascript" "HTML" "CSS" "Lo-Dash" "jQuery" "Bootstrap_3"))
+              (setq helm-current-buffer (current-buffer)))
 
             (add-hook 'js-mode-hook 'js-doc)
             (add-hook 'web-mode-hook 'web-doc)))
