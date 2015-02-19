@@ -456,6 +456,12 @@
             (add-to-list 'flycheck-checkers 'jsxhint-checker)
             (add-to-list 'flycheck-checkers 'swift)
 
+            (use-package flycheck-haskell
+              :ensure t
+              :commands flycheck-haskell-setup
+              :init (progn
+                      (add-hook 'flycheck-mode-hook #'flycheck-haskell-setup)))
+
             ; Checkers for formats
             (when 'web-mode-hook
               (add-hook 'web-mode-hook
