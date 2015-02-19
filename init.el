@@ -19,7 +19,7 @@
         "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f"
         default)))
  '(fci-rule-character 9474)
- '(fci-rule-character-color "cyan")
+ '(fci-rule-character-color "#5E5E5E")
  '(fci-rule-column 80))
 
 (custom-set-faces
@@ -27,7 +27,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+  '(font-lock-comment-face ((t (:foreground "#5E5E5E"))))
+  '(web-mode-html-attr-name-face ((t (:foreground "#B98080")))))
 
 ;; Use UTF-8 encoding
 (setq locale-coding-system 'utf-8)
@@ -77,7 +78,9 @@
 
 (use-package hc-zenburn-theme
   :ensure t
-  :init (load-theme 'hc-zenburn t))
+  :init (progn
+          (add-to-list 'default-frame-alist '(background-color . "#313131")
+          (load-theme 'hc-zenburn t))))
 
 (use-package diminish
   :ensure t)
@@ -472,10 +475,12 @@
 
 (use-package rainbow-mode
   :ensure t
+  :diminish rainbow-mode
   :commands (rainbow-mode)
   :init (progn
           (add-hook 'css-mode-hook 'rainbow-mode)
-          (add-hook 'web-mode-hook 'rainbow-mode)))
+          (add-hook 'web-mode-hook 'rainbow-mode)
+          (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)))
 
 (use-package rainbow-delimiters
   :ensure t
