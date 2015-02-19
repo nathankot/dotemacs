@@ -464,6 +464,13 @@
           (add-hook 'css-mode-hook  'emmet-mode)
           (add-hook 'web-mode-hook 'emmet-mode)))
 
+(use-package rainbow-mode
+  :ensure t
+  :commands (rainbow-mode)
+  :init (progn
+          (add-hook 'css-mode-hook 'rainbow-mode)
+          (add-hook 'web-mode-hook 'rainbow-mode)))
+
 (use-package rainbow-delimiters
   :ensure t
   :commands rainbow-delimiters-mode
