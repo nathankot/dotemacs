@@ -99,15 +99,6 @@
           (setq save-place-file "~/.emacs/saveplaces")
           (setq-default save-place t)))
 
-(use-package evil-leader
-  :ensure t
-  :commands (global-evil-leader-mode evil-leader-mode)
-  :config (progn
-            (evil-leader/set-leader ",")
-            (evil-leader/set-key "w" 'save-buffer)
-            (evil-leader/set-key "i" 'evil-window-move-far-left)
-            (evil-leader/set-key "SPC" 'evil-search-highlight-persist-remove-all)))
-
 (use-package evil
   :commands evil-mode
   :ensure t
@@ -123,12 +114,21 @@
                 evil-visual-state-cursor '("gray" box)
                 evil-insert-state-cursor '("gray" bar)
                 evil-motion-state-cursor '("gray" box))
-
-          (global-evil-leader-mode)
           (evil-mode 1))
-  ; These aren't exactly evil-specific, but they are fundamental to the workflow.
+
   :bind ("C-q" . delete-window)
   :config (progn
+
+            (use-package evil-leader
+              :ensure t
+              :commands (global-evil-leader-mode evil-leader-mode)
+              :init (global-evil-leader-mode)
+              :config (progn
+                        (evil-leader/set-leader ",")
+                        (evil-leader/set-key "w" 'save-buffer)
+                        (evil-leader/set-key "i" 'evil-window-move-far-left)
+                        (evil-leader/set-key "SPC" 'evil-search-highlight-persist-remove-all)))
+
             (use-package evil-search-highlight-persist
                :ensure t
                :commands global-evil-search-highlight-persist
@@ -159,9 +159,6 @@
               :commands (evil-jumper-mode)
               :init (evil-jumper-mode 1))
 
-            (evil-add-hjkl-bindings package-menu-mode-map 'emacs)
-            (evil-add-hjkl-bindings outline-mode-map 'emacs)
-
             ; Window management
             (define-key evil-normal-state-map (kbd "C-q") 'delete-window)
             (define-key evil-normal-state-map (kbd "C-j") 'evil-window-next)
@@ -187,68 +184,10 @@
             (define-key evil-visual-state-map (kbd "S-SPC") 'evil-search-backward)
             (define-key evil-normal-state-map (kbd "S-SPC") 'evil-search-backward)
             (define-key evil-normal-state-map (kbd "] l") 'occur-next)
-            (define-key evil-normal-state-map (kbd "[ l") 'occur-prev)))
+            (define-key evil-normal-state-map (kbd "[ l") 'occur-prev)
+            (evil-add-hjkl-bindings package-menu-mode-map 'emacs)
+            (evil-add-hjkl-bindings outline-mode-map 'emacs)))
 
-
-(use-package company
-  :ensure t
-  :diminish " c"
-  :commands (global-company-mode company-mode)
-  :idle-priority 1
-  :init (progn
-          (setq company-dabbrev-downcase nil))
-  :config (progn
-
-            ; There is a bug with company mode and FCI, this is a workaround
-            (defvar-local company-fci-mode-on-p nil)
-
-            (defun company-turn-off-fci (&rest ignore)
-              (when (boundp 'fci-mode)
-                (setq company-fci-mode-on-p fci-mode)
-                (when fci-mode (fci-mode -1))))
-
-            (defun company-maybe-turn-on-fci (&rest ignore)
-              (when company-fci-mode-on-p (fci-mode 1)))
-
-            (add-hook 'company-completion-started-hook 'company-turn-off-fci)
-            (add-hook 'company-completion-finished-hook 'company-maybe-turn-on-fci)
-            (add-hook 'company-completion-cancelled-hook 'company-maybe-turn-on-fci)
-            ; ---
-
-            ; Add custom backends
-            (add-to-list 'company-backends 'company-tern)
-            ; Swap some keybindings
-            (define-key company-active-map (kbd "C-j") 'company-select-next)
-            (define-key company-active-map (kbd "C-k") 'company-select-previous)
-            (define-key company-active-map (kbd "C-i") 'company-select-next)
-            (define-key company-active-map (kbd "C-o") 'company-select-previous))
-  :idle (global-company-mode))
-
-(use-package company-css
-  :init (progn
-          ;; For stylus and jade mode
-          (add-hook 'sws-mode-hook
-            (lambda ()
-              (setq-local company-backends (add 'company-css company-backends))))
-
-          (add-hook 'less-css-mode-hook
-            (lambda ()
-              (setq-local company-backends (add 'company-css company-backends))))))
-
-(use-package company-xcode
-  :init (progn
-          (add-hook 'swift-mode-hook
-            (lambda ()
-              (setq-local company-backends (add 'company-xcode company-backends))))))
-
-(use-package tern
-  :diminish " T"
-  :ensure t
-  :init (progn
-          (add-hook 'js-mode-hook 'tern-mode)))
-
-(use-package company-tern
-  :ensure t)
 
 (use-package yasnippet
   :ensure t
@@ -578,18 +517,75 @@
 
 (use-package haskell-mode
   :ensure t
-  :diminish (haskell-indentation-mode electric-indent-mode interactive-haskell-mode)
-  :commands (haskell-mode literate-haskell-mode interactive-haskell-mode)
+  :commands haskell-mode
+  :diminish (interactive-haskell-mode electric-indent-mode)
   :init (progn
-          (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
-          (add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
-          (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-          (add-hook 'haskell-mode-hook (progn (evil-leader/set-key
-                                                "t" 'haskell-process-do-type
-                                                "ghi" 'haskell-interactive-bring
-                                                "ghk" 'haskell-session-kill
-                                                "ghgi" 'haskell-navigate-imports
-                                                "ghfi" 'haskell-mode-format-imports)))))
+          (add-hook 'haskell-mode-hook (lambda ()
+                                         (turn-on-haskell-indentation)
+                                         (interactive-haskell-mode)
+                                         (evil-leader/set-key
+                                            "t" 'haskell-process-do-type
+                                            "ghi" 'haskell-interactive-bring
+                                            "ghk" 'haskell-session-kill
+                                            "ghgi" 'haskell-navigate-imports
+                                            "ghfi" 'haskell-mode-format-imports)))))
+
+
+
+;; Company and it's backends
+;; ================================================================================
+
+(use-package company
+  :ensure t
+  :diminish " c"
+  :commands (global-company-mode company-mode)
+  :idle-priority 1
+  :init (progn
+          (setq company-dabbrev-downcase nil))
+  :config (progn
+
+            ; There is a bug with company mode and FCI, this is a workaround
+            (defvar-local company-fci-mode-on-p nil)
+
+            (defun company-turn-off-fci (&rest ignore)
+              (when (boundp 'fci-mode)
+                (setq company-fci-mode-on-p fci-mode)
+                (when fci-mode (fci-mode -1))))
+
+            (defun company-maybe-turn-on-fci (&rest ignore)
+              (when company-fci-mode-on-p (fci-mode 1)))
+
+            (add-hook 'company-completion-started-hook 'company-turn-off-fci)
+            (add-hook 'company-completion-finished-hook 'company-maybe-turn-on-fci)
+            (add-hook 'company-completion-cancelled-hook 'company-maybe-turn-on-fci)
+            ; ---
+
+            ; Swap some keybindings
+            (define-key company-active-map (kbd "C-j") 'company-select-next)
+            (define-key company-active-map (kbd "C-k") 'company-select-previous)
+            (define-key company-active-map (kbd "C-i") 'company-select-next)
+            (define-key company-active-map (kbd "C-o") 'company-select-previous))
+  :idle (global-company-mode))
+
+(use-package company-ghc
+  :ensure t
+  :init (progn
+          (use-package ghc
+            :ensure t
+            :init (progn
+                    (add-hook 'haskell-mode-hook 'ghc-init)))
+          (add-to-list 'company-backends 'company-ghc)))
+
+(use-package company-tern
+  :ensure t
+  :init (progn
+          (use-package tern
+            :diminish " T"
+            :commands (tern-mode)
+            :ensure t
+            :init (progn
+                    (add-hook 'js-mode-hook 'tern-mode)))
+          (add-to-list 'company-backends 'company-tern)))
 
 
 ;; Non-packaged stuff
