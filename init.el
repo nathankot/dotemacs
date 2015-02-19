@@ -141,23 +141,23 @@
 
             (use-package evil-snipe
               :ensure t
-              :commands (evil-snipe-mode evil-mode)
+              :commands (global-evil-snipe-mode)
               :init     (global-evil-snipe-mode 1))
 
             (use-package evil-surround
               :ensure t
-              :commands (evil-mode evil-surround-mode)
+              :commands (global-evil-surround-mode)
               :init (global-evil-surround-mode 1))
 
             (use-package evil-matchit
               :ensure t
-              :commands (global-evil-matchit-mode evil-matchit-mode)
+              :commands (global-evil-matchit-mode)
               :init (global-evil-matchit-mode 1))
 
             (use-package evil-jumper
               :ensure t
-              :commands (evil-jumper-mode)
-              :init (evil-jumper-mode 1))
+              :commands (global-evil-jumper-mode)
+              :init (global-evil-jumper-mode 1))
 
             ; Window management
             (define-key evil-normal-state-map (kbd "C-q") 'delete-window)
