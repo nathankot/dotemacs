@@ -570,6 +570,22 @@
   :ensure t
   :commands yaml-mode)
 
+(use-package haskell-mode
+  :ensure t
+  :diminish (haskell-indentation-mode electric-indent-mode interactive-haskell-mode)
+  :commands (haskell-mode literate-haskell-mode interactive-haskell-mode)
+  :init (progn
+          (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+          (add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
+          (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+          (add-hook 'haskell-mode-hook (progn (evil-leader/set-key
+                                                "t" 'haskell-process-do-type
+                                                "ghi" 'haskell-interactive-bring
+                                                "ghk" 'haskell-session-kill
+                                                "ghgi" 'haskell-navigate-imports
+                                                "ghfi" 'haskell-mode-format-imports)))))
+
+
 ;; Non-packaged stuff
 ;; ================================================================================
 
