@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;; Extensive use of `use-package`
 
+;;; Code:
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -18,9 +19,13 @@
         "c5a044ba03d43a725bd79700087dea813abcb6beb6be08c7eb3303ed90782482"
         "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f"
         default)))
- '(fci-rule-character 9474)
- '(fci-rule-character-color "#5E5E5E")
- '(fci-rule-column 80))
+  '(haskell-process-suggest-remove-import-lines t)
+  '(haskell-process-auto-import-loaded-modules t)
+  '(haskell-process-log t)
+  '(haskell-process-type 'cabal-repl)
+  '(fci-rule-character 9474)
+  '(fci-rule-character-color "#5E5E5E")
+  '(fci-rule-column 80))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -28,6 +33,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
   '(font-lock-comment-face ((t (:foreground "#5E5E5E"))))
+  '(flycheck-error ((t (:background "red"))))
   '(web-mode-html-attr-name-face ((t (:foreground "#B98080")))))
 
 ;; Use UTF-8 encoding
@@ -93,6 +99,15 @@
           (setq save-place-file "~/.emacs/saveplaces")
           (setq-default save-place t)))
 
+(use-package evil-leader
+  :ensure t
+  :commands (global-evil-leader-mode evil-leader-mode)
+  :config (progn
+            (evil-leader/set-leader ",")
+            (evil-leader/set-key "w" 'save-buffer)
+            (evil-leader/set-key "i" 'evil-window-move-far-left)
+            (evil-leader/set-key "SPC" 'evil-search-highlight-persist-remove-all)))
+
 (use-package evil
   :commands evil-mode
   :ensure t
@@ -109,6 +124,7 @@
                 evil-insert-state-cursor '("gray" bar)
                 evil-motion-state-cursor '("gray" box))
 
+          (global-evil-leader-mode)
           (evil-mode 1))
   ; These aren't exactly evil-specific, but they are fundamental to the workflow.
   :bind ("C-q" . delete-window)
@@ -118,20 +134,10 @@
                :commands global-evil-search-highlight-persist
                :init (global-evil-search-highlight-persist))
 
-            (use-package evil-leader
-              :ensure t
-              :commands evil-mode
-              :init (global-evil-leader-mode)
-              :config (progn
-                        (evil-leader/set-leader ",")
-                        (evil-leader/set-key "w" 'save-buffer)
-                        (evil-leader/set-key "i" 'evil-window-move-far-left)
-                        (evil-leader/set-key "SPC" 'evil-search-highlight-persist-remove-all)))
-
             (use-package evil-commentary
               :ensure t
-              :commands evil-mode
-              :init (evil-commentary-default-setup))
+              :commands evil-mode-commentary-mode
+              :init (add-hook 'evil-mode-hook 'evil-commentary-mode))
 
             (use-package evil-snipe
               :ensure t
