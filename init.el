@@ -596,9 +596,23 @@
                     (add-hook 'js-mode-hook 'tern-mode)))
           (add-to-list 'company-backends 'company-tern)))
 
-
-;; Non-packaged stuff
+;; Org Mode
 ;; ================================================================================
+(setq org-hide-leading-stars t)
+(setq org-alphabetical-lists t)
+(setq org-src-fontify-natively t)  ;; you want this to activate coloring in blocks
+(setq org-src-tab-acts-natively t) ;; you want this to have completion in blocks
+(setq org-hide-emphasis-markers t) ;; to hide the *,=, or / markers
+(setq org-pretty-entities t)       ;; to have \alpha, \to and others display as utf8 http://orgmode.org/manual/Special-symbols.html
+(setq org-directory "~/org/")
+
+(use-package evil-org
+  :ensure t)
+
+;; Initialize by starting a org mode buffer for the current project
+;; ================================================================================
+(if (file-exists-p "./project.org")
+  (find-file "./project.org"))
 
 (provide 'init)
 ;;; init.el ends here
