@@ -439,12 +439,12 @@
   :init (progn
           (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)))
 
-(use-package fill-column-indicator
-  :ensure t
-  :commands fci-mode
-  :init (progn
-          (setq fci-rule-column 80)
-          (add-hook 'prog-mode-hook #'fci-mode)))
+;; (use-package fill-column-indicator
+;;   :ensure t
+;;   :commands fci-mode
+;;   :init (progn
+;;           (setq fci-rule-column 80)
+;;           (add-hook 'prog-mode-hook #'fci-mode)))
 
 
 ;; LANGUAGE PACKS
