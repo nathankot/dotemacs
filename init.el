@@ -610,6 +610,16 @@
 (setq org-agenda-files (list "~/org/home.org" "~/org/work.org" "~/org/notes.org"))
 (setq org-default-notes-file (concat org-directory "/notes.org"))
 
+(setq org-todo-keywords
+  '((sequence "TODO" "DOING" "|" "DONE" "CANCELED" "DELEGATED")))
+
+(setq org-todo-keyword-faces
+  '(("TODO" . org-warning)
+    ("DOING" . "white")
+    ("DONE" . "green")
+    ("DELEGATED" . "purple")
+    ("CANCELED" . "red")))
+
 (use-package evil-org
   :ensure t
   :init (progn
