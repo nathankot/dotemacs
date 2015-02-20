@@ -307,7 +307,8 @@
           (defun projectile-neotree-project-root ()
             (interactive)
             (neotree-dir (projectile-project-root)))
-          (define-key evil-normal-state-map (kbd "C-t") 'projectile-neotree-project-root))
+          (evil-leader/set-key "k b" 'projectile-neotree-project-root)
+          (evil-leader/set-key "k r" 'neotree-find))
   :config (progn
             (evil-add-hjkl-bindings neotree-mode-map 'normal)
             (evil-define-key 'normal neotree-mode-map (kbd "C-t") 'neotree-hide)
