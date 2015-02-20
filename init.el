@@ -613,17 +613,21 @@
 (use-package evil-org
   :ensure t
   :init (progn
-          (evil-leader/set-key "o c" 'org-capture)
-          (evil-leader/set-key "o a" 'org-agenda)
-          (evil-leader/set-key "o t" 'org-todo-list)
-          (evil-add-hjkl-bindings org-agenda-mode 'emacs)
+          (evil-add-hjkl-bindings org-agenda-mode-map 'emacs)
 
-          (evil-define-key 'normal 'org-mode-hook
+          (evil-leader/set-key "o c" 'org-capture
+                               "o a" 'org-agenda
+                               "o t" 'org-todo-list)
+
+          (evil-leader/set-key-for-mode 'org-mode
+            "d" 'org-deadline)
+
+          (evil-define-key 'normal org-mode-map
+            (kbd "+") 'org-priority-up)
+
+          (evil-define-key 'normal org-agenda-mode-map
+            (kbd "d") 'org-agenda-deadline
             (kbd "+") 'org-priority-up
-            (kbd "=") 'org-priority-down)
-
-          (evil-define-key 'normal 'org-agenda-mode-hook
-            (kbd "n") 'org-agenda-add-note
             (kbd "q") 'org-agenda-Quit)))
 
 (add-hook 'org-mode-hook 'org-indent-mode)
