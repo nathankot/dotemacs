@@ -326,8 +326,8 @@
   :commands (persp-mode persp-kill persp-switch persp-next persp-prev)
   :init (progn
             (define-key evil-normal-state-map (kbd "C-@") 'persp-switch)
-            (define-key evil-normal-state-map (kbd "TAB") 'persp-next)
-            (define-key evil-normal-state-map (kbd "DEL") 'persp-prev)
+            (define-key evil-normal-state-map (kbd ")") 'persp-next)
+            (define-key evil-normal-state-map (kbd "(") 'persp-prev)
             (persp-mode))
   :config (progn
             (use-package persp-projectile :ensure t)))
