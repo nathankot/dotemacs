@@ -164,7 +164,7 @@
             (use-package evil-jumper
               :ensure t
               :commands (global-evil-jumper-mode)
-              :init (global-evil-jumper-mode 1))
+              :init (global-evil-jumper-mode))
 
             ; Window management
             (define-key evil-normal-state-map (kbd "C-q") 'delete-window)
