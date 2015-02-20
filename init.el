@@ -620,7 +620,8 @@
                                "o t" 'org-todo-list)
 
           (evil-leader/set-key-for-mode 'org-mode
-            "d" 'org-deadline)
+            "d" 'org-deadline
+            "c" 'org-toggle-checkbox)
 
           (evil-define-key 'normal org-mode-map
             (kbd "+") 'org-priority-up)
