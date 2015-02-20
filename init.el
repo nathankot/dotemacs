@@ -136,8 +136,8 @@
 
             (use-package evil-commentary
               :ensure t
-              :commands evil-mode-commentary-mode
-              :init (add-hook 'evil-mode-hook 'evil-commentary-mode))
+              :commands evil-commentary-mode
+              :init (evil-commentary-mode))
 
             (use-package evil-snipe
               :ensure t
