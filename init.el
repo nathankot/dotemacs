@@ -303,7 +303,8 @@
             (interactive)
             (neotree-dir (projectile-project-root)))
           (evil-leader/set-key "k b" 'projectile-neotree-project-root)
-          (evil-leader/set-key "k r" 'neotree-find))
+          (evil-leader/set-key "k r" 'neotree-find)
+          (evil-leader/set-key-for-mode 'neotree-mode "r" 'neotree-refresh))
   :config (progn
             (evil-add-hjkl-bindings neotree-mode-map 'normal)
             (evil-define-key 'normal neotree-mode-map (kbd "C-t") 'neotree-hide)
