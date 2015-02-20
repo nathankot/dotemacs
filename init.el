@@ -605,14 +605,32 @@
 (setq org-hide-emphasis-markers t) ;; to hide the *,=, or / markers
 (setq org-pretty-entities t)       ;; to have \alpha, \to and others display as utf8 http://orgmode.org/manual/Special-symbols.html
 (setq org-directory "~/org/")
+(setq org-agenda-files (list "~/org/home.org" "~/org/work.org"))
 
 (use-package evil-org
-  :ensure t)
+  :ensure t
+  :init (progn
+          (evil-leader/set-key "o a" 'org-agenda)
+          (evil-leader/set-key "o t" 'org-todo-list)))
 
-;; Initialize by starting a org mode buffer for the current project
-;; ================================================================================
+;; Initialize by starting an org mode perspective
+
+(persp-switch "org")
+
 (if (file-exists-p "./project.org")
   (find-file "./project.org"))
+
+(if (file-exists-p "~/org/home.org")
+  (progn
+    (split-window-right)
+    (find-file "~/org/home.org")))
+
+(if (file-exists-p "~/org/work.org")
+  (progn
+    (split-window-below)
+    (find-file "~/org/work.org")))
+
+(persp-switch "main")
 
 (provide 'init)
 ;;; init.el ends here
