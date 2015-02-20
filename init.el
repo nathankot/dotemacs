@@ -122,7 +122,6 @@
                 evil-insert-state-cursor '("gray" bar)
                 evil-motion-state-cursor '("gray" box))
           (evil-mode 1))
-
   :bind ("C-q" . delete-window)
   :config (progn
 
@@ -184,6 +183,9 @@
                 (interactive)
                 (split-window-horizontally)
                     (other-window 1)))
+
+            (evil-set-initial-state 'magit-log-edit-mode 'insert)
+            (evil-set-initial-state 'git-commit-mode 'insert)
 
             ; Buffer Management
             (define-key evil-visual-state-map (kbd "SPC") 'evil-search-forward)
