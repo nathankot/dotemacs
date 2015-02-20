@@ -197,7 +197,6 @@
             (evil-add-hjkl-bindings package-menu-mode-map 'emacs)
             (evil-add-hjkl-bindings outline-mode-map 'emacs)))
 
-
 (use-package yasnippet
   :ensure t
   :diminish (yas-minor-mode . " y")
@@ -600,6 +599,7 @@
 
 ;; Org Mode
 ;; ================================================================================
+(setq org-log-done 'time)
 (setq org-hide-leading-stars t)
 (setq org-alphabetical-lists t)
 (setq org-src-fontify-natively t)  ;; you want this to activate coloring in blocks
@@ -607,13 +607,24 @@
 (setq org-hide-emphasis-markers t) ;; to hide the *,=, or / markers
 (setq org-pretty-entities t)       ;; to have \alpha, \to and others display as utf8 http://orgmode.org/manual/Special-symbols.html
 (setq org-directory "~/org/")
-(setq org-agenda-files (list "~/org/home.org" "~/org/work.org"))
+(setq org-agenda-files (list "~/org/home.org" "~/org/work.org" "~/org/notes.org"))
+(setq org-default-notes-file (concat org-directory "/notes.org"))
 
 (use-package evil-org
   :ensure t
   :init (progn
+          (evil-leader/set-key "o c" 'org-capture)
           (evil-leader/set-key "o a" 'org-agenda)
-          (evil-leader/set-key "o t" 'org-todo-list)))
+          (evil-leader/set-key "o t" 'org-todo-list)
+          (evil-add-hjkl-bindings org-agenda-mode 'emacs)
+
+          (evil-define-key 'normal 'org-mode-hook
+            (kbd "+") 'org-priority-up
+            (kbd "=") 'org-priority-down)
+
+          (evil-define-key 'normal 'org-agenda-mode-hook
+            (kbd "n") 'org-agenda-add-note
+            (kbd "q") 'org-agenda-Quit)))
 
 (add-hook 'org-mode-hook 'org-indent-mode)
 
