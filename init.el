@@ -636,12 +636,8 @@
 
 (persp-switch "org")
 
-(if (file-exists-p "./project.org")
-  (find-file "./project.org"))
-
 (if (file-exists-p "~/org/home.org")
   (progn
-    (split-window-right)
     (find-file "~/org/home.org")))
 
 (if (file-exists-p "~/org/work.org")
