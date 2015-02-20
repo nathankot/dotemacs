@@ -643,7 +643,7 @@
 
 (if (file-exists-p "~/org/work.org")
   (progn
-    (split-window-below)
+    (split-window-right)
     (find-file "~/org/work.org")))
 
 (persp-switch "main")
