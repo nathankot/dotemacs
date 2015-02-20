@@ -615,6 +615,8 @@
           (evil-leader/set-key "o a" 'org-agenda)
           (evil-leader/set-key "o t" 'org-todo-list)))
 
+(add-hook 'org-mode-hook 'org-indent-mode)
+
 ;; Initialize by starting an org mode perspective
 
 (persp-switch "org")
