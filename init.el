@@ -478,6 +478,7 @@
           (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
           (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
           (add-to-list 'auto-mode-alist '("\\.html.twig\\'" . web-mode))
+          (add-to-list 'auto-mode-alist '("\\.html.jsx\\'" . web-mode))
           (add-to-list 'magic-mode-alist '("\/\*\*.*@jsx" . web-mode)))
   :config (progn
             (define-key prog-mode-map (kbd "C-x /") 'web-mode-element-close)))
