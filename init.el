@@ -201,8 +201,6 @@
             '("~/.snippets/yasnippet-snippets"
               "~/.snippets/personal")))
   :config (progn
-            (setq company-backends (remove 'company-dabbrev company-backends))
-            (setq company-backends (append company-backends '(company-yasnippet company-dabbrev-code)))
             (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand)
             (add-hook 'web-mode-hook (lambda () (yas-activate-extra-mode 'js-mode))))
   :idle (yas-global-mode 1))
@@ -548,28 +546,26 @@
   :init (progn
           (setq company-dabbrev-downcase nil))
   :config (progn
-
-            ; There is a bug with company mode and FCI, this is a workaround
-            (defvar-local company-fci-mode-on-p nil)
-
-            (defun company-turn-off-fci (&rest ignore)
-              (when (boundp 'fci-mode)
-                (setq company-fci-mode-on-p fci-mode)
-                (when fci-mode (fci-mode -1))))
-
-            (defun company-maybe-turn-on-fci (&rest ignore)
-              (when company-fci-mode-on-p (fci-mode 1)))
-
-            (add-hook 'company-completion-started-hook 'company-turn-off-fci)
-            (add-hook 'company-completion-finished-hook 'company-maybe-turn-on-fci)
-            (add-hook 'company-completion-cancelled-hook 'company-maybe-turn-on-fci)
-            ; ---
-
             ; Swap some keybindings
             (define-key company-active-map (kbd "C-j") 'company-select-next)
             (define-key company-active-map (kbd "C-k") 'company-select-previous)
             (define-key company-active-map (kbd "C-i") 'company-select-next)
-            (define-key company-active-map (kbd "C-o") 'company-select-previous))
+            (define-key company-active-map (kbd "C-o") 'company-select-previous)
+            ; Okay lets setup company backends the way we want it, in a single place.
+            (setq company-backends
+              '( company-css
+                 company-elisp
+                 company-clang
+                 company-xcode
+                 company-tern
+                 company-ghc
+                 ( company-dabbrev-code
+                   company-etags
+                   company-gtags
+                   company-keywords
+                   company-files
+                   company-dabbrev
+                   :with company-yasnippet))))
   :idle (global-company-mode))
 
 (use-package company-ghc
@@ -578,8 +574,7 @@
           (use-package ghc
             :ensure t
             :init (progn
-                    (add-hook 'haskell-mode-hook 'ghc-init)))
-          (add-to-list 'company-backends 'company-ghc)))
+                    (add-hook 'haskell-mode-hook 'ghc-init)))))
 
 (use-package company-tern
   :ensure t
@@ -589,8 +584,7 @@
             :commands (tern-mode)
             :ensure t
             :init (progn
-                    (add-hook 'js-mode-hook 'tern-mode)))
-          (add-to-list 'company-backends 'company-tern)))
+                    (add-hook 'js-mode-hook 'tern-mode)))))
 
 ;; Org Mode
 ;; ================================================================================
