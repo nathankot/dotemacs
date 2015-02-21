@@ -19,7 +19,8 @@
  '(haskell-process-suggest-remove-import-lines t)
  '(haskell-process-type (quote cabal-repl))
  '(org-enforce-todo-checkbox-dependencies t)
- '(org-enforce-todo-dependencies t))
+ '(org-enforce-todo-dependencies t)
+ '(standard-indent 2))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -195,14 +196,14 @@
   :ensure t
   :diminish (yas-minor-mode . " y")
   :idle-priority 2
-  :commands yas-global-mode
+  :commands (yas-global-mode yas-activate-extra-mode)
   :init (progn
           (setq yas-snippet-dirs
             '("~/.snippets/yasnippet-snippets"
-              "~/.snippets/personal")))
+               "~/.snippets/personal"))
+          (add-hook 'web-mode-hook (lambda () (yas-activate-extra-mode 'js-mode))))
   :config (progn
-            (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand)
-            (add-hook 'web-mode-hook (lambda () (yas-activate-extra-mode 'js-mode))))
+            (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand))
   :idle (yas-global-mode 1))
 
 (use-package smart-mode-line
