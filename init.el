@@ -225,9 +225,9 @@
   :init (popwin-mode 1)
   :config (progn
             (evil-define-key 'normal popwin:keymap (kbd "q") 'popwin:close-popup-window)
-            (push '("^\\*helm.*\\*$" :regexp t) popwin:special-display-config)
-            (push '("^\\*magit.*\\*$" :regexp t :position top :noselect t) popwin:special-display-config)
-            (push '("^.*COMMIT_EDITMSG$" :regexp t :position top) popwin:special-display-config)))
+            (push '("^\\*helm.*\\*$" :regexp t :dedicated t) popwin:special-display-config)
+            (push '("^\\*magit.*\\*$" :regexp t :position top :noselect t :dedicated t) popwin:special-display-config)
+            (push '("^.*COMMIT_EDITMSG$" :regexp t :position top :dedicated t) popwin:special-display-config)))
 
 (use-package helm
   :ensure t
@@ -236,12 +236,11 @@
           (require 'helm-config))
   :config (progn
             (define-key evil-normal-state-map (kbd "C-b") 'helm-buffers-list)
-            (define-key helm-map
-              (kbd "C-b") 'helm-keyboard-quit
-              (kbd "C-p") 'helm-keyboard-quit
-              (kbd "C-j") 'helm-next-line
-              (kbd "C-k") 'helm-previous-line
-              (kbd "C-d") 'helm-buffer-run-kill-persistent)))
+            (define-key helm-map (kbd "C-b") 'helm-keyboard-quit)
+            (define-key helm-map (kbd "C-p") 'helm-keyboard-quit)
+            (define-key helm-map (kbd "C-j") 'helm-next-line)
+            (define-key helm-map (kbd "C-k") 'helm-previous-line)
+            (define-key helm-map (kbd "C-d") 'helm-buffer-run-kill-persistent)))
 
 (use-package projectile
   :ensure t
@@ -294,11 +293,14 @@
 
 (use-package neotree
   :ensure t
-  :commands (neotree-dir)
+  :commands (neotree-dir neo-global--window-exists-p)
   :init (progn
           (defun projectile-neotree-project-root ()
             (interactive)
-            (neotree-dir (projectile-project-root)))
+            (if (neo-global--window-exists-p)
+              (neotree-hide)
+              (neotree-dir (projectile-project-root))))
+
           (evil-leader/set-key "k b" 'projectile-neotree-project-root)
           (evil-leader/set-key "k r" 'neotree-find))
   :config (progn
@@ -539,11 +541,10 @@
           (setq company-dabbrev-downcase nil))
   :config (progn
             ; Swap some keybindings
-            (define-key company-active-map
-              (kbd "C-j") 'company-select-next
-              (kbd "C-k") 'company-select-previous
-              (kbd "C-i") 'company-select-next
-              (kbd "C-o") 'company-select-previous)
+            (define-key company-active-map (kbd "C-j") 'company-select-next)
+            (define-key company-active-map (kbd "C-k") 'company-select-previous)
+            (define-key company-active-map (kbd "C-i") 'company-select-next)
+            (define-key company-active-map (kbd "C-o") 'company-select-previous)
             ; Okay lets setup company backends the way we want it, in a single place.
             (setq company-backends
               '( company-css
