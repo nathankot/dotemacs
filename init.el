@@ -239,11 +239,12 @@
           (require 'helm-config))
   :config (progn
             (define-key evil-normal-state-map (kbd "C-b") 'helm-buffers-list)
-            (define-key helm-map (kbd "C-b") 'helm-keyboard-quit)
-            (define-key helm-map (kbd "C-p") 'helm-keyboard-quit)
-            (define-key helm-map (kbd "C-j") 'helm-next-line)
-            (define-key helm-map (kbd "C-k") 'helm-previous-line)
-            (define-key helm-map (kbd "C-d") 'helm-buffer-run-kill-persistent)))
+            (define-key helm-map
+              (kbd "C-b") 'helm-keyboard-quit
+              (kbd "C-p") 'helm-keyboard-quit
+              (kbd "C-j") 'helm-next-line
+              (kbd "C-k") 'helm-previous-line
+              (kbd "C-d") 'helm-buffer-run-kill-persistent)))
 
 (use-package projectile
   :ensure t
@@ -302,11 +303,9 @@
             (interactive)
             (neotree-dir (projectile-project-root)))
           (evil-leader/set-key "k b" 'projectile-neotree-project-root)
-          (evil-leader/set-key "k r" 'neotree-find)
-          (evil-leader/set-key-for-mode 'neotree-mode "r" 'neotree-refresh))
+          (evil-leader/set-key "k r" 'neotree-find))
   :config (progn
             (evil-add-hjkl-bindings neotree-mode-map 'normal)
-            (evil-define-key 'normal neotree-mode-map (kbd "C-t") 'neotree-hide)
             (evil-define-key 'normal neotree-mode-map "q" 'neotree-hide
                                                       "o" 'neotree-enter
                                                       "v" 'neotree-enter-vertical-split
@@ -365,14 +364,15 @@
              magit-diff-unstaged magit-diff-staged magit-blame-mode
              magit-stage-all)
   :init (progn
-          (evil-leader/set-key "g l" 'magit-log)
-          (evil-leader/set-key "g c" 'magit-commit)
-          (evil-leader/set-key "g C" 'magit-commit-amend)
-          (evil-leader/set-key "g s" 'magit-status)
-          (evil-leader/set-key "g d" 'magit-diff-unstaged)
-          (evil-leader/set-key "g D" 'magit-diff-staged)
-          (evil-leader/set-key "g b" 'magit-blame-mode)
-          (evil-leader/set-key "g w" 'magit-stage-all)
+          (evil-leader/set-key
+            "g l" 'magit-log
+            "g c" 'magit-commit
+            "g C" 'magit-commit-amend
+            "g s" 'magit-status
+            "g d" 'magit-diff-unstaged
+            "g D" 'magit-diff-staged
+            "g b" 'magit-blame-mode
+            "g w" 'magit-stage-all)
           (add-to-list 'evil-insert-state-modes 'magit-commit-mode))
   :config (progn
             (evil-add-hjkl-bindings magit-log-mode-map 'emacs)
@@ -549,10 +549,11 @@
           (setq company-dabbrev-downcase nil))
   :config (progn
             ; Swap some keybindings
-            (define-key company-active-map (kbd "C-j") 'company-select-next)
-            (define-key company-active-map (kbd "C-k") 'company-select-previous)
-            (define-key company-active-map (kbd "C-i") 'company-select-next)
-            (define-key company-active-map (kbd "C-o") 'company-select-previous)
+            (define-key company-active-map
+              (kbd "C-j") 'company-select-next
+              (kbd "C-k") 'company-select-previous
+              (kbd "C-i") 'company-select-next
+              (kbd "C-o") 'company-select-previous)
             ; Okay lets setup company backends the way we want it, in a single place.
             (setq company-backends
               '( company-css
