@@ -307,14 +307,14 @@
   :config (progn
             (evil-add-hjkl-bindings neotree-mode-map 'normal)
             (evil-define-key 'normal neotree-mode-map (kbd "C-t") 'neotree-hide)
-            (evil-define-key 'normal neotree-mode-map "q" 'neotree-hide)
-            (evil-define-key 'normal neotree-mode-map "o" 'neotree-enter)
-            (evil-define-key 'normal neotree-mode-map "v" 'neotree-enter-vertical-split)
-            (evil-define-key 'normal neotree-mode-map "r" 'neotree-refresh)
-            (evil-define-key 'normal neotree-mode-map "h" 'neotree-hidden-file-toggle)
-            (evil-define-key 'normal neotree-mode-map (kbd "m d") 'neotree-delete-node)
-            (evil-define-key 'normal neotree-mode-map (kbd "m a") 'neotree-create-node)
-            (evil-define-key 'normal neotree-mode-map (kbd "m m") 'neotree-rename-node)))
+            (evil-define-key 'normal neotree-mode-map "q" 'neotree-hide
+                                                      "o" 'neotree-enter
+                                                      "v" 'neotree-enter-vertical-split
+                                                      "r" 'neotree-refresh
+                                                      "h" 'neotree-hidden-file-toggle
+                                                      (kbd "m d") 'neotree-delete-node
+                                                      (kbd "m a") 'neotree-create-node
+                                                      (kbd "m m") 'neotree-rename-node)))
 
 (use-package perspective
   :ensure t
