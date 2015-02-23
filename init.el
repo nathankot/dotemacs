@@ -79,6 +79,7 @@
 (global-auto-revert-mode 1)
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 (setq-default fill-column 80)
+(setq tags-table-list '("./" "./.git"))
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
