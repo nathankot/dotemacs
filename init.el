@@ -81,6 +81,7 @@
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 (setq-default fill-column 80)
 (setq tags-table-list '("./" "./.git"))
+(setq large-file-warning-threshold 100000000)
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
