@@ -622,7 +622,9 @@
             "d" 'org-deadline
             "s" 'org-schedule
             "c" 'org-toggle-checkbox
-            "o" 'org-insert-heading-respect-content)
+            "o" (lambda ()
+                  (interactive)
+                  (evil-org-eol-call (quote org-insert-heading-respect-content))))
 
           (evil-define-key 'normal org-mode-map
             (kbd "m") 'org-set-tags
