@@ -233,9 +233,7 @@
   :init (popwin-mode 1)
   :config (progn
             (evil-define-key 'normal popwin:keymap (kbd "q") 'popwin:close-popup-window)
-            (push '("^\\*helm.*\\*$" :regexp t :dedicated t) popwin:special-display-config)
-            (push '("^\\*magit.*\\*$" :regexp t :position top :noselect t :dedicated t) popwin:special-display-config)
-            (push '("^.*COMMIT_EDITMSG$" :regexp t :position top :dedicated t) popwin:special-display-config)))
+            (push '("^\\*helm.*\\*$" :regexp t :dedicated t) popwin:special-display-config)))
 
 (use-package helm
   :ensure t
