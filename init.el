@@ -299,6 +299,13 @@
             (add-hook 'js-mode-hook 'js-doc)
             (add-hook 'web-mode-hook 'web-doc)))
 
+(use-package helm-swoop
+  :ensure t
+  :commands (helm-swoop)
+  :init (progn
+          (evil-leader/set-key "sb" 'helm-swoop)
+          (evil-leader/set-key "sa" 'helm-multi-swoop)))
+
 (use-package neotree
   :ensure t
   :commands (neotree-dir neo-global--window-exists-p)
