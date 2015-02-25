@@ -623,7 +623,8 @@
           (evil-leader/set-key-for-mode 'org-mode
             "d" 'org-deadline
             "s" 'org-schedule
-            "c" 'org-toggle-checkbox)
+            "c" 'org-toggle-checkbox
+            "o" 'org-insert-heading-respect-content)
 
           (evil-define-key 'normal org-mode-map
             (kbd "m") 'org-set-tags
