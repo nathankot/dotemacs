@@ -405,39 +405,37 @@
             (define-key magit-diff-mode-map (kbd "j") 'magit-goto-next-section)
             (define-key magit-diff-mode-map (kbd "k") 'magit-goto-previous-section)))
 
-(use-package flycheck
+(require 'flycheck)
+
+(define-key evil-normal-state-map (kbd "] e") 'next-error)
+(define-key evil-normal-state-map (kbd "[ e") 'previous-error)
+
+; Custom checkers
+(flycheck-define-checker jsxhint
+  "A JSX syntax and style checker based on JSXHint."
+  :command ("jsxhint" source)
+  :error-patterns ((error line-start (1+ nonl) ": line " line ", col " column ", " (message) line-end))
+  :predicate (lambda ()
+               (and (executable-find "jsxhint")
+                    (buffer-file-name)
+                    (string-match ".*\.jsx?$" (buffer-file-name))))
+  :modes (web-mode))
+
+(add-to-list 'flycheck-checkers 'jsxhint)
+(add-to-list 'flycheck-checkers 'swift)
+
+(global-flycheck-mode)
+
+(use-package flycheck-haskell
   :ensure t
-  :diminish " f"
-  :commands global-flycheck-mode
-  :idle (global-flycheck-mode)
-  :config (progn
-            (define-key evil-normal-state-map (kbd "] e") 'next-error)
-            (define-key evil-normal-state-map (kbd "[ e") 'previous-error)
+  :commands flycheck-haskell-setup
+  :init (progn
+          (add-hook 'flycheck-mode-hook #'flycheck-haskell-setup)))
 
-            (use-package helm-flycheck
-              :ensure t
-              :commands helm-flycheck
-              :init (evil-leader/set-key "e" 'helm-flycheck))
-
-            ; Custom checkers
-            (flycheck-define-checker jsxhint
-              "A JSX syntax and style checker based on JSXHint."
-              :command ("jsxhint" source)
-              :error-patterns ((error line-start (1+ nonl) ": line " line ", col " column ", " (message) line-end))
-              :predicate (lambda ()
-                           (and (executable-find "jsxhint")
-                                (buffer-file-name)
-                                (string-match ".*\.jsx?$" (buffer-file-name))))
-              :modes (web-mode))
-
-            (use-package flycheck-haskell
-              :ensure t
-              :commands flycheck-haskell-setup
-              :init (progn
-                      (add-hook 'flycheck-mode-hook #'flycheck-haskell-setup)))
-
-            (add-to-list 'flycheck-checkers 'jsxhint)
-            (add-to-list 'flycheck-checkers 'swift)))
+(use-package helm-flycheck
+  :ensure t
+  :commands helm-flycheck
+  :init (evil-leader/set-key "e" 'helm-flycheck))
 
 (use-package emmet-mode
   :diminish " e"
