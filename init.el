@@ -75,7 +75,7 @@
 (setq make-backup-files nil)
 (setq backup-inhibited t)
 (setq auto-save-default nil)
-(auto-save-mode -1) ;; Disable autosaving
+(auto-save-mode nil) ;; Disable autosaving
 (show-paren-mode t) ;; Show matching parens
 (setq scroll-margin 5 scroll-conservatively 9999 scroll-step 1) ;; Smooth scrolling
 (setq gc-cons-threshold 20000000) ;; Increase garbage collection limit
