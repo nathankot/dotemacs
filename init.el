@@ -53,13 +53,19 @@
 (setenv "LC_CTYPE" "UTF-8")
 
 ;; Mac Specific
-(if (eq system-type 'darwin)
-  (push "/opt/boxen/homebrew/bin" exec-path)
-  (push "/usr/local/bin" exec-path)
-  (setenv "PATH" (concat (getenv "PATH") ":/opt/boxen/homebrew/bin"))
-  (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
-  (require 'pbcopy)
-  (turn-on-pbcopy))
+(push "/opt/boxen/homebrew/bin" exec-path)
+(push "/usr/local/bin" exec-path)
+(setenv "PATH" (concat (getenv "PATH") ":/opt/boxen/homebrew/bin"))
+(setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
+(defun copy-from-osx ()
+  (shell-command-to-string "pbpaste"))
+(defun paste-to-osx (text &optional push)
+  (let ((process-connection-type nil))
+    (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+      (process-send-string proc text)
+      (process-send-eof proc))))
+(setq interprogram-cut-function 'paste-to-osx)
+(setq interprogram-paste-function 'copy-from-osx)
 
 ;; Other stuff
 (setq inhibit-startup-screen t)
