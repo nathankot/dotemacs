@@ -420,14 +420,15 @@
               :init (evil-leader/set-key "e" 'helm-flycheck))
 
             ; Custom checkers
-            (flycheck-define-checker jsxhint-checker
+            (flycheck-define-checker jsxhint
               "A JSX syntax and style checker based on JSXHint."
               :command ("jsxhint" source)
-              :error-patterns
-              ((error line-start (1+ nonl) ": line " line ", col " column ", " (message) line-end))
+              :error-patterns ((error line-start (1+ nonl) ": line " line ", col " column ", " (message) line-end))
+              :predicate (lambda ()
+                           (and (executable-find "jsxhint")
+                                (buffer-file-name)
+                                (string-match ".*\.jsx?$" (buffer-file-name))))
               :modes (web-mode))
-            (add-to-list 'flycheck-checkers 'jsxhint-checker)
-            (add-to-list 'flycheck-checkers 'swift)
 
             (use-package flycheck-haskell
               :ensure t
@@ -435,13 +436,8 @@
               :init (progn
                       (add-hook 'flycheck-mode-hook #'flycheck-haskell-setup)))
 
-            ; Checkers for formats
-            (when 'web-mode-hook
-              (add-hook 'web-mode-hook
-              (lambda ()
-                (when (equal 'web-mode-content-type "jsx")
-                  (flycheck-select-checker 'jsxhint-checker)
-                  (flycheck-mode)))))))
+            (add-to-list 'flycheck-checkers 'jsxhint)
+            (add-to-list 'flycheck-checkers 'swift)))
 
 (use-package emmet-mode
   :diminish " e"
