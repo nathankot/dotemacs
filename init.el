@@ -57,7 +57,9 @@
   (push "/opt/boxen/homebrew/bin" exec-path)
   (push "/usr/local/bin" exec-path)
   (setenv "PATH" (concat (getenv "PATH") ":/opt/boxen/homebrew/bin"))
-  (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin")))
+  (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
+  (require 'pbcopy)
+  (turn-on-pbcopy))
 
 ;; Other stuff
 (setq inhibit-startup-screen t)
