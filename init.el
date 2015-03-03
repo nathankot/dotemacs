@@ -569,7 +569,8 @@
                  company-xcode
                  company-tern
                  company-ghc
-                 ( company-dabbrev-code
+                 ( company-capf
+                   company-dabbrev-code
                    company-etags
                    company-gtags
                    company-keywords
@@ -657,7 +658,8 @@
   :config (progn
             (evil-leader/set-key-for-mode 'ledger-mode
               "o" 'ledger-add-transaction
-              "r" 'ledger-reconcile)))
+              "r" 'ledger-reconcile
+              "d" 'ledger-delete-current-transaction)))
 
 ;; Initialize by starting an org mode perspective
 
