@@ -648,6 +648,15 @@
 
 (add-hook 'org-mode-hook 'org-indent-mode)
 
+;; Ledger-mode
+;; ================================================================================
+(use-package ledger-mode
+  :ensure t
+  :config (progn
+            (evil-leader/set-key-for-mode 'ledger-mode
+              "o" 'ledger-add-transaction
+              "r" 'ledger-reconcile)))
+
 ;; Initialize by starting an org mode perspective
 
 (persp-switch "org")
