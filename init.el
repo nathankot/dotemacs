@@ -652,6 +652,8 @@
 ;; ================================================================================
 (use-package ledger-mode
   :ensure t
+  :init (progn
+          (add-to-list 'auto-mode-alist '("\\.ledger\\'" . ledger-mode)))
   :config (progn
             (evil-leader/set-key-for-mode 'ledger-mode
               "o" 'ledger-add-transaction
