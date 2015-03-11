@@ -571,8 +571,8 @@
                  company-ghc
                  ( company-capf
                    company-dabbrev-code
-                   company-etags
-                   company-gtags
+                   ;; company-etags
+                   ;; company-gtags
                    company-keywords
                    company-files
                    company-dabbrev
