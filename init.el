@@ -600,7 +600,7 @@
 ;; Org Mode
 ;; ================================================================================
 (setq org-log-done 'time)
-(setq org-hide-leading-stars t)
+(setq org-hide-leading-stars f)
 (setq org-alphabetical-lists t)
 (setq org-src-fontify-natively t)  ;; you want this to activate coloring in blocks
 (setq org-src-tab-acts-natively t) ;; you want this to have completion in blocks
