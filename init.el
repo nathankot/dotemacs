@@ -10,15 +10,7 @@
  ;; If there is more than one, they won't work right.
   '(custom-safe-themes
      (quote
-       ("1cd9defef2a98138c732728568b04043afd321eb802d25a254777de9b2463768"
-        "8f1cedf54f137f71382e3367e1843d10e173add99abe3a5f7d3285f5cc18f1a9"
-        "d6e27431f8cafb4a9136aebb1d4061f895b120bf88d34ff60c390d9905bd4e36"
-        "e292ec749f785d348969926448e25790356a7ce1a8fda6e695f5e8b70bed786b"
-        "8022cea21aa4daca569aee5c1b875fbb3f3248a5debc6fc8cf5833f2936fbb22"
-        "c56d90af9285708041991bbc780a073182cbe91721de17c6e7a8aac1380336b3"
-        "c5a044ba03d43a725bd79700087dea813abcb6beb6be08c7eb3303ed90782482"
-        "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f"
-        default)))
+       ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "1cd9defef2a98138c732728568b04043afd321eb802d25a254777de9b2463768" "8f1cedf54f137f71382e3367e1843d10e173add99abe3a5f7d3285f5cc18f1a9" "d6e27431f8cafb4a9136aebb1d4061f895b120bf88d34ff60c390d9905bd4e36" "e292ec749f785d348969926448e25790356a7ce1a8fda6e695f5e8b70bed786b" "8022cea21aa4daca569aee5c1b875fbb3f3248a5debc6fc8cf5833f2936fbb22" "c56d90af9285708041991bbc780a073182cbe91721de17c6e7a8aac1380336b3" "c5a044ba03d43a725bd79700087dea813abcb6beb6be08c7eb3303ed90782482" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default)))
  '(haskell-process-auto-import-loaded-modules t)
  '(haskell-process-log t)
  '(haskell-process-suggest-remove-import-lines t)
@@ -600,7 +592,7 @@
 ;; Org Mode
 ;; ================================================================================
 (setq org-log-done 'time)
-(setq org-hide-leading-stars f)
+(setq org-hide-leading-stars nil)
 (setq org-alphabetical-lists t)
 (setq org-src-fontify-natively t)  ;; you want this to activate coloring in blocks
 (setq org-src-tab-acts-natively t) ;; you want this to have completion in blocks
