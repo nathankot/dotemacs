@@ -599,7 +599,7 @@
 (setq org-hide-emphasis-markers t) ;; to hide the *,=, or / markers
 (setq org-pretty-entities t)       ;; to have \alpha, \to and others display as utf8 http://orgmode.org/manual/Special-symbols.html
 (setq org-directory "~/org/")
-(setq org-agenda-files (list "~/org/home.org" "~/org/work.org" "~/org/notes.org" "./project.org"))
+(setq org-agenda-files (list "~/org/home.org" "~/org/work.org" "~/org/notes.org" "./project.org" "./README.org"))
 (setq org-default-notes-file (concat org-directory "/notes.org"))
 
 (setq org-todo-keywords
