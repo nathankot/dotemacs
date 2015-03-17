@@ -83,7 +83,7 @@
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
-(require 'use-package)
+(eval-when-compile (require 'use-package))
 
 ;; ESSENTIAL PACKAGES
 ;; ================================================================================
@@ -199,16 +199,15 @@
 (use-package yasnippet
   :ensure t
   :diminish (yas-minor-mode . " y")
-  :idle-priority 2
   :commands (yas-global-mode yas-activate-extra-mode)
   :init (progn
           (setq yas-snippet-dirs
             '("~/.snippets/yasnippet-snippets"
                "~/.snippets/personal"))
-          (add-hook 'web-mode-hook (lambda () (yas-activate-extra-mode 'js-mode))))
+          (add-hook 'web-mode-hook (lambda () (yas-activate-extra-mode 'js-mode)))
+          (yas-global-mode 1))
   :config (progn
-            (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand))
-  :idle (yas-global-mode 1))
+            (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand)))
 
 (use-package smart-mode-line
   :ensure t
@@ -344,7 +343,7 @@
 
 (use-package editorconfig
   :ensure t
-  :init (progn
+  :config (progn
           (add-to-list 'edconf-indentation-alist '(swift-mode swift-indent-offset))))
 
 (use-package smex
@@ -366,7 +365,7 @@
 
 (use-package linum-relative
   :ensure t
-  :init (progn
+  :config (progn
           (setq linum-relative-format "%3s   ")
           (linum-on)
           (global-linum-mode)))
@@ -544,9 +543,9 @@
   :ensure t
   :diminish " c"
   :commands (global-company-mode company-mode)
-  :idle-priority 1
   :init (progn
-          (setq company-dabbrev-downcase nil))
+          (setq company-dabbrev-downcase nil)
+          (global-company-mode))
   :config (progn
             ; Swap some keybindings
             (define-key company-active-map (kbd "C-j") 'company-select-next)
@@ -568,8 +567,7 @@
                    company-keywords
                    company-files
                    company-dabbrev
-                   :with company-yasnippet))))
-  :idle (global-company-mode))
+                   :with company-yasnippet)))))
 
 (use-package company-ghc
   :ensure t
