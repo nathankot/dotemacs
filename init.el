@@ -393,26 +393,25 @@
             (define-key magit-diff-mode-map (kbd "j") 'magit-goto-next-section)
             (define-key magit-diff-mode-map (kbd "k") 'magit-goto-previous-section)))
 
-(require 'flycheck)
-
-(define-key evil-normal-state-map (kbd "] e") 'next-error)
-(define-key evil-normal-state-map (kbd "[ e") 'previous-error)
-
-; Custom checkers
-(flycheck-define-checker jsxhint
-  "A JSX syntax and style checker based on JSXHint."
-  :command ("jsxhint" source)
-  :error-patterns ((error line-start (1+ nonl) ": line " line ", col " column ", " (message) line-end))
-  :predicate (lambda ()
-               (and (executable-find "jsxhint")
-                    (buffer-file-name)
-                    (string-match ".*\.jsx?$" (buffer-file-name))))
-  :modes (web-mode))
-
-(add-to-list 'flycheck-checkers 'jsxhint)
-(add-to-list 'flycheck-checkers 'swift)
-
-(global-flycheck-mode)
+(use-package flycheck
+  :ensure t
+  :commands global-flycheck-mode
+  :init (progn
+          (global-flycheck-mode))
+  :config (progn
+            (flycheck-define-checker jsxhint
+              "A JSX syntax and style checker based on JSXHint."
+              :command ("jsxhint" source)
+              :error-patterns ((error line-start (1+ nonl) ": line " line ", col " column ", " (message) line-end))
+              :predicate (lambda ()
+                          (and (executable-find "jsxhint")
+                                (buffer-file-name)
+                                (string-match ".*\.jsx?$" (buffer-file-name))))
+              :modes (web-mode))
+            (add-to-list 'flycheck-checkers 'jsxhint)
+            (add-to-list 'flycheck-checkers 'swift)
+            (define-key evil-normal-state-map (kbd "] e") 'next-error)
+            (define-key evil-normal-state-map (kbd "[ e") 'previous-error)))
 
 (use-package flycheck-haskell
   :ensure t
