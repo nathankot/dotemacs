@@ -15,6 +15,9 @@
  '(haskell-process-log t)
  '(haskell-process-suggest-remove-import-lines t)
  '(haskell-process-type (quote cabal-repl))
+  '(org-agenda-files
+     (quote
+       ("~/org/home.org" "~/org/work.org" "~/org/notes.org")))
  '(org-enforce-todo-checkbox-dependencies t)
  '(org-enforce-todo-dependencies t)
  '(standard-indent 2))
@@ -596,7 +599,7 @@
 (setq org-hide-emphasis-markers t) ;; to hide the *,=, or / markers
 (setq org-pretty-entities t)       ;; to have \alpha, \to and others display as utf8 http://orgmode.org/manual/Special-symbols.html
 (setq org-directory "~/org/")
-(setq org-agenda-files (list "~/org/home.org" "~/org/work.org" "~/org/notes.org" "./project.org" "./README.org"))
+(setq org-agenda-files (list "~/org/home.org" "~/org/work.org" "~/org/notes.org"))
 (setq org-default-notes-file (concat org-directory "/notes.org"))
 
 (setq org-todo-keywords
@@ -664,6 +667,15 @@
     (find-file "~/org/work.org")))
 
 (persp-switch "main")
+
+;; Add any available project-based org files to the agend list
+(if (file-exists-p (expand-file-name "README.org"))
+  (progn
+    (add-to-list 'org-agenda-files (expand-file-name "README.org"))))
+
+(if (file-exists-p (expand-file-name "project.org"))
+  (progn
+    (add-to-list 'org-agenda-files (expand-file-name "project.org"))))
 
 (provide 'init)
 ;;; init.el ends here
