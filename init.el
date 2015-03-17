@@ -282,21 +282,29 @@
   :ensure t
   :init (progn
           (setq helm-dash-docsets-path "~/.docset")
+          (setq helm-dash-common-docsets '("Lo-Dash" "HTML" "CSS"))
           (evil-leader/set-key "f" 'helm-dash-at-point)
           (define-key evil-normal-state-map (kbd "C-f") 'helm-dash))
   :config (progn
-            (defun js-doc()
-              (interactive)
-              (setq-local helm-dash-docsets '("AngularJS" "BackboneJS" "Lo-Dash" "Javascript" "NodeJS" "jQuery" "Chai"))
-              (setq helm-current-buffer (current-buffer)))
+            (add-hook 'prog-mode-hook
+              (lambda ()
+                (interactive)
+                (setq helm-current-buffer (current-buffer))))
 
-            (defun web-doc()
-              (interactive)
-              (setq-local helm-dash-docsets '("Javascript" "HTML" "CSS" "Lo-Dash" "jQuery" "Bootstrap_3"))
-              (setq helm-current-buffer (current-buffer)))
+            (add-hook 'swift-mode-hook
+              (lambda ()
+                (interactive)
+                (setq-local helm-dash-docsets '("iOS"))))
 
-            (add-hook 'js-mode-hook 'js-doc)
-            (add-hook 'web-mode-hook 'web-doc)))
+            (add-hook 'js-mode-hook
+              (lambda ()
+                (interactive)
+                (setq-local helm-dash-docsets '("AngularJS" "BackboneJS" "Lo-Dash" "Javascript" "NodeJS" "jQuery" "Chai"))))
+
+            (add-hook 'web-mode-hook
+              (lambda ()
+                (interactive)
+                (setq-local helm-dash-docsets '("Javascript" "HTML" "CSS" "Lo-Dash" "jQuery" "Bootstrap_3"))))))
 
 (use-package helm-swoop
   :ensure t
