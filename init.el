@@ -133,6 +133,7 @@
               :init (global-evil-leader-mode)
               :config (progn
                         (evil-leader/set-leader ",")
+                        (evil-leader/set-key "t" 'transpose-words)
                         (evil-leader/set-key "w" 'save-buffer)
                         (evil-leader/set-key "i" 'evil-window-move-far-left)
                         (evil-leader/set-key "SPC" 'evil-search-highlight-persist-remove-all)))
