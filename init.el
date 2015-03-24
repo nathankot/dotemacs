@@ -36,6 +36,7 @@
  '(git-gutter:modified ((t (:foreground "#E090C7" :inverse-video nil :weight bold))))
  '(linum ((t (:background "#202020" :foreground "color-237"))))
  '(region ((t (:background "#000000"))))
+ '(vertical-border ((t (:foreground "color-237"))))
  '(web-mode-html-attr-name-face ((t (:foreground "#B98080")))))
 
 ;; Use UTF-8 encoding
