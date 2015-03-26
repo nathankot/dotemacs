@@ -625,30 +625,30 @@
 
 (use-package evil-org
   :ensure t
-  :init (progn
-          (evil-add-hjkl-bindings org-agenda-mode-map 'emacs)
+  :config (progn
+            (evil-add-hjkl-bindings org-agenda-mode-map 'emacs)
 
-          (evil-leader/set-key "o c" 'org-capture
-                               "o a" 'org-agenda
-                               "o t" 'org-todo-list)
+            (evil-leader/set-key "o c" 'org-capture
+                                "o a" 'org-agenda
+                                "o t" 'org-todo-list)
 
-          (evil-leader/set-key-for-mode 'org-mode
-            "d" 'org-deadline
-            "s" 'org-schedule
-            "c" 'org-toggle-checkbox
-            "o" (lambda ()
-                  (interactive)
-                  (evil-org-eol-call (quote org-insert-heading-respect-content))))
+            (evil-leader/set-key-for-mode 'org-mode
+              "d" 'org-deadline
+              "s" 'org-schedule
+              "c" 'org-toggle-checkbox
+              "o" (lambda ()
+                    (interactive)
+                    (evil-org-eol-call (quote org-insert-heading-respect-content))))
 
-          (evil-define-key 'normal org-mode-map
-            (kbd "m") 'org-set-tags
-            (kbd "+") 'org-priority-up)
+            (evil-define-key 'normal org-mode-map
+              (kbd "m") 'org-set-tags
+              (kbd "+") 'org-priority-up)
 
-          (evil-define-key 'normal org-agenda-mode-map
-            (kbd "d") 'org-agenda-deadline
-            (kbd "s") 'org-agenda-schedule
-            (kbd "+") 'org-priority-up
-            (kbd "q") 'org-agenda-Quit)))
+            (evil-define-key 'normal org-agenda-mode-map
+              (kbd "d") 'org-agenda-deadline
+              (kbd "s") 'org-agenda-schedule
+              (kbd "+") 'org-priority-up
+              (kbd "q") 'org-agenda-Quit)))
 
 (add-hook 'org-mode-hook 'org-indent-mode)
 
