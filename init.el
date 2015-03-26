@@ -390,6 +390,7 @@
 
 (use-package magit
   :ensure t
+  :diminish magit-auto-revert-mode
   :commands (magit-log magit-status magit-commit magit-commit-amend
              magit-diff-unstaged magit-diff-staged magit-blame-mode
              magit-stage-all)
