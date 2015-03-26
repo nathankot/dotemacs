@@ -693,5 +693,9 @@
   (progn
     (add-to-list 'org-agenda-files (expand-file-name "project.org"))))
 
+(if (file-exists-p (expand-file-name ".emacs.el"))
+  (progn
+    (load (expand-file-name ".emacs.el"))))
+
 (provide 'init)
 ;;; init.el ends here
