@@ -440,7 +440,7 @@
 (use-package helm-flycheck
   :ensure t
   :commands helm-flycheck
-  :init (evil-leader/set-key "f l" 'helm-flycheck))
+  :init (evil-leader/set-key "e l" 'helm-flycheck))
 
 (use-package emmet-mode
   :diminish " e"
@@ -639,8 +639,8 @@
             (evil-add-hjkl-bindings org-agenda-mode-map 'emacs)
 
             (evil-leader/set-key "o c" 'org-capture
-                                "o a" 'org-agenda
-                                "o t" 'org-todo-list)
+                                 "o a" 'org-agenda
+                                 "o t" 'org-todo-list)
 
             (evil-leader/set-key-for-mode 'org-mode
               "d" 'org-deadline
