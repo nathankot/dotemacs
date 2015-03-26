@@ -99,7 +99,10 @@
           (load-theme 'hc-zenburn t))))
 
 (use-package diminish
-  :ensure t)
+  :ensure t
+  :commands diminish
+  :config (progn
+            (diminish 'isearch-mode " ?")))
 
 (use-package undo-tree
   :diminish undo-tree-mode)
@@ -151,7 +154,8 @@
 
             (use-package evil-snipe
               :ensure t
-              :commands (global-evil-snipe-mode)
+              :diminish evil-snipe-mode
+              :commands (global-evil-snipe-mode evil-snipe-mode)
               :init     (global-evil-snipe-mode 1))
 
             (use-package evil-surround
@@ -409,6 +413,7 @@
 
 (use-package flycheck
   :ensure t
+  :diminish (flycheck-mode . " f")
   :commands global-flycheck-mode
   :init (progn
           (global-flycheck-mode))
