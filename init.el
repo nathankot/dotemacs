@@ -84,8 +84,6 @@
 (setq tags-table-list '("./" "./.git"))
 (setq large-file-warning-threshold 100000000)
 
-(add-to-list 'load-path "~/.emacs.d/vendor")
-
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
@@ -425,7 +423,6 @@
                                 (string-match ".*\.jsx?$" (buffer-file-name))))
               :modes (web-mode))
             (add-to-list 'flycheck-checkers 'jsxhint)
-            (add-to-list 'flycheck-checkers 'swift)
             (define-key evil-normal-state-map (kbd "] e") 'next-error)
             (define-key evil-normal-state-map (kbd "[ e") 'previous-error)))
 
@@ -523,11 +520,12 @@
   :commands lua-mode)
 
 (use-package swift-mode
-  :ensure nil ; Currently developing in vendor/
+  :load-path "vendor/swift-mode"
   :commands swift-mode
+  :init (progn
+            (add-to-list 'auto-mode-alist '("\\.swift\\'" . swift-mode)))
   :config (progn
-            (setq flycheck-swift-linked-sources "**/*.swift")
-            (setq flycheck-swift-framework-search-path "Carthage/Build/iOS")
+            (add-to-list 'flycheck-checkers 'swift)
             (setq flycheck-swift-sdk-path
               "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk")))
 
