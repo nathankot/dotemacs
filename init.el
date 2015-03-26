@@ -522,7 +522,10 @@
 
 (use-package swift-mode
   :ensure t
-  :commands swift-mode)
+  :commands swift-mode
+  :config (progn
+            (setq flycheck-swift-sdk-path
+              "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk")))
 
 (use-package puppet-mode
   :ensure t
