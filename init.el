@@ -440,7 +440,7 @@
 (use-package helm-flycheck
   :ensure t
   :commands helm-flycheck
-  :init (evil-leader/set-key "e" 'helm-flycheck))
+  :init (evil-leader/set-key "f l" 'helm-flycheck))
 
 (use-package emmet-mode
   :diminish " e"
