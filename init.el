@@ -542,17 +542,18 @@
 
 (use-package haskell-mode
   :load-path "vendor/haskell-mode"
-  :config (progn
-            (add-hook 'haskell-mode-hook
-              (lambda ()
-                (turn-on-haskell-indentation)
-                (interactive-haskell-mode)
-                (evil-leader/set-key-for-mode 'haskell-mode
+  :init (progn
+          (evil-leader/set-key-for-mode 'haskell-mode
                     "t" 'haskell-process-do-type
                     "h i" 'haskell-interactive-bring
                     "h k" 'haskell-session-kill
                     "h g i" 'haskell-navigate-imports
-                    "h f i" 'haskell-mode-format-imports)))))
+                    "h f i" 'haskell-mode-format-imports))
+  :config (progn
+            (add-hook 'haskell-mode-hook
+              (lambda ()
+                (turn-on-haskell-indentation)
+                (interactive-haskell-mode)))))
 
 
 
