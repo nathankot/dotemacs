@@ -433,7 +433,7 @@
             (define-key evil-normal-state-map (kbd "[ e") 'previous-error)))
 
 (use-package flycheck-haskell
-  :ensure t
+  :load-path "vendor/flycheck-haskell"
   :commands flycheck-haskell-setup
   :init (progn
           (add-hook 'flycheck-mode-hook #'flycheck-haskell-setup)))
@@ -527,9 +527,6 @@
 
 (use-package swift-mode
   :load-path "vendor/swift-mode"
-  :commands swift-mode
-  :init (progn
-            (add-to-list 'auto-mode-alist '("\\.swift\\'" . swift-mode)))
   :config (progn
             (add-to-list 'flycheck-checkers 'swift)
             (setq flycheck-swift-sdk-path
@@ -544,8 +541,7 @@
   :commands yaml-mode)
 
 (use-package haskell-mode
-  :ensure t
-  :commands haskell-mode
+  :load-path "vendor/haskell-mode"
   :config (progn
             (add-hook 'haskell-mode-hook
               (lambda ()
