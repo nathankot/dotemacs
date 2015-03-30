@@ -416,6 +416,11 @@
   :ensure t
   :diminish (flycheck-mode . " f")
   :commands global-flycheck-mode
+  :preface (progn
+             (defun jsxhint-predicate ()
+               (and (executable-find "jsxhint")
+                                (buffer-file-name)
+                                (string-match ".*\.jsx?$" (buffer-file-name)))))
   :init (progn
           (global-flycheck-mode))
   :config (progn
@@ -423,10 +428,7 @@
               "A JSX syntax and style checker based on JSXHint."
               :command ("jsxhint" source)
               :error-patterns ((error line-start (1+ nonl) ": line " line ", col " column ", " (message) line-end))
-              :predicate (lambda ()
-                          (and (executable-find "jsxhint")
-                                (buffer-file-name)
-                                (string-match ".*\.jsx?$" (buffer-file-name))))
+              :predicate jsxhint-predicate
               :modes (web-mode))
             (add-to-list 'flycheck-checkers 'jsxhint)
             (define-key evil-normal-state-map (kbd "] e") 'next-error)
