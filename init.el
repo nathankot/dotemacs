@@ -546,17 +546,17 @@
 (use-package haskell-mode
   :ensure t
   :commands haskell-mode
-  :diminish (interactive-haskell-mode electric-indent-mode)
-  :init (progn
-          (add-hook 'haskell-mode-hook (lambda ()
-                                         (turn-on-haskell-indentation)
-                                         (interactive-haskell-mode)
-                                         (evil-leader/set-key
-                                            "t" 'haskell-process-do-type
-                                            "ghi" 'haskell-interactive-bring
-                                            "ghk" 'haskell-session-kill
-                                            "ghgi" 'haskell-navigate-imports
-                                            "ghfi" 'haskell-mode-format-imports)))))
+  :config (progn
+            (add-hook 'haskell-mode-hook
+              (lambda ()
+                (turn-on-haskell-indentation)
+                (interactive-haskell-mode)
+                (evil-leader/set-key-for-mode 'haskell-mode
+                    "t" 'haskell-process-do-type
+                    "h i" 'haskell-interactive-bring
+                    "h k" 'haskell-session-kill
+                    "h g i" 'haskell-navigate-imports
+                    "h f i" 'haskell-mode-format-imports)))))
 
 
 
