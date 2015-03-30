@@ -446,7 +446,9 @@
   :init (evil-leader/set-key "e l" 'helm-flycheck))
 
 (use-package emmet-mode
-  :diminish " e"
+  ;; Can't diminish this, because the logic relies on
+  ;; reading the mode-line.
+  ;; :diminish " e"
   :ensure t
   :commands emmet-mode
   :init (progn
