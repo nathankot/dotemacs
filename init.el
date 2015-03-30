@@ -79,6 +79,20 @@
 (package-initialize)
 (eval-when-compile (require 'use-package))
 
+;; Theme.
+;; ================================================================================
+(use-package hc-zenburn-theme
+  :ensure t
+  :init (progn
+          (add-to-list 'default-frame-alist '(background-color . "#313131")
+          (load-theme 'hc-zenburn t))))
+
+(use-package smart-mode-line
+  :ensure t
+  :init (sml/setup)
+  :config (sml/apply-theme 'respectful))
+
+
 ;; Misc.
 ;; ================================================================================
 (use-package undo-tree :diminish undo-tree-mode)
@@ -207,17 +221,6 @@
 
 ;; Visual utilities
 ;; ================================================================================
-(use-package hc-zenburn-theme
-  :ensure t
-  :init (progn
-          (add-to-list 'default-frame-alist '(background-color . "#313131")
-          (load-theme 'hc-zenburn t))))
-
-(use-package smart-mode-line
-  :ensure t
-  :init (sml/setup)
-  :config (sml/apply-theme 'respectful))
-
 (use-package diminish
   :ensure t
   :commands diminish
