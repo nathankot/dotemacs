@@ -615,6 +615,7 @@
           (setq haskell-process-log t)
           (setq haskell-process-suggest-remove-import-lines t)
           (setq haskell-process-type (quote cabal-repl))
+          (setq haskell-interactive-popup-errors nil)
           (evil-leader/set-key-for-mode 'haskell-mode
                     "t" 'haskell-process-do-type
                     "h i" 'haskell-interactive-bring
