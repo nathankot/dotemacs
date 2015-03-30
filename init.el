@@ -424,12 +424,6 @@
             (define-key evil-normal-state-map (kbd "] e") 'next-error)
             (define-key evil-normal-state-map (kbd "[ e") 'previous-error)))
 
-(use-package flycheck-haskell
-  :load-path "vendor/flycheck-haskell"
-  :commands flycheck-haskell-setup
-  :init (progn
-          (add-hook 'flycheck-mode-hook #'flycheck-haskell-setup)))
-
 (use-package helm-flycheck
   :ensure t
   :commands helm-flycheck
@@ -460,6 +454,48 @@
   :commands rainbow-delimiters-mode
   :init (progn
           (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)))
+
+
+;; Company and it's backends
+;; ================================================================================
+
+(use-package company
+  :ensure t
+  :diminish " c"
+  :init (progn
+          (setq company-dabbrev-downcase nil)
+          (global-company-mode))
+  :config (progn
+            ; Swap some keybindings
+            (define-key company-active-map (kbd "C-j") 'company-select-next)
+            (define-key company-active-map (kbd "C-k") 'company-select-previous)
+            (define-key company-active-map (kbd "C-i") 'company-select-next)
+            (define-key company-active-map (kbd "C-o") 'company-select-previous)
+            ; Okay lets setup company backends the way we want it, in a single place.
+            (setq company-backends
+              '( company-css
+                 company-elisp
+                 company-clang
+                 company-xcode
+                 company-tern
+                 ( company-capf
+                   company-dabbrev-code
+                   ;; company-etags
+                   ;; company-gtags
+                   company-keywords
+                   company-files
+                   company-dabbrev
+                   :with company-yasnippet)))))
+
+(use-package company-tern
+  :ensure t
+  :init (progn
+          (use-package tern
+            :diminish " T"
+            :commands (tern-mode)
+            :ensure t
+            :init (progn
+                    (add-hook 'js-mode-hook 'tern-mode)))))
 
 
 ;; LANGUAGE PACKS
@@ -537,6 +573,19 @@
 (use-package haskell-mode
   :load-path "vendor/haskell-mode"
   :init (progn
+          (use-package company-ghc
+            :ensure t
+            :init (progn
+                    (use-package ghc :ensure t))
+            :config (progn
+                      (add-to-list 'company-backends 'company-ghc)))
+
+          (use-package flycheck-haskell
+            :load-path "vendor/flycheck-haskell"
+            :commands flycheck-haskell-setup
+            :init (progn
+                    (add-hook 'flycheck-mode-hook #'flycheck-haskell-setup)))
+
           (setq haskell-process-auto-import-loaded-modules t)
           (setq haskell-process-log t)
           (setq haskell-process-suggest-remove-import-lines t)
@@ -548,63 +597,9 @@
                     "h g i" 'haskell-navigate-imports
                     "h f i" 'haskell-mode-format-imports))
   :config (progn
-            (add-hook 'haskell-mode-hook
-              (lambda ()
-                (turn-on-haskell-indentation)
-                (interactive-haskell-mode)))))
-
-
-
-;; Company and it's backends
-;; ================================================================================
-
-(use-package company
-  :ensure t
-  :diminish " c"
-  :commands (global-company-mode company-mode)
-  :init (progn
-          (setq company-dabbrev-downcase nil)
-          (global-company-mode))
-  :config (progn
-            ; Swap some keybindings
-            (define-key company-active-map (kbd "C-j") 'company-select-next)
-            (define-key company-active-map (kbd "C-k") 'company-select-previous)
-            (define-key company-active-map (kbd "C-i") 'company-select-next)
-            (define-key company-active-map (kbd "C-o") 'company-select-previous)
-            ; Okay lets setup company backends the way we want it, in a single place.
-            (setq company-backends
-              '( company-css
-                 company-elisp
-                 company-clang
-                 company-xcode
-                 company-tern
-                 company-ghc
-                 ( company-capf
-                   company-dabbrev-code
-                   ;; company-etags
-                   ;; company-gtags
-                   company-keywords
-                   company-files
-                   company-dabbrev
-                   :with company-yasnippet)))))
-
-(use-package company-ghc
-  :ensure t
-  :init (progn
-          (use-package ghc
-            :ensure t
-            :init (progn
-                    (add-hook 'haskell-mode-hook 'ghc-init)))))
-
-(use-package company-tern
-  :ensure t
-  :init (progn
-          (use-package tern
-            :diminish " T"
-            :commands (tern-mode)
-            :ensure t
-            :init (progn
-                    (add-hook 'js-mode-hook 'tern-mode)))))
+            (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+            (add-hook 'haskell-mode-hook 'ghc-init)
+            (add-hook 'haskell-mode-hook 'interactive-haskell-mode)))
 
 ;; Org Mode
 ;; ================================================================================
