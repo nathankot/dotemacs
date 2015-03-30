@@ -676,6 +676,12 @@
               "r" 'ledger-reconcile
               "d" 'ledger-delete-current-transaction)))
 
+;; Load any local configuration if it exists
+
+(if (file-exists-p (expand-file-name ".emacs.el"))
+  (progn
+    (load (expand-file-name ".emacs.el"))))
+
 ;; Initialize by starting an org mode perspective
 
 (persp-switch "org")
@@ -699,10 +705,6 @@
 (if (file-exists-p (expand-file-name "project.org"))
   (progn
     (add-to-list 'org-agenda-files (expand-file-name "project.org"))))
-
-(if (file-exists-p (expand-file-name ".emacs.el"))
-  (progn
-    (load (expand-file-name ".emacs.el"))))
 
 (provide 'init)
 ;;; init.el ends here
