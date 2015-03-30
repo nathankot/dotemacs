@@ -79,31 +79,40 @@
 (package-initialize)
 (eval-when-compile (require 'use-package))
 
-;; ESSENTIAL PACKAGES
+;; Misc.
 ;; ================================================================================
-
-(use-package hc-zenburn-theme
-  :ensure t
-  :init (progn
-          (add-to-list 'default-frame-alist '(background-color . "#313131")
-          (load-theme 'hc-zenburn t))))
-
-(use-package diminish
-  :ensure t
-  :commands diminish
-  :config (progn
-            (diminish 'isearch-mode " ?")))
-
-(use-package undo-tree
-  :diminish undo-tree-mode)
+(use-package undo-tree :diminish undo-tree-mode)
 
 (use-package saveplace
   :init (progn
           (setq save-place-file "~/.emacs/saveplaces")
           (setq-default save-place t)))
 
+(use-package flx-ido
+  :ensure t
+  :commands (flx-ido-mode)
+  :init (progn
+          (setq ido-enable-flex-matching t)
+          (setq ido-use-faces nil)
+          (setq flx-ido-threshold 10000)
+          (ido-mode 1)
+          (ido-everywhere 1)
+          (flx-ido-mode 1)))
+
+(use-package editorconfig
+  :ensure t
+  :config (progn
+          (add-to-list 'edconf-indentation-alist '(swift-mode swift-indent-offset))))
+
+(use-package smex
+  :ensure t
+  :commands smex
+  :bind ("M-x" . smex))
+
+
+;; EVIL
+;; ================================================================================
 (use-package evil
-  :commands evil-mode
   :ensure t
   :init (progn
           (setq evil-want-C-u-scroll t
@@ -195,34 +204,46 @@
             (evil-add-hjkl-bindings package-menu-mode-map 'emacs)
             (evil-add-hjkl-bindings outline-mode-map 'emacs)))
 
-(use-package yasnippet
+
+;; Visual utilities
+;; ================================================================================
+(use-package hc-zenburn-theme
   :ensure t
-  :diminish (yas-minor-mode . " y")
-  :commands (yas-global-mode yas-activate-extra-mode)
   :init (progn
-          (setq yas-snippet-dirs
-            '("~/.snippets/yasnippet-snippets"
-               "~/.snippets/personal"))
-          (add-hook 'web-mode-hook (lambda () (yas-activate-extra-mode 'js-mode)))
-          (yas-global-mode 1))
-  :config (progn
-            (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand)))
+          (add-to-list 'default-frame-alist '(background-color . "#313131")
+          (load-theme 'hc-zenburn t))))
 
 (use-package smart-mode-line
   :ensure t
   :init (sml/setup)
   :config (sml/apply-theme 'respectful))
 
-(use-package flx-ido
+(use-package diminish
   :ensure t
-  :commands (flx-ido-mode)
+  :commands diminish
+  :config (progn
+            (diminish 'isearch-mode " ?")))
+
+(use-package rainbow-mode
+  :ensure t
+  :diminish rainbow-mode
+  :commands (rainbow-mode)
   :init (progn
-          (setq ido-enable-flex-matching t)
-          (setq ido-use-faces nil)
-          (setq flx-ido-threshold 10000)
-          (ido-mode 1)
-          (ido-everywhere 1)
-          (flx-ido-mode 1)))
+          (add-hook 'css-mode-hook 'rainbow-mode)
+          (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)))
+
+(use-package rainbow-delimiters
+  :ensure t
+  :commands rainbow-delimiters-mode
+  :init (progn
+          (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)))
+
+(use-package linum-relative
+  :ensure t
+  :config (progn
+          (setq linum-relative-format "%3s   ")
+          (linum-on)
+          (global-linum-mode)))
 
 (use-package popwin
   :ensure t
@@ -232,20 +253,14 @@
             (evil-define-key 'normal popwin:keymap (kbd "q") 'popwin:close-popup-window)
             (push '("^\\*helm.*\\*$" :regexp t :dedicated t) popwin:special-display-config)))
 
-(use-package helm
+(use-package autopair
   :ensure t
-  :commands (helm-buffer-list helm-mode)
-  :init (progn
-          (require 'helm-config))
-  :config (progn
-            (define-key evil-normal-state-map (kbd "C-b") 'helm-buffers-list)
-            (define-key helm-map (kbd "C-l") 'projectile-invalidate-cache)
-            (define-key helm-map (kbd "C-b") 'helm-keyboard-quit)
-            (define-key helm-map (kbd "C-p") 'helm-keyboard-quit)
-            (define-key helm-map (kbd "C-j") 'helm-next-line)
-            (define-key helm-map (kbd "C-k") 'helm-previous-line)
-            (define-key helm-map (kbd "C-d") 'helm-buffer-run-kill-persistent)))
+  :diminish autopair-mode
+  :init (autopair-global-mode))
 
+
+;; File and buffer management
+;; ================================================================================
 (use-package projectile
   :ensure t
   :commands (projectile-global-mode projectile-mode projectile-project-root)
@@ -262,76 +277,29 @@
             (add-to-list 'projectile-globally-ignored-directories "node_modules")
             (add-to-list 'projectile-globally-ignored-directories "bower_components")))
 
-(use-package helm-projectile
-  :ensure t
-  :commands (helm-projectile)
-  :bind ("C-p" . helm-projectile)
-  :init (progn
-          (define-key evil-normal-state-map (kbd "C-p") 'helm-projectile)))
-
-(use-package helm-ag
-  :ensure t
-  :commands (helm-projectile-ag)
-  :init (progn
-          (define-key evil-normal-state-map (kbd "C-s") 'helm-projectile-ag)))
-
-(use-package helm-dash
-  :ensure t
-  :init (progn
-          (setq helm-dash-docsets-path "~/.docset")
-          (setq helm-dash-common-docsets '("Lo-Dash" "HTML" "CSS"))
-          (evil-leader/set-key "f" 'helm-dash-at-point)
-          (define-key evil-normal-state-map (kbd "C-f") 'helm-dash))
-  :config (progn
-            (add-hook 'prog-mode-hook
-              (lambda ()
-                (interactive)
-                (setq helm-current-buffer (current-buffer))))
-
-            (add-hook 'swift-mode-hook
-              (lambda ()
-                (interactive)
-                (setq-local helm-dash-docsets '("iOS"))))
-
-            (add-hook 'js-mode-hook
-              (lambda ()
-                (interactive)
-                (setq-local helm-dash-docsets '("AngularJS" "BackboneJS" "Lo-Dash" "Javascript" "NodeJS" "jQuery" "Chai"))))
-
-            (add-hook 'web-mode-hook
-              (lambda ()
-                (interactive)
-                (setq-local helm-dash-docsets '("Javascript" "HTML" "CSS" "Lo-Dash" "jQuery" "Bootstrap_3"))))))
-
-(use-package helm-swoop
-  :ensure t
-  :commands (helm-swoop)
-  :init (progn
-          (evil-leader/set-key "sb" 'helm-swoop)
-          (evil-leader/set-key "sa" 'helm-multi-swoop)))
-
 (use-package neotree
   :ensure t
   :commands (neotree-dir neo-global--window-exists-p)
+  :preface (progn
+             (defun projectile-neotree-project-root ()
+                (interactive)
+                (if (neo-global--window-exists-p)
+                  (neotree-hide)
+                  (neotree-dir (projectile-project-root)))))
   :init (progn
-          (defun projectile-neotree-project-root ()
-            (interactive)
-            (if (neo-global--window-exists-p)
-              (neotree-hide)
-              (neotree-dir (projectile-project-root))))
-
           (evil-leader/set-key "k b" 'projectile-neotree-project-root)
           (evil-leader/set-key "k r" 'neotree-find))
   :config (progn
             (evil-add-hjkl-bindings neotree-mode-map 'normal)
-            (evil-define-key 'normal neotree-mode-map "q" 'neotree-hide
-                                                      "o" 'neotree-enter
-                                                      "v" 'neotree-enter-vertical-split
-                                                      "r" 'neotree-refresh
-                                                      "h" 'neotree-hidden-file-toggle
-                                                      (kbd "m d") 'neotree-delete-node
-                                                      (kbd "m a") 'neotree-create-node
-                                                      (kbd "m m") 'neotree-rename-node)))
+            (evil-define-key 'normal neotree-mode-map
+              "q" 'neotree-hide
+              "o" 'neotree-enter
+              "v" 'neotree-enter-vertical-split
+              "r" 'neotree-refresh
+              "h" 'neotree-hidden-file-toggle
+              (kbd "m d") 'neotree-delete-node
+              (kbd "m a") 'neotree-create-node
+              (kbd "m m") 'neotree-rename-node)))
 
 (use-package perspective
   :ensure t
@@ -344,21 +312,9 @@
   :config (progn
             (use-package persp-projectile :ensure t)))
 
-(use-package autopair
-  :ensure t
-  :diminish autopair-mode
-  :init (autopair-global-mode))
 
-(use-package editorconfig
-  :ensure t
-  :config (progn
-          (add-to-list 'edconf-indentation-alist '(swift-mode swift-indent-offset))))
-
-(use-package smex
-  :ensure t
-  :commands smex
-  :bind ("M-x" . smex))
-
+;; Git Utilities
+;; ================================================================================
 (use-package git-gutter
   :ensure t
   :diminish git-gutter-mode
@@ -370,13 +326,6 @@
             (define-key evil-normal-state-map (kbd "[ c") 'git-gutter:previous-hunk)
             (evil-leader/set-key "g a" 'git-gutter:stage-hunk)
             (evil-leader/set-key "g r" 'git-gutter:revert-hunk)))
-
-(use-package linum-relative
-  :ensure t
-  :config (progn
-          (setq linum-relative-format "%3s   ")
-          (linum-on)
-          (global-linum-mode)))
 
 (use-package magit
   :ensure t
@@ -402,63 +351,91 @@
             (define-key magit-diff-mode-map (kbd "j") 'magit-goto-next-section)
             (define-key magit-diff-mode-map (kbd "k") 'magit-goto-previous-section)))
 
+
+;; Flycheck
+;; ================================================================================
 (use-package flycheck
   :ensure t
   :diminish (flycheck-mode . " f")
   :commands global-flycheck-mode
-  :preface (progn
-             (defun jsxhint-predicate ()
-               (and (executable-find "jsxhint")
-                                (buffer-file-name)
-                                (string-match ".*\.jsx?$" (buffer-file-name)))))
   :init (progn
           (global-flycheck-mode))
   :config (progn
-            (flycheck-define-checker jsxhint
-              "A JSX syntax and style checker based on JSXHint."
-              :command ("jsxhint" source)
-              :error-patterns ((error line-start (1+ nonl) ": line " line ", col " column ", " (message) line-end))
-              :predicate jsxhint-predicate
-              :modes (web-mode))
-            (add-to-list 'flycheck-checkers 'jsxhint)
             (define-key evil-normal-state-map (kbd "] e") 'next-error)
             (define-key evil-normal-state-map (kbd "[ e") 'previous-error)))
+
+
+;; Yasnippet
+;; ================================================================================
+(use-package yasnippet
+  :ensure t
+  :diminish (yas-minor-mode . " y")
+  :commands (yas-global-mode yas-activate-extra-mode)
+  :init (progn
+          (setq yas-snippet-dirs '("~/.snippets/yasnippet-snippets"
+                                   "~/.snippets/personal"))
+          (yas-global-mode 1))
+  :config (progn
+            (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand)))
+
+
+;; Helm
+;; ================================================================================
+(use-package helm
+  :ensure t
+  :commands (helm-buffer-list helm-mode)
+  :init (progn
+          (require 'helm-config))
+  :config (progn
+            (define-key evil-normal-state-map (kbd "C-b") 'helm-buffers-list)
+            (define-key helm-map (kbd "C-l") 'projectile-invalidate-cache)
+            (define-key helm-map (kbd "C-b") 'helm-keyboard-quit)
+            (define-key helm-map (kbd "C-p") 'helm-keyboard-quit)
+            (define-key helm-map (kbd "C-j") 'helm-next-line)
+            (define-key helm-map (kbd "C-k") 'helm-previous-line)
+            (define-key helm-map (kbd "C-d") 'helm-buffer-run-kill-persistent)))
+
+(use-package helm-projectile
+  :ensure t
+  :commands (helm-projectile)
+  :bind ("C-p" . helm-projectile)
+  :init (progn
+          (define-key evil-normal-state-map (kbd "C-p") 'helm-projectile)))
+
+(use-package helm-ag
+  :ensure t
+  :commands (helm-projectile-ag)
+  :init (progn
+          (define-key evil-normal-state-map (kbd "C-s") 'helm-projectile-ag)))
+
+(use-package helm-dash
+  :ensure t
+  :init (progn
+          (setq helm-dash-docsets-path "~/.docset")
+          (setq helm-dash-common-docsets '("Lo-Dash" "HTML" "CSS"))
+          (evil-leader/set-key "f" 'helm-dash-at-point)
+          (define-key evil-normal-state-map (kbd "C-f") 'helm-dash))
+  :config (progn
+            (add-hook 'prog-mode-hook
+              (lambda ()
+                (interactive)
+                (setq helm-current-buffer (current-buffer))))))
+
+(use-package helm-swoop
+  :ensure t
+  :commands (helm-swoop)
+  :init (progn
+          (evil-leader/set-key "sb" 'helm-swoop)
+          (evil-leader/set-key "sa" 'helm-multi-swoop)))
 
 (use-package helm-flycheck
   :ensure t
   :commands helm-flycheck
   :init (evil-leader/set-key "e l" 'helm-flycheck))
 
-(use-package emmet-mode
-  ;; Can't diminish this, because the logic relies on
-  ;; reading the mode-line.
-  ;; :diminish " e"
-  :ensure t
-  :commands emmet-mode
-  :init (progn
-          (add-hook 'sgml-mode-hook 'emmet-mode)
-          (add-hook 'css-mode-hook  'emmet-mode)
-          (add-hook 'web-mode-hook 'emmet-mode)))
 
-(use-package rainbow-mode
-  :ensure t
-  :diminish rainbow-mode
-  :commands (rainbow-mode)
-  :init (progn
-          (add-hook 'css-mode-hook 'rainbow-mode)
-          (add-hook 'web-mode-hook 'rainbow-mode)
-          (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)))
-
-(use-package rainbow-delimiters
-  :ensure t
-  :commands rainbow-delimiters-mode
-  :init (progn
-          (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)))
-
-
-;; Company and it's backends
+;; Company moed
 ;; ================================================================================
-
 (use-package company
   :ensure t
   :diminish " c"
@@ -477,7 +454,6 @@
                  company-elisp
                  company-clang
                  company-xcode
-                 company-tern
                  ( company-capf
                    company-dabbrev-code
                    ;; company-etags
@@ -486,16 +462,6 @@
                    company-files
                    company-dabbrev
                    :with company-yasnippet)))))
-
-(use-package company-tern
-  :ensure t
-  :init (progn
-          (use-package tern
-            :diminish " T"
-            :commands (tern-mode)
-            :ensure t
-            :init (progn
-                    (add-hook 'js-mode-hook 'tern-mode)))))
 
 
 ;; LANGUAGE PACKS
@@ -506,15 +472,42 @@
   :diminish js2-minor-mode
   :commands (js2-mode js-mode js2-minor-mode)
   :init (progn
+          (use-package tern
+            :diminish " T"
+            :commands (tern-mode)
+            :ensure t
+            :init (progn
+                    (add-hook 'js-mode-hook 'tern-mode)))
+          (use-package company-tern
+            :ensure t
+            :config (progn
+                      (add-to-list 'company-backends 'company-tern)))
           (setq js2-highlight-level 3)
           (setq js2-mode-show-parse-errors nil)
           (setq js2-mode-show-strict-warnings nil)
           ; Use js2-mode as a minor mode (preferred way)
           (add-hook 'js-mode-hook 'js2-minor-mode)
-          (add-to-list 'interpreter-mode-alist '("node" . js-mode))))
+          (add-to-list 'interpreter-mode-alist '("node" . js-mode)))
+  :config (progn
+            (add-hook 'js2-minor-mode-hook
+              (lambda ()
+                (interactive)
+                (setq-local helm-dash-docsets
+                  '("AngularJS"
+                     "BackboneJS"
+                     "Lo-Dash"
+                     "Javascript"
+                     "NodeJS"
+                     "jQuery"
+                     "Chai"))))))
 
 (use-package web-mode
   :ensure t
+  :preface (progn
+             (defun jsxhint-predicate ()
+               (and (executable-find "jsxhint")
+                                (buffer-file-name)
+                                (string-match ".*\.jsx?$" (buffer-file-name)))))
   :commands web-mode
   :init (progn
           (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
@@ -527,8 +520,34 @@
           (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
           (add-to-list 'auto-mode-alist '("\\.html.twig\\'" . web-mode))
           (add-to-list 'auto-mode-alist '("\\.html.jsx\\'" . web-mode))
-          (add-to-list 'magic-mode-alist '("\/\*\*.*@jsx" . web-mode)))
+          (add-to-list 'magic-mode-alist '("\/\*\*.*@jsx" . web-mode))
+
+          (flycheck-define-checker jsxhint
+            "A JSX syntax and style checker based on JSXHint."
+            :command ("jsxhint" source)
+            :error-patterns ((error line-start (1+ nonl) ": line " line ", col " column ", " (message) line-end))
+            :predicate jsxhint-predicate
+            :modes (web-mode))
+
+          (add-to-list 'flycheck-checkers 'jsxhint)
+
+          (use-package emmet-mode
+                        ;; Can't diminish this, because the logic relies on
+                        ;; reading the mode-line.
+                        ;; :diminish " e"
+                        :ensure t
+                        :commands emmet-mode
+                        :init (progn
+                                (add-hook 'sgml-mode-hook 'emmet-mode)
+                                (add-hook 'css-mode-hook  'emmet-mode)
+                                (add-hook 'web-mode-hook 'emmet-mode))))
   :config (progn
+            (add-hook 'web-mode-hook
+              (lambda ()
+                (interactive)
+                (setq-local helm-dash-docsets '("Javascript" "HTML" "CSS" "Lo-Dash" "jQuery" "Bootstrap_3"))))
+            (add-hook 'web-mode-hook (lambda () (yas-activate-extra-mode 'js-mode)))
+            (add-hook 'web-mode-hook 'rainbow-mode)
             (define-key prog-mode-map (kbd "C-x /") 'web-mode-element-close)))
 
 (use-package less-css-mode
@@ -558,6 +577,9 @@
 (use-package swift-mode
   :load-path "vendor/swift-mode"
   :config (progn
+            (add-hook 'swift-mode-hook
+              (lambda () (interactive)
+                (setq-local helm-dash-docsets '("iOS"))))
             (add-to-list 'flycheck-checkers 'swift)
             (setq flycheck-swift-sdk-path
               "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk")))
