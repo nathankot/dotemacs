@@ -10,17 +10,7 @@
  ;; If there is more than one, they won't work right.
   '(custom-safe-themes
      (quote
-       ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "1cd9defef2a98138c732728568b04043afd321eb802d25a254777de9b2463768" "8f1cedf54f137f71382e3367e1843d10e173add99abe3a5f7d3285f5cc18f1a9" "d6e27431f8cafb4a9136aebb1d4061f895b120bf88d34ff60c390d9905bd4e36" "e292ec749f785d348969926448e25790356a7ce1a8fda6e695f5e8b70bed786b" "8022cea21aa4daca569aee5c1b875fbb3f3248a5debc6fc8cf5833f2936fbb22" "c56d90af9285708041991bbc780a073182cbe91721de17c6e7a8aac1380336b3" "c5a044ba03d43a725bd79700087dea813abcb6beb6be08c7eb3303ed90782482" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default)))
- '(haskell-process-auto-import-loaded-modules t)
- '(haskell-process-log t)
- '(haskell-process-suggest-remove-import-lines t)
- '(haskell-process-type (quote cabal-repl))
-  '(org-agenda-files
-     (quote
-       ("~/org/home.org" "~/org/work.org" "~/org/notes.org")))
- '(org-enforce-todo-checkbox-dependencies t)
- '(org-enforce-todo-dependencies t)
- '(standard-indent 2))
+       ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "1cd9defef2a98138c732728568b04043afd321eb802d25a254777de9b2463768" "8f1cedf54f137f71382e3367e1843d10e173add99abe3a5f7d3285f5cc18f1a9" "d6e27431f8cafb4a9136aebb1d4061f895b120bf88d34ff60c390d9905bd4e36" "e292ec749f785d348969926448e25790356a7ce1a8fda6e695f5e8b70bed786b" "8022cea21aa4daca569aee5c1b875fbb3f3248a5debc6fc8cf5833f2936fbb22" "c56d90af9285708041991bbc780a073182cbe91721de17c6e7a8aac1380336b3" "c5a044ba03d43a725bd79700087dea813abcb6beb6be08c7eb3303ed90782482" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" default))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -65,6 +55,7 @@
 (menu-bar-mode -1) ;; Disable menu bar
 (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (setq-default tab-width 2 indent-tabs-mode nil) ;; Spaces
+(setq standard-indent 2)
 (setq make-backup-files nil)
 (setq backup-inhibited t)
 (setq auto-save-default nil)
@@ -546,6 +537,10 @@
 (use-package haskell-mode
   :load-path "vendor/haskell-mode"
   :init (progn
+          (setq haskell-process-auto-import-loaded-modules t)
+          (setq haskell-process-log t)
+          (setq haskell-process-suggest-remove-import-lines t)
+          (setq haskell-process-type (quote cabal-repl))
           (evil-leader/set-key-for-mode 'haskell-mode
                     "t" 'haskell-process-do-type
                     "h i" 'haskell-interactive-bring
@@ -623,6 +618,9 @@
 (setq org-directory "~/org/")
 (setq org-agenda-files (list "~/org/home.org" "~/org/work.org" "~/org/notes.org"))
 (setq org-default-notes-file (concat org-directory "/notes.org"))
+(setq org-agenda-files (quote ("~/org/home.org" "~/org/work.org" "~/org/notes.org")))
+(setq org-enforce-todo-checkbox-dependencies t)
+(setq org-enforce-todo-dependencies t)
 
 (setq org-todo-keywords
   '((sequence "TODO" "DOING" "|" "DONE" "CANCELED" "DELEGATED")))
