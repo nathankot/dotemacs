@@ -1,3 +1,4 @@
+
 ;;; package --- Nathan's Emacs
 ;;; Commentary:
 ;;; Extensive use of `use-package`
@@ -121,7 +122,8 @@
 (use-package smex
   :ensure t
   :commands smex
-  :bind ("M-x" . smex))
+  :bind (("M-x" . smex)
+         ("≈" . smex)))
 
 
 ;; EVIL
@@ -678,7 +680,14 @@
               (kbd "d") 'org-agenda-deadline
               (kbd "s") 'org-agenda-schedule
               (kbd "+") 'org-priority-up
-              (kbd "q") 'org-agenda-Quit)))
+              (kbd "q") 'org-agenda-Quit)
+
+            (evil-define-key 'normal evil-org-mode-map
+              (kbd "ø") '(lambda () (interactive)
+                           (evil-org-eol-call
+                             '(lambda()
+                                (org-insert-heading)
+                                (org-metaright)))))))
 
 (add-hook 'org-mode-hook 'org-indent-mode)
 
