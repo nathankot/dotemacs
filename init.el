@@ -701,7 +701,8 @@
             (evil-leader/set-key-for-mode 'ledger-mode
               "o" 'ledger-add-transaction
               "r" 'ledger-reconcile
-              "d" 'ledger-delete-current-transaction)))
+              "d" 'ledger-delete-current-transaction
+              "f" 'ledger-occur)))
 
 ;; Load any local configuration if it exists
 
