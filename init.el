@@ -701,12 +701,10 @@
 
             (evil-define-key 'normal ledger-mode-map
               (kbd "Y") 'ledger-copy-transaction-at-point
-              (kbd "C-s") 'ledger-occur
               (kbd "C") 'ledger-post-edit-amount
               (kbd "!") 'ledger-post-align-postings)
 
             (evil-leader/set-key-for-mode 'ledger-mode
-              "SPC" 'ledger-occur-mode
               "o" 'ledger-add-transaction
               "r" 'ledger-reconcile
               "d" 'ledger-delete-current-transaction
