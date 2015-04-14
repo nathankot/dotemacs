@@ -339,6 +339,7 @@
              magit-diff-unstaged magit-diff-staged magit-blame-mode
              magit-stage-all)
   :init (progn
+          (setq magit-last-seen-setup-instructions "1.4.0")
           (evil-leader/set-key
             "g l" 'magit-log
             "g c" 'magit-commit
