@@ -71,8 +71,7 @@
   :load-path "vendor/hc-zenburn-theme"
   :init (progn
           (require 'hc-zenburn-theme)
-          (add-to-list 'default-frame-alist '(background-color . "#313131")
-          (load-theme 'hc-zenburn t))))
+          (load-theme 'hc-zenburn t)))
 
 (use-package smart-mode-line
   :ensure t
