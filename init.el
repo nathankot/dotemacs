@@ -665,6 +665,24 @@
                                  "o a" 'org-agenda
                                  "o t" 'org-todo-list)
 
+            (evil-leader/set-key "o b"
+              (lambda ()
+                (interactive)
+                (let ((persp (gethash "org" perspectives-hash)))
+                  (if (null persp)
+                    ; When perspective doesn't exist
+                    (progn
+                      (persp-switch "org")
+                      (if (file-exists-p "~/org/home.org")
+                        (progn
+                          (find-file "~/org/home.org")))
+                      (if (file-exists-p "~/org/work.org")
+                        (progn
+                          (split-window-right)
+                          (find-file "~/org/work.org"))))
+                    ; Or when it already exists
+                    (persp-activate persp)))))
+
             (evil-leader/set-key-for-mode 'org-mode
               "d" 'org-deadline
               "s" 'org-schedule
@@ -717,22 +735,6 @@
   (progn
     (load (expand-file-name ".emacs.el"))))
 
-;; Initialize by starting an org mode perspective
-
-(persp-switch "org")
-
-(if (file-exists-p "~/org/home.org")
-  (progn
-    (find-file "~/org/home.org")))
-
-(if (file-exists-p "~/org/work.org")
-  (progn
-    (split-window-right)
-    (find-file "~/org/work.org")))
-
-(persp-switch "main")
-
-;; Add any available project-based org files to the agend list
 (if (file-exists-p (expand-file-name "README.org"))
   (progn
     (add-to-list 'org-agenda-files (expand-file-name "README.org"))))
