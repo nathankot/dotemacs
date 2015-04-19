@@ -287,7 +287,9 @@
                 (interactive)
                 (if (neo-global--window-exists-p)
                   (neotree-hide)
-                  (neotree-dir (projectile-project-root)))))
+                  (if (projectile-project-p)
+                    (neotree-dir (projectile-project-root))
+                    (neotree)))))
   :init (progn
           (evil-leader/set-key "k b" 'projectile-neotree-project-root)
           (evil-leader/set-key "k r" 'neotree-find))
