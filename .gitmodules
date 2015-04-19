@@ -7,3 +7,6 @@
 [submodule "vendor/flycheck-haskell"]
 	path = vendor/flycheck-haskell
 	url = https://github.com/flycheck/flycheck-haskell.git
+[submodule "vendor/hc-zenburn-theme"]
+	path = vendor/hc-zenburn-theme
+	url = https://github.com/edran/hc-zenburn-emacs.git
