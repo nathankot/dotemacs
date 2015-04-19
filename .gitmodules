@@ -9,4 +9,4 @@
 	url = https://github.com/flycheck/flycheck-haskell.git
 [submodule "vendor/hc-zenburn-theme"]
 	path = vendor/hc-zenburn-theme
-	url = https://github.com/edran/hc-zenburn-emacs.git
+	url = https://github.com/nathankot/hc-zenburn-emacs.git
