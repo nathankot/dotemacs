@@ -59,6 +59,7 @@
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 (setq-default fill-column 80)
 (setq large-file-warning-threshold 100000000)
+(column-number-mode 1)
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
@@ -75,7 +76,18 @@
 
 (use-package smart-mode-line
   :ensure t
-  :init (sml/setup)
+  :init (progn
+          (setq sml/shorten-directory t)
+          (setq sml/shorten-modes t)
+          (setq sml/name-width 30)
+          (setq sml/numbers-separator "")
+          (setq sml/show-trailing-N nil)
+          (setq sml/show-frame-identification nil)
+          (setq sml/mule-info nil)
+          (setq sml/show-client nil)
+          (setq sml/show-remote nil)
+          (setq sml/position-percentage-format nil)
+          (sml/setup))
   :config (sml/apply-theme 'respectful))
 
 
