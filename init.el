@@ -553,6 +553,10 @@
             (add-hook 'web-mode-hook 'rainbow-mode)
             (define-key prog-mode-map (kbd "C-x /") 'web-mode-element-close)))
 
+(use-package fish-mode
+  :ensure t
+  :commands fish-mode)
+
 (use-package less-css-mode
   :ensure t
   :commands less-css-mode
