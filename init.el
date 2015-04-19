@@ -642,10 +642,10 @@
 (setq org-src-tab-acts-natively t) ;; you want this to have completion in blocks
 (setq org-hide-emphasis-markers t) ;; to hide the *,=, or / markers
 (setq org-pretty-entities t)       ;; to have \alpha, \to and others display as utf8 http://orgmode.org/manual/Special-symbols.html
-(setq org-directory "~/org/")
-(setq org-agenda-files (list "~/org/home.org" "~/org/work.org" "~/org/notes.org"))
+(setq org-directory "~/.org/")
+(setq org-agenda-files (list "~/.org/home.org" "~/.org/work.org" "~/.org/notes.org"))
 (setq org-default-notes-file (concat org-directory "/notes.org"))
-(setq org-agenda-files (quote ("~/org/home.org" "~/org/work.org" "~/org/notes.org")))
+(setq org-agenda-files (quote ("~/.org/home.org" "~/.org/work.org" "~/.org/notes.org")))
 (setq org-enforce-todo-checkbox-dependencies t)
 (setq org-enforce-todo-dependencies t)
 
@@ -676,13 +676,13 @@
                     ; When perspective doesn't exist
                     (progn
                       (persp-switch "org")
-                      (if (file-exists-p "~/org/home.org")
+                      (if (file-exists-p "~/.org/home.org")
                         (progn
-                          (find-file "~/org/home.org")))
-                      (if (file-exists-p "~/org/work.org")
+                          (find-file "~/.org/home.org")))
+                      (if (file-exists-p "~/.org/work.org")
                         (progn
                           (split-window-right)
-                          (find-file "~/org/work.org"))))
+                          (find-file "~/.org/work.org"))))
                     ; Or when it already exists
                     (persp-activate persp)))))
 
