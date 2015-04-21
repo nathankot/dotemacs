@@ -381,7 +381,8 @@
                                    "~/.snippets/personal"))
           (yas-global-mode 1))
   :config (progn
-            (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand)))
+            (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand)
+            (define-key yas-keymap (kbd "C-e") 'yas-next-field-or-maybe-expand)))
 
 
 ;; Helm
