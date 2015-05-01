@@ -128,18 +128,6 @@
 (use-package evil
   :ensure t
   :init (progn
-          ; Evil-leader needs to be before evil mode
-          (use-package evil-leader
-            :ensure t
-            :commands (global-evil-leader-mode evil-leader-mode)
-            :init (global-evil-leader-mode)
-            :config (progn
-                      (evil-leader/set-leader ",")
-                      (evil-leader/set-key "t" 'transpose-words)
-                      (evil-leader/set-key "w" 'save-buffer)
-                      (evil-leader/set-key "i" 'evil-window-move-far-left)
-                      (evil-leader/set-key "SPC" 'evil-search-highlight-persist-remove-all)))
-
           (setq evil-want-C-u-scroll t
                 evil-overriding-maps nil
                 evil-intercept-maps nil
@@ -154,6 +142,18 @@
           (evil-mode 1))
   :bind ("C-q" . delete-window)
   :config (progn
+
+            (use-package evil-leader
+              :ensure t
+              :commands (global-evil-leader-mode evil-leader-mode)
+              :init (global-evil-leader-mode)
+              :config (progn
+                        (evil-leader/set-leader ",")
+                        (evil-leader/set-key "t" 'transpose-words)
+                        (evil-leader/set-key "w" 'save-buffer)
+                        (evil-leader/set-key "i" 'evil-window-move-far-left)
+                        (evil-leader/set-key "SPC" 'evil-search-highlight-persist-remove-all)))
+
             (use-package evil-search-highlight-persist
                :ensure t
                :commands global-evil-search-highlight-persist
