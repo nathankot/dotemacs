@@ -705,7 +705,8 @@
               (kbd "d") 'org-agenda-deadline
               (kbd "s") 'org-agenda-schedule
               (kbd "+") 'org-priority-up
-              (kbd "q") 'org-agenda-Quit)
+              (kbd "q") 'org-agenda-Quit
+              (kbd "w") 'org-save-all-org-buffers)
 
             (evil-define-key 'normal evil-org-mode-map
               (kbd "ø") '(lambda () (interactive)
