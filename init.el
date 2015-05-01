@@ -665,9 +665,12 @@
 (use-package evil-org
   :ensure t
   :init (progn
-          (add-hook 'org-agenda-mode-hook (lambda ()
-              ;; Don't shadow the <leader>
-              (local-unset-key (kbd ",")))))
+          (add-hook 'org-agenda-mode-hook
+            (lambda ()
+              (local-unset-key (kbd ",")) ;; Don't shadow the <leader>
+              ;; Autosave:
+              (add-hook 'auto-save-hook 'org-save-all-org-buffers nil t)
+              (auto-save-mode))))
   :config (progn
             (evil-add-hjkl-bindings org-agenda-mode-map 'emacs)
 
