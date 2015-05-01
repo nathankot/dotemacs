@@ -664,6 +664,10 @@
 
 (use-package evil-org
   :ensure t
+  :init (progn
+          (add-hook 'org-agenda-mode-hook (lambda ()
+              ;; Don't shadow the <leader>
+              (local-unset-key (kbd ",")))))
   :config (progn
             (evil-add-hjkl-bindings org-agenda-mode-map 'emacs)
 
@@ -701,7 +705,6 @@
               (kbd "m") 'org-set-tags
               (kbd "+") 'org-priority-up)
 
-            (define-key org-agenda-mode-map "," nil)
             (evil-define-key 'normal org-agenda-mode-map
               (kbd "d") 'org-agenda-deadline
               (kbd "s") 'org-agenda-schedule
