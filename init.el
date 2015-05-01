@@ -737,7 +737,7 @@
               (kbd "!") 'ledger-post-align-postings)
 
             (evil-leader/set-key-for-mode 'ledger-mode
-              "o" 'ledger-add-transaction
+              "n" 'ledger-add-transaction
               "r" 'ledger-reconcile
               "d" 'ledger-delete-current-transaction
               "?" 'ledger-display-balance-at-point)))
