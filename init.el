@@ -215,7 +215,8 @@
             (define-key evil-normal-state-map (kbd "] l") 'occur-next)
             (define-key evil-normal-state-map (kbd "[ l") 'occur-prev)
             (evil-add-hjkl-bindings package-menu-mode-map 'emacs)
-            (evil-add-hjkl-bindings outline-mode-map 'emacs)))
+            (evil-add-hjkl-bindings outline-mode-map 'emacs)
+            (define-key evil-visual-state-map (kbd "C-i") 'indent-region)))
 
 
 ;; Visual utilities
