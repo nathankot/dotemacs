@@ -634,6 +634,7 @@
             "t" 'haskell-process-do-type
             "h i" 'haskell-interactive-bring
             "`" 'haskell-interactive-bring
+            "h r" 'haskell-process-load-or-reload
             "h k" 'haskell-session-kill
             "h g i" 'haskell-navigate-imports
             "h f i" 'haskell-mode-format-imports))
