@@ -628,11 +628,12 @@
           (setq haskell-process-type (quote cabal-repl))
           (setq haskell-interactive-popup-errors nil)
           (evil-leader/set-key-for-mode 'haskell-mode
-                    "t" 'haskell-process-do-type
-                    "h i" 'haskell-interactive-bring
-                    "h k" 'haskell-session-kill
-                    "h g i" 'haskell-navigate-imports
-                    "h f i" 'haskell-mode-format-imports))
+            "t" 'haskell-process-do-type
+            "h i" 'haskell-interactive-bring
+            "`" 'haskell-interactive-bring
+            "h k" 'haskell-session-kill
+            "h g i" 'haskell-navigate-imports
+            "h f i" 'haskell-mode-format-imports))
   :config (progn
             (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
             (add-hook 'haskell-mode-hook 'ghc-init)
