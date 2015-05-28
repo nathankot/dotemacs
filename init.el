@@ -25,8 +25,6 @@
 (setenv "LC_CTYPE" "UTF-8")
 
 ;; Mac Specific
-(push "/opt/boxen/homebrew/bin" exec-path)
-(push "/usr/local/bin" exec-path)
 (setenv "PATH" (concat (getenv "PATH") ":/opt/boxen/homebrew/bin"))
 (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
 (defun paste-to-osx (text &optional push)
@@ -65,6 +63,11 @@
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
 (eval-when-compile (require 'use-package))
+
+(use-package exec-path-from-shell
+  :ensure t
+  :init (progn
+          (exec-path-from-shell-initialize)))
 
 ;; Theme.
 ;; ================================================================================
