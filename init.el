@@ -616,7 +616,8 @@
           (use-package company-ghc
             :ensure t
             :init (progn
-                    (use-package ghc :ensure t))
+                    (use-package ghc
+                      :load-path "/Users/nathan/Development/Packages/ghc-mod/elisp"))
             :config (progn
                       (add-to-list 'company-backends 'company-ghc)))
 
