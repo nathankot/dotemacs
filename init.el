@@ -610,8 +610,8 @@
   :ensure t
   :commands yaml-mode)
 
-(use-package haskell-mode-autoloads
-  :load-path "vendor/haskell-mode"
+(use-package haskell-mode
+  :ensure t
   :init (progn
           (use-package company-ghc
             :ensure t
@@ -633,6 +633,7 @@
           (setq haskell-process-suggest-remove-import-lines t)
           (setq haskell-process-type (quote cabal-repl))
           (setq haskell-interactive-popup-errors nil)
+
           (evil-leader/set-key-for-mode 'haskell-mode
             "t" 'haskell-process-do-type
             "h i" 'haskell-interactive-bring
@@ -642,7 +643,7 @@
             "h g i" 'haskell-navigate-imports
             "h f i" 'haskell-mode-format-imports))
   :config (progn
-            (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
+            (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
             (add-hook 'haskell-mode-hook 'ghc-init)
             (add-hook 'haskell-mode-hook 'interactive-haskell-mode)))
 

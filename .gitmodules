@@ -1,9 +1,6 @@
 [submodule "vendor/swift-mode"]
 	path = vendor/swift-mode
 	url = https://github.com/chrisbarrett/swift-mode.git
-[submodule "vendor/haskell-mode"]
-	path = vendor/haskell-mode
-	url = https://github.com/haskell/haskell-mode.git
 [submodule "vendor/flycheck-haskell"]
 	path = vendor/flycheck-haskell
 	url = https://github.com/flycheck/flycheck-haskell.git
