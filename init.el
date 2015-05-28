@@ -186,6 +186,9 @@
               :init (global-evil-jumper-mode))
 
             ; Window management
+            (global-set-key (kbd "C-q") 'delete-window)
+            (global-set-key (kbd "C-j") 'evil-window-next)
+            (global-set-key (kbd "C-k") 'evil-window-prev)
             (define-key evil-normal-state-map (kbd "C-q") 'delete-window)
             (define-key evil-normal-state-map (kbd "C-j") 'evil-window-next)
             (define-key evil-normal-state-map (kbd "C-k") 'evil-window-prev)
