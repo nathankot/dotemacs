@@ -620,6 +620,8 @@
             :init (progn
                     (add-hook 'flycheck-mode-hook #'flycheck-haskell-setup)))
 
+          (evil-set-initial-state 'haskell-interactive-mode 'emacs)
+
           (setq haskell-process-auto-import-loaded-modules t)
           (setq haskell-process-log t)
           (setq haskell-process-suggest-remove-import-lines t)
