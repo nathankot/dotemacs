@@ -641,6 +641,8 @@
             "`" 'haskell-interactive-bring
             "h r" 'haskell-process-load-or-reload
             "h k" 'haskell-session-kill
+            "h m" 'haskell-menu
+            "h b" 'haskell-process-cabal-build
             "h g i" 'haskell-navigate-imports
             "h f i" 'haskell-mode-format-imports))
   :config (progn
