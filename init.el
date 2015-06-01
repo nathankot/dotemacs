@@ -610,17 +610,18 @@
   :ensure t
   :commands yaml-mode)
 
+(use-package ghc
+  :load-path "/Users/nathan/Development/Packages/ghc-mod/elisp"
+  :init (progn
+          (add-hook 'haskell-mode-hook 'ghc-init))
+  :config (progn
+            (use-package company-ghc
+              :ensure t
+              :config (progn (add-to-list 'company-backends 'company-ghc)))))
+
 (use-package haskell-mode
   :ensure t
   :init (progn
-          (use-package company-ghc
-            :ensure t
-            :init (progn
-                    (use-package ghc
-                      :load-path "/Users/nathan/Development/Packages/ghc-mod/elisp"))
-            :config (progn
-                      (add-to-list 'company-backends 'company-ghc)))
-
           (use-package flycheck-haskell
             :load-path "vendor/flycheck-haskell"
             :commands flycheck-haskell-setup
@@ -644,11 +645,12 @@
             "h m" 'haskell-menu
             "h b" 'haskell-process-cabal-build
             "h g i" 'haskell-navigate-imports
-            "h f i" 'haskell-mode-format-imports))
-  :config (progn
-            (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
-            (add-hook 'haskell-mode-hook 'ghc-init)
-            (add-hook 'haskell-mode-hook 'interactive-haskell-mode)))
+            "h f i" 'haskell-mode-format-imports)
+
+          (add-hook 'haskell-mode-hook
+            (lambda ()
+              (turn-on-haskell-indent)
+              (interactive-haskell-mode)))))
 
 ;; Org Mode
 ;; ================================================================================
