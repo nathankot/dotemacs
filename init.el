@@ -644,7 +644,7 @@
             "h g i" 'haskell-navigate-imports
             "h f i" 'haskell-mode-format-imports))
   :config (progn
-            (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+            (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
             (add-hook 'haskell-mode-hook 'ghc-init)
             (add-hook 'haskell-mode-hook 'interactive-haskell-mode)))
 
