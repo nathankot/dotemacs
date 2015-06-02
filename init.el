@@ -644,6 +644,9 @@
           (setq haskell-process-type (quote cabal-repl))
           (setq haskell-interactive-popup-errors nil)
 
+          (evil-define-key 'normal haskell-mode-map
+            (kbd "?") 'hoogle)
+
           (evil-leader/set-key-for-mode 'haskell-mode
             "t" 'ghc-show-type
             "h t" 'haskell-process-do-type
