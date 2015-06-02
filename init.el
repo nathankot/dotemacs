@@ -372,6 +372,7 @@
   :diminish (flycheck-mode . " f")
   :commands global-flycheck-mode
   :init (progn
+          (setq flycheck-check-syntax-automatically '(save))
           (global-flycheck-mode))
   :config (progn
             (define-key evil-normal-state-map (kbd "] e") 'next-error)
