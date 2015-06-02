@@ -656,6 +656,12 @@
             "h g i" 'haskell-navigate-imports
             "h f i" 'haskell-mode-format-imports)
 
+          (add-hook 'haskell-interactive-mode-hook
+            (lambda ()
+              (local-set-key (kbd "<up>") 'haskell-interactive-mode-history-previous)
+              (local-set-key (kbd "<down>") 'haskell-interactive-mode-history-next)
+              (local-set-key (kbd "C-j") 'evil-window-next)))
+
           (add-hook 'haskell-mode-hook
             (lambda ()
               (turn-on-haskell-indent)))))
