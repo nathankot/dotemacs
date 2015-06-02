@@ -610,10 +610,17 @@
   :ensure t
   :commands yaml-mode)
 
+(defvar my-ghc-initialized nil)
 (use-package ghc
-  :load-path "/Users/nathan/Development/Packages/ghc-mod/elisp"
+  :ensure t
   :init (progn
-          (add-hook 'haskell-mode-hook 'ghc-init))
+          (add-hook 'haskell-mode-hook (lambda ()
+                                         (ghc-abbrev-init)
+                                         (ghc-type-init)
+                                         (unless my-ghc-initialized
+                                           (ghc-comp-init)
+                                           (setq my-ghc-initialized t))
+                                         (ghc-import-module))))
   :config (progn
             (use-package company-ghc
               :ensure t
@@ -637,7 +644,8 @@
           (setq haskell-interactive-popup-errors nil)
 
           (evil-leader/set-key-for-mode 'haskell-mode
-            "t" 'haskell-process-do-type
+            "t" 'ghc-show-type
+            "h t" 'haskell-process-do-type
             "h i" 'haskell-interactive-bring
             "`" 'haskell-interactive-bring
             "h r" 'haskell-process-load-or-reload
@@ -649,8 +657,7 @@
 
           (add-hook 'haskell-mode-hook
             (lambda ()
-              (turn-on-haskell-indent)
-              (interactive-haskell-mode)))))
+              (turn-on-haskell-indent)))))
 
 ;; Org Mode
 ;; ================================================================================
