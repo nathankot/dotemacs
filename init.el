@@ -155,6 +155,7 @@
                         (evil-leader/set-key "t" 'transpose-words)
                         (evil-leader/set-key "w" 'save-buffer)
                         (evil-leader/set-key "i" 'evil-window-move-far-left)
+                        (evil-leader/set-key "a" 'align-regexp)
                         (evil-leader/set-key "SPC" 'evil-search-highlight-persist-remove-all)))
 
             (use-package evil-search-highlight-persist
