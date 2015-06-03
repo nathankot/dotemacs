@@ -198,7 +198,7 @@
             (define-key evil-normal-state-map (kbd "C-k") 'evil-window-prev)
             (define-key evil-normal-state-map (kbd "C-l") 'evil-window-increase-width)
             (define-key evil-normal-state-map (kbd "C-h") 'evil-window-decrease-width)
-            (define-key evil-insert-state-map (kbd "<S-return>") 'comment-indent-new-line)
+            (define-key evil-insert-state-map (kbd "C-j") 'comment-indent-new-line)
 
             (define-key evil-normal-state-map (kbd "-")
               (lambda ()
