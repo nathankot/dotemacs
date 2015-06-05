@@ -12,8 +12,11 @@
  ;; If there is more than one, they won't work right.
   '(custom-safe-themes
      (quote
-       ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223"
-        "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))))
+       ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
+  '(safe-local-variable-values
+     (quote
+       ((haskell-process-use-ghci . t)
+         (haskell-indent-spaces . 4)))))
 
 ;; Use UTF-8 encoding
 (setq locale-coding-system 'utf-8)
@@ -393,7 +396,9 @@
           (yas-global-mode 1))
   :config (progn
             (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand)
-            (define-key yas-keymap (kbd "C-e") 'yas-next-field-or-maybe-expand)))
+            (define-key yas-keymap (kbd "C-e") 'yas-next-field-or-maybe-expand)
+            (define-key yas-keymap (kbd "C-i") nil)
+            (define-key yas-keymap (kbd "C-o") nil)))
 
 
 ;; Helm
@@ -795,3 +800,9 @@
 
 (provide 'init)
 ;;; init.el ends here
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
