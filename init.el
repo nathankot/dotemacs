@@ -268,7 +268,16 @@
   :init (popwin-mode 1)
   :config (progn
             (evil-define-key 'normal popwin:keymap (kbd "q") 'popwin:close-popup-window)
-            (push '("^\\*helm.*\\*$" :regexp t :dedicated t) popwin:special-display-config)))
+            ;; Let's override the popwin defaults
+            (setq popwin:special-display-config '(("^\\*magit:.*\\*$" :regexp t :position top :height 28 :stick t)
+                                                   (git-commit-mode :position top :height 28 :stick t)
+                                                   ("*Warnings*" :noselect t)
+                                                   ("*Miniedit Help*" :noselect t)
+                                                   (help-mode :position bottom :noselect t :stick t)
+                                                   (completion-list-mode :noselect t)
+                                                   (grep-mode :noselect t)
+                                                   (occur-mode :noselect t)
+                                                   (" *undo-tree*" :width 60 :position right)))))
 
 (use-package autopair
   :ensure t
