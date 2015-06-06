@@ -678,7 +678,8 @@
 
           (add-hook 'haskell-mode-hook
             (lambda ()
-              (turn-on-haskell-indent)))))
+              (turn-on-haskell-indent)
+              (interactive-haskell-mode)))))
 
 ;; Org Mode
 ;; ================================================================================
