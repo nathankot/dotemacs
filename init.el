@@ -451,6 +451,10 @@
   :ensure t
   :commands (helm-swoop)
   :init (progn
+          (define-key helm-swoop-edit-map (kbd "C-c C-c") 'helm-swoop--edit-complete)
+          (define-key helm-swoop-edit-map (kbd "C-c C-k") 'helm-swoop--edit-cancel)
+          (define-key helm-multi-swoop-map (kbd "C-e") 'helm-multi-swoop-edit)
+          (define-key helm-swoop-map (kbd "C-e") 'helm-swoop-edit)
           (evil-leader/set-key "sb" 'helm-swoop)
           (evil-leader/set-key "sa" 'helm-multi-swoop)))
 
