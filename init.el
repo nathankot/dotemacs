@@ -173,9 +173,11 @@
 
             (use-package evil-snipe
               :ensure t
+              :commands (evil-snipe-mode evil-snipe-override-mode)
               :diminish evil-snipe-mode
-              :commands (global-evil-snipe-mode evil-snipe-mode)
-              :init     (global-evil-snipe-mode 1))
+              :init     (progn
+                          (evil-snipe-mode 1)
+                          (evil-snipe-override-mode 1)))
 
             (use-package evil-surround
               :ensure t
