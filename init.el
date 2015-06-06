@@ -413,7 +413,13 @@
   :init (progn
           (require 'helm-config))
   :config (progn
+            (setq helm-autoresize-max-height 30)
+            (setq helm-autoresize-min-height 15)
+
+            (helm-autoresize-mode 1)
             (define-key evil-normal-state-map (kbd "C-b") 'helm-buffers-list)
+            (define-key evil-normal-state-map (kbd "g o") 'helm-google-suggest)
+
             (define-key helm-map (kbd "C-l") 'projectile-invalidate-cache)
             (define-key helm-map (kbd "C-b") 'helm-keyboard-quit)
             (define-key helm-map (kbd "C-p") 'helm-keyboard-quit)
