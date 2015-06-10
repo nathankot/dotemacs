@@ -684,11 +684,14 @@
   :ensure t
   :commands structured-haskell-mode
   :init (progn
-          (add-hook 'haskell-mode-hook 'structured-haskell-mode)
+          (add-hook 'haskell-mode-hook (lambda ()
+                                         (autopair-mode -1)
+                                         (structured-haskell-mode)))
           (evil-define-key 'insert shm-map
             (kbd "RET") 'shm/newline-indent
             (kbd "C-o") 'shm/raise
             (kbd "C-k") 'shm/goto-parent
+            (kbd "C-l") 'shm/add-operand
             (kbd "C-h") 'shm/delete-indentation)
           (evil-define-key 'normal shm-map
             (kbd "g o") 'shm/raise
