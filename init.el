@@ -651,6 +651,7 @@
   :config (progn
             (use-package company-ghc
               :ensure t
+              :inig (progn (setq company-ghc-show-info oneline))
               :config (progn (add-to-list 'company-backends 'company-ghc)))))
 
 (use-package haskell-mode
