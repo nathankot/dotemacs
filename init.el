@@ -251,6 +251,7 @@
 
 (use-package popwin
   :ensure t
+  :functions popwin-mode
   :init (popwin-mode 1)
   :config (progn
             (evil-define-key 'normal popwin:keymap (kbd "q") 'popwin:close-popup-window)
