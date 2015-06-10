@@ -678,27 +678,8 @@
 
           (add-hook 'haskell-mode-hook (lambda ()
                                          (interactive-haskell-mode)
-                                         (set (make-local-variable 'indent-line-function) (lambda ()))
-                                         (set (make-local-variable 'indent-region-function) (lambda ()))))))
+                                         (turn-on-haskell-indentation)))))
 
-(use-package shm ;; structured-haskell-mode
-  :ensure t
-  :commands structured-haskell-mode
-  :init (progn
-          (add-hook 'haskell-mode-hook (lambda ()
-                                         (autopair-mode -1)
-                                         (structured-haskell-mode)))
-          (evil-define-key 'insert shm-map
-            (kbd "C-o") 'shm/raise
-            (kbd "C-k") 'shm/goto-parent
-            (kbd "C-l") 'shm/add-operand
-            (kbd "C-h") 'shm/delete-indentation)
-          (evil-define-key 'normal shm-map
-            (kbd "g o") 'shm/raise
-            (kbd "o") (lambda ()
-                        (interactive)
-                        (evil-append-line 1)
-                        (shm/newline-indent)))))
 
 ;; Org Mode
 ;; ================================================================================
