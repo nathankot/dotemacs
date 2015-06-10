@@ -603,6 +603,7 @@
 
 (use-package swift-mode
   :load-path "vendor/swift-mode"
+  :commands swift-mode
   :config (progn
             (add-hook 'swift-mode-hook
               (lambda () (interactive)
@@ -678,6 +679,7 @@
 
 (use-package shm ;; structured-haskell-mode
   :ensure t
+  :commands structured-haskell-mode
   :init (progn
           (add-hook 'haskell-mode-hook 'structured-haskell-mode)
           (evil-define-key 'insert shm-map
@@ -777,6 +779,7 @@
 ;; ================================================================================
 (use-package ledger-mode
   :ensure t
+  :commands ledger-mode
   :init (progn
           (add-to-list 'auto-mode-alist '("\\.ledger\\'" . ledger-mode)))
   :config (progn
