@@ -692,10 +692,19 @@
               (local-set-key (kbd "<down>") 'haskell-interactive-mode-history-next)
               (local-set-key (kbd "C-j") 'evil-window-next)))
 
-          (add-hook 'haskell-mode-hook
-            (lambda ()
-              (turn-on-haskell-indent)
-              (interactive-haskell-mode)))))
+          (add-hook 'haskell-mode-hook 'interactive-haskell-mode)))
+
+(use-package shm ;; structured-haskell-mode
+  :ensure t
+  :init (progn
+          (add-hook 'haskell-mode-hook 'structured-haskell-mode)
+          (evil-define-key 'insert shm-map
+            (kbd "RET") 'shm/newline-indent
+            (kbd "C-o") 'shm/raise
+            (kbd "C-k") 'shm/goto-parent
+            (kbd "C-h") 'shm/delete-indentation)
+          (evil-leader/set-key-for-mode 'structured-haskell-mode
+            "o" 'shm/raise)))
 
 ;; Org Mode
 ;; ================================================================================
