@@ -669,6 +669,7 @@
           (setq haskell-process-suggest-remove-import-lines t)
           (setq haskell-process-type (quote cabal-repl))
           (setq haskell-interactive-popup-errors nil)
+          (setq haskell-stylish-on-save t)
 
           (evil-define-key 'normal haskell-mode-map
             (kbd "?") 'hoogle)
