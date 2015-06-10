@@ -1,4 +1,3 @@
-
 ;;; package --- Nathan's Emacs
 ;;; Commentary:
 ;;; Extensive use of `use-package`
@@ -216,10 +215,6 @@
             ; Buffer Management
             (define-key evil-visual-state-map (kbd "SPC") 'evil-search-forward)
             (define-key evil-normal-state-map (kbd "SPC") 'evil-search-forward)
-            (define-key evil-visual-state-map (kbd "S-SPC") 'evil-search-backward)
-            (define-key evil-normal-state-map (kbd "S-SPC") 'evil-search-backward)
-            (define-key evil-normal-state-map (kbd "] l") 'occur-next)
-            (define-key evil-normal-state-map (kbd "[ l") 'occur-prev)
             (evil-add-hjkl-bindings package-menu-mode-map 'emacs)
             (evil-add-hjkl-bindings outline-mode-map 'emacs)
             (evil-add-hjkl-bindings occur-mode-map 'emacs)
@@ -464,6 +459,7 @@
 (use-package company
   :ensure t
   :diminish " c"
+  :defines company-dabbrev-downcase
   :init (progn
           (setq company-dabbrev-downcase nil)
           (global-company-mode))
@@ -478,6 +474,7 @@
               '( company-css
                  company-elisp
                  company-clang
+                 company-ghc
                  company-xcode
                  ( company-capf
                    company-dabbrev-code
@@ -496,6 +493,7 @@
   :ensure t
   :diminish js2-minor-mode
   :commands (js2-mode js-mode js2-minor-mode)
+  :defines helm-dash-docsets
   :init (progn
           (use-package tern
             :diminish " T"
@@ -635,8 +633,7 @@
   :config (progn
             (use-package company-ghc
               :ensure t
-              :inig (progn (setq company-ghc-show-info oneline))
-              :config (progn (add-to-list 'company-backends 'company-ghc)))))
+              :init (progn (setq company-ghc-show-info 'oneline)))))
 
 (use-package haskell-mode
   :ensure t
@@ -693,24 +690,21 @@
 
 ;; Org Mode
 ;; ================================================================================
-(setq org-log-done 'time)
-(setq org-hide-leading-stars nil)
-(setq org-alphabetical-lists t)
-(setq org-src-fontify-natively t)  ;; you want this to activate coloring in blocks
-(setq org-src-tab-acts-natively t) ;; you want this to have completion in blocks
-(setq org-hide-emphasis-markers t) ;; to hide the *,=, or / markers
-(setq org-pretty-entities t)       ;; to have \alpha, \to and others display as utf8 http://orgmode.org/manual/Special-symbols.html
-(setq org-directory "~/.org/")
-(setq org-agenda-files (list "~/.org/home.org" "~/.org/work.org" "~/.org/notes.org"))
-(setq org-default-notes-file (concat org-directory "/notes.org"))
-(setq org-agenda-files (quote ("~/.org/home.org" "~/.org/work.org" "~/.org/notes.org")))
-(setq org-enforce-todo-checkbox-dependencies t)
-(setq org-enforce-todo-dependencies t)
-
-(setq org-todo-keywords
-  '((sequence "TODO" "DOING" "|" "DONE" "CANCELED" "DELEGATED")))
-
-(setq org-todo-keyword-faces
+(defvar org-log-done 'time)
+(defvar org-hide-leading-stars nil)
+(defvar org-alphabetical-lists t)
+(defvar org-src-fontify-natively t)  ;; you want this to activate coloring in blocks
+(defvar org-src-tab-acts-natively t) ;; you want this to have completion in blocks
+(defvar org-hide-emphasis-markers t) ;; to hide the *,=, or / markers
+(defvar org-pretty-entities t)       ;; to have \alpha, \to and others display as utf8 http://orgmode.org/manual/Special-symbols.html
+(defvar org-directory "~/.org/")
+(defvar org-agenda-files (list "~/.org/home.org" "~/.org/work.org" "~/.org/notes.org"))
+(defvar org-default-notes-file (concat org-directory "/notes.org"))
+(defvar org-enforce-todo-checkbox-dependencies t)
+(defvar org-enforce-todo-dependencies t)
+(defvar org-todo-keywords '((sequence "TODO" "DOING" "|" "DONE" "CANCELED" "DELEGATED")))
+(defvar org-agenda-files (quote ("~/.org/home.org" "~/.org/work.org" "~/.org/notes.org")))
+(defvar org-todo-keyword-faces
   '(("TODO" . org-warning)
     ("DOING" . "white")
     ("DONE" . "green")
