@@ -364,6 +364,7 @@
              magit-stage-all)
   :init (progn
           (setq magit-last-seen-setup-instructions "1.4.0")
+          (add-to-list 'evil-insert-state-modes 'magit-commit-mode)
           (evil-leader/set-key
             "g l" 'magit-log
             "g c" 'magit-commit
@@ -372,8 +373,7 @@
             "g d" 'magit-diff-unstaged
             "g D" 'magit-diff-staged
             "g b" 'magit-blame-mode
-            "g w" 'magit-stage-all)
-          (add-to-list 'evil-insert-state-modes 'magit-commit-mode))
+            "g w" 'magit-stage-all))
   :config (progn
             (evil-add-hjkl-bindings magit-log-mode-map 'emacs)
             (evil-add-hjkl-bindings magit-status-mode-map 'emacs)
