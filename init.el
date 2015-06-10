@@ -675,7 +675,10 @@
               (local-set-key (kbd "<down>") 'haskell-interactive-mode-history-next)
               (local-set-key (kbd "C-j") 'evil-window-next)))
 
-          (add-hook 'haskell-mode-hook 'interactive-haskell-mode)))
+          (add-hook 'haskell-mode-hook (lambda ()
+                                         (interactive-haskell-mode)
+                                         (set (make-local-variable 'indent-line-function) (lambda ()))
+                                         (set (make-local-variable 'indent-region-function) (lambda ()))))))
 
 (use-package shm ;; structured-haskell-mode
   :ensure t
@@ -688,7 +691,11 @@
             (kbd "C-k") 'shm/goto-parent
             (kbd "C-h") 'shm/delete-indentation)
           (evil-define-key 'normal shm-map
-            (kbd "g o") 'shm/raise)))
+            (kbd "g o") 'shm/raise
+            (kbd "o") (lambda ()
+                        (interactive)
+                        (evil-append-line 1)
+                        (shm/newline-indent)))))
 
 ;; Org Mode
 ;; ================================================================================
