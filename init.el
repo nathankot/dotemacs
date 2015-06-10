@@ -151,7 +151,6 @@
 
             (use-package evil-leader
               :ensure t
-              :commands (global-evil-leader-mode evil-leader-mode)
               :init (global-evil-leader-mode)
               :config (progn
                         (evil-leader/set-leader ",")
@@ -163,17 +162,14 @@
 
             (use-package evil-search-highlight-persist
                :ensure t
-               :commands global-evil-search-highlight-persist
                :init (global-evil-search-highlight-persist))
 
             (use-package evil-commentary
               :ensure t
-              :commands evil-commentary-mode
               :init (evil-commentary-mode))
 
             (use-package evil-snipe
               :ensure t
-              :commands (evil-snipe-mode evil-snipe-override-mode)
               :diminish evil-snipe-mode
               :init     (progn
                           (evil-snipe-mode 1)
@@ -181,17 +177,14 @@
 
             (use-package evil-surround
               :ensure t
-              :commands (global-evil-surround-mode)
               :init (global-evil-surround-mode 1))
 
             (use-package evil-matchit
               :ensure t
-              :commands (global-evil-matchit-mode)
               :init (global-evil-matchit-mode 1))
 
             (use-package evil-jumper
               :ensure t
-              :commands (global-evil-jumper-mode)
               :init (global-evil-jumper-mode))
 
             ; Window management
@@ -237,7 +230,6 @@
 ;; ================================================================================
 (use-package diminish
   :ensure t
-  :commands diminish
   :config (progn
             (diminish 'isearch-mode " ?")))
 
@@ -264,7 +256,6 @@
 
 (use-package popwin
   :ensure t
-  :commands popwin-mode
   :init (popwin-mode 1)
   :config (progn
             (evil-define-key 'normal popwin:keymap (kbd "q") 'popwin:close-popup-window)
@@ -289,7 +280,6 @@
 ;; ================================================================================
 (use-package projectile
   :ensure t
-  :commands (projectile-global-mode projectile-mode projectile-project-root)
   :diminish projectile-mode
   :init (progn
           (setq projectile-enable-caching t)
@@ -331,7 +321,6 @@
 
 (use-package perspective
   :ensure t
-  :commands (persp-mode persp-kill persp-switch persp-next persp-prev)
   :init (progn
             (define-key evil-normal-state-map (kbd "C-@") 'persp-switch)
             (define-key evil-normal-state-map (kbd ")") 'persp-next)
@@ -347,7 +336,6 @@
 (use-package git-gutter
   :ensure t
   :diminish git-gutter-mode
-  :commands git-gutter-mode
   :init (global-git-gutter-mode +1)
   :config (progn
             (git-gutter:linum-setup)
@@ -387,7 +375,6 @@
 (use-package flycheck
   :ensure t
   :diminish (flycheck-mode . " f")
-  :commands global-flycheck-mode
   :init (progn
           (setq flycheck-check-syntax-automatically '(mode-enabled save))
           (global-flycheck-mode))
@@ -401,7 +388,6 @@
 (use-package yasnippet
   :ensure t
   :diminish (yas-minor-mode . " y")
-  :commands (yas-global-mode yas-activate-extra-mode)
   :init (progn
           (setq yas-snippet-dirs '("~/.snippets/yasnippet-snippets"
                                    "~/.snippets/personal"))
@@ -418,7 +404,6 @@
 ;; ================================================================================
 (use-package helm
   :ensure t
-  :commands (helm-buffer-list helm-mode)
   :init (progn
           (require 'helm-config))
   :config (progn
@@ -438,7 +423,6 @@
 
 (use-package helm-projectile
   :ensure t
-  :commands (helm-projectile)
   :bind ("C-p" . helm-projectile)
   :init (progn
           (define-key evil-normal-state-map (kbd "C-p") 'helm-projectile)))
@@ -656,10 +640,10 @@
 
 (use-package haskell-mode
   :ensure t
+  :commands (haskell-mode haskell-interactive-mode)
   :init (progn
           (use-package flycheck-haskell
             :load-path "vendor/flycheck-haskell"
-            :commands flycheck-haskell-setup
             :init (progn
                     (add-hook 'flycheck-mode-hook #'flycheck-haskell-setup)))
 
