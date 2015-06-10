@@ -688,7 +688,6 @@
                                          (autopair-mode -1)
                                          (structured-haskell-mode)))
           (evil-define-key 'insert shm-map
-            (kbd "RET") 'shm/newline-indent
             (kbd "C-o") 'shm/raise
             (kbd "C-k") 'shm/goto-parent
             (kbd "C-l") 'shm/add-operand
