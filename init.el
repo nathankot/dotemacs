@@ -256,9 +256,9 @@
   :config (progn
             (evil-define-key 'normal popwin:keymap (kbd "q") 'popwin:close-popup-window)
             ;; Let's override the popwin defaults
-            (setq popwin:special-display-config  '(("^\\*magit:.*\\*$" :regexp t :position top :height 30 :dedicated t)
-                                                   (git-commit-mode :position top :height 30 :stick t :dedicated t)
-                                                   ("^\\*helm.*\\*$" :regexp t :position bottom :height 30 :dedicated t)
+            (setq popwin:special-display-config  '(("^\\*magit:.*\\*$" :regexp t :position top :height 20 :dedicated t)
+                                                   ("^\\*helm.*\\*$" :regexp t :position bottom :dedicated t)
+                                                   (git-commit-mode :position top :height 20 :stick t :dedicated t)
                                                    (help-mode :position bottom :noselect t :stick t)
                                                    (completion-list-mode :noselect t)
                                                    (grep-mode :noselect t)
@@ -404,6 +404,7 @@
   :init (progn
           (require 'helm-config))
   :config (progn
+            (helm-autoresize-mode 1)
             (define-key evil-normal-state-map (kbd "C-b") 'helm-buffers-list)
             (define-key evil-normal-state-map (kbd "g o") 'helm-google-suggest)
 
