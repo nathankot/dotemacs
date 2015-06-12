@@ -605,6 +605,8 @@
 (use-package swift-mode
   :load-path "vendor/swift-mode"
   :commands swift-mode
+  :init (progn
+          (add-to-list 'auto-mode-alist '("\\.swift\\'" . swift-mode)))
   :config (progn
             (add-hook 'swift-mode-hook
               (lambda () (interactive)
