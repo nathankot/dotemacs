@@ -118,7 +118,7 @@
 
 (use-package editorconfig
   :ensure t
-  :config (progn
+  :init (progn
           (add-to-list 'edconf-indentation-alist '(swift-mode swift-indent-offset))))
 
 (use-package smex
@@ -256,15 +256,16 @@
   :config (progn
             (evil-define-key 'normal popwin:keymap (kbd "q") 'popwin:close-popup-window)
             ;; Let's override the popwin defaults
-            (setq popwin:special-display-config  '(("^\\*magit:.*\\*$" :regexp t :position top :height 28 :stick t)
-                                                   (git-commit-mode :position top :height 28 :stick t)
+            (setq popwin:special-display-config  '(("^\\*magit:.*\\*$" :regexp t :position top :height 30 :dedicated t)
+                                                   (git-commit-mode :position top :height 30 :stick t :dedicated t)
+                                                   ("^\\*helm.*\\*$" :regexp t :position bottom :height 30 :dedicated t)
                                                    (help-mode :position bottom :noselect t :stick t)
                                                    (completion-list-mode :noselect t)
                                                    (grep-mode :noselect t)
                                                    (occur-mode :noselect t)
                                                    ("*Warnings*" :noselect t)
                                                    ("*Miniedit Help*" :noselect t)
-                                                   (" *undo-tree*" :width 60 :position right)))))
+                                                   ("*undo-tree*" :width 60 :position right)))))
 
 (use-package autopair
   :ensure t
@@ -403,10 +404,6 @@
   :init (progn
           (require 'helm-config))
   :config (progn
-            (setq helm-autoresize-max-height 30)
-            (setq helm-autoresize-min-height 15)
-
-            (helm-autoresize-mode 1)
             (define-key evil-normal-state-map (kbd "C-b") 'helm-buffers-list)
             (define-key evil-normal-state-map (kbd "g o") 'helm-google-suggest)
 
