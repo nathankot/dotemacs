@@ -474,7 +474,6 @@
                  company-elisp
                  company-clang
                  company-ghc
-                 company-xcode
                  ( company-capf
                    company-dabbrev-code
                    ;; company-etags
