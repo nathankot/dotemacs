@@ -4,6 +4,12 @@
 
 ;;; Code:
 
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(package-initialize)
+(add-to-list 'load-path "~/.emacs.d/vendor/use-package")
+(require 'use-package)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -61,11 +67,6 @@
 (setq large-file-warning-threshold 100000000)
 (column-number-mode 1)
 
-(require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-(package-initialize)
-(eval-when-compile (require 'use-package))
-
 (use-package exec-path-from-shell
   :ensure t
   :init (progn
@@ -118,7 +119,7 @@
 
 (use-package editorconfig
   :ensure t
-  :init (progn
+  :config (progn
           (add-to-list 'edconf-indentation-alist '(swift-mode swift-indent-offset))))
 
 (use-package smex
