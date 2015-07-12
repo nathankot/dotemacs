@@ -339,7 +339,6 @@
 (use-package magit
   :ensure t
   :init (progn
-          ;; (setq magit-last-seen-setup-instructions "1.4.0")
           (evil-leader/set-key
             "g l" 'magit-log
             "g c" 'magit-commit
@@ -350,34 +349,17 @@
             "g b" 'magit-blame
             "g w" 'magit-stage-file))
   :config (progn
-            (setq magit-keymaps '(magit-mode-map
-                                   magit-log-mode-map
-                                   magit-refs-mode-map
-                                   magit-diff-mode-map
-                                   magit-stash-mode-map
-                                   magit-blame-mode-map
-                                   magit-reflog-mode-map
-                                   magit-status-mode-map
-                                   magit-tag-section-map
-                                   magit-cherry-mode-map
-                                   magit-hunk-section-map
-                                   magit-file-section-map
-                                   magit-process-mode-map
-                                   magit-stashes-mode-map
-                                   magit-revision-mode-map
-                                   magit-log-read-revs-map
-                                   magit-stash-section-map
-                                   magit-staged-section-map
-                                   magit-remote-section-map
-                                   magit-commit-section-map
-                                   magit-branch-section-map
-                                   magit-stashes-section-map
-                                   magit-log-select-mode-map
-                                   magit-unpulled-section-map
-                                   magit-unstaged-section-map
-                                   magit-unpushed-section-map
-                                   magit-untracked-section-map
-                                   magit-module-commit-section-map))
+            (setq magit-keymaps
+              '(magit-mode-map magit-log-mode-map magit-refs-mode-map
+                 magit-diff-mode-map magit-stash-mode-map magit-blame-mode-map
+                 magit-reflog-mode-map magit-status-mode-map magit-tag-section-map
+                 magit-cherry-mode-map magit-hunk-section-map magit-file-section-map
+                 magit-process-mode-map magit-stashes-mode-map magit-revision-mode-map
+                 magit-log-read-revs-map magit-stash-section-map magit-staged-section-map
+                 magit-remote-section-map magit-commit-section-map magit-branch-section-map
+                 magit-stashes-section-map magit-log-select-mode-map magit-unpulled-section-map
+                 magit-unstaged-section-map magit-unpushed-section-map magit-untracked-section-map
+                 magit-module-commit-section-map))
             (dolist (map-name magit-keymaps)
               (let* ((map (symbol-value map-name)))
                 (-when-let (def (lookup-key map "v"))
