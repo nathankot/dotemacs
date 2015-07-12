@@ -252,8 +252,7 @@
   :config (progn
             (evil-define-key 'normal popwin:keymap (kbd "q") 'popwin:close-popup-window)
             ;; Let's override the popwin defaults
-            (setq popwin:special-display-config  '(("^\\*magit:.*\\*$" :regexp t :position top :height 20 :dedicated t)
-                                                   ("^\\*helm.*\\*$" :regexp t :position bottom :dedicated t)
+            (setq popwin:special-display-config  '(("^\\*helm.*\\*$" :regexp t :position bottom :dedicated t)
                                                    (help-mode :position bottom :noselect t :stick t)
                                                    (completion-list-mode :noselect t)
                                                    (grep-mode :noselect t)
