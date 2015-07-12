@@ -33,8 +33,6 @@
 (setenv "LC_CTYPE" "UTF-8")
 
 ;; Mac Specific
-(setenv "PATH" (concat (getenv "PATH") ":/opt/boxen/homebrew/bin"))
-(setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
 (defun paste-to-osx (text &optional push)
   (let ((process-connection-type nil))
     (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
@@ -210,9 +208,6 @@
                 (split-window-horizontally)
                     (other-window 1)))
 
-            (evil-set-initial-state 'magit-log-edit-mode 'insert)
-            (evil-set-initial-state 'git-commit-mode 'insert)
-
             ; Buffer Management
             (define-key evil-visual-state-map (kbd "SPC") 'evil-search-forward)
             (define-key evil-normal-state-map (kbd "SPC") 'evil-search-forward)
@@ -259,7 +254,6 @@
             ;; Let's override the popwin defaults
             (setq popwin:special-display-config  '(("^\\*magit:.*\\*$" :regexp t :position top :height 20 :dedicated t)
                                                    ("^\\*helm.*\\*$" :regexp t :position bottom :dedicated t)
-                                                   (git-commit-mode :position top :height 20 :stick t :dedicated t)
                                                    (help-mode :position bottom :noselect t :stick t)
                                                    (completion-list-mode :noselect t)
                                                    (grep-mode :noselect t)
@@ -344,13 +338,8 @@
 
 (use-package magit
   :ensure t
-  :diminish magit-auto-revert-mode
-  :commands (magit-log magit-status magit-commit magit-commit-amend
-             magit-diff-unstaged magit-diff-staged magit-blame-mode
-             magit-stage-all)
   :init (progn
-          (setq magit-last-seen-setup-instructions "1.4.0")
-          (add-to-list 'evil-insert-state-modes 'magit-commit-mode)
+          ;; (setq magit-last-seen-setup-instructions "1.4.0")
           (evil-leader/set-key
             "g l" 'magit-log
             "g c" 'magit-commit
@@ -358,14 +347,47 @@
             "g s" 'magit-status
             "g d" 'magit-diff-unstaged
             "g D" 'magit-diff-staged
-            "g b" 'magit-blame-mode
-            "g w" 'magit-stage-all))
+            "g b" 'magit-blame
+            "g w" 'magit-stage-file))
   :config (progn
-            (evil-add-hjkl-bindings magit-log-mode-map 'emacs)
-            (evil-add-hjkl-bindings magit-status-mode-map 'emacs)
-            (evil-add-hjkl-bindings magit-branch-manager-mode-map 'emacs)
-            (define-key magit-diff-mode-map (kbd "j") 'magit-goto-next-section)
-            (define-key magit-diff-mode-map (kbd "k") 'magit-goto-previous-section)))
+            (setq magit-keymaps '(magit-mode-map
+                                   magit-log-mode-map
+                                   magit-refs-mode-map
+                                   magit-diff-mode-map
+                                   magit-stash-mode-map
+                                   magit-blame-mode-map
+                                   magit-reflog-mode-map
+                                   magit-status-mode-map
+                                   magit-tag-section-map
+                                   magit-cherry-mode-map
+                                   magit-hunk-section-map
+                                   magit-file-section-map
+                                   magit-process-mode-map
+                                   magit-stashes-mode-map
+                                   magit-revision-mode-map
+                                   magit-log-read-revs-map
+                                   magit-stash-section-map
+                                   magit-staged-section-map
+                                   magit-remote-section-map
+                                   magit-commit-section-map
+                                   magit-branch-section-map
+                                   magit-stashes-section-map
+                                   magit-log-select-mode-map
+                                   magit-unpulled-section-map
+                                   magit-unstaged-section-map
+                                   magit-unpushed-section-map
+                                   magit-untracked-section-map
+                                   magit-module-commit-section-map))
+            (dolist (map-name magit-keymaps)
+              (let* ((map (symbol-value map-name)))
+                (-when-let (def (lookup-key map "v"))
+                  (define-key map "V" def)
+                  (define-key map "v" nil))
+                (-when-let (def (lookup-key map "k"))
+                  (define-key map "K" def)
+                  (define-key map "k" nil))
+                (evil-add-hjkl-bindings map 'emacs
+                  "v" 'evil-visual-char)))))
 
 
 ;; Flycheck
@@ -388,7 +410,7 @@
   :diminish (yas-minor-mode . " y")
   :init (progn
           (setq yas-snippet-dirs '("~/.snippets/yasnippet-snippets"
-                                   "~/.snippets/personal"))
+                                    "~/.snippets/personal"))
           (yas-global-mode 1))
   :config (progn
             (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand)
@@ -464,12 +486,12 @@
           (setq company-dabbrev-downcase nil)
           (global-company-mode))
   :config (progn
-            ; Swap some keybindings
+                                        ; Swap some keybindings
             (define-key company-active-map (kbd "C-j") 'company-select-next)
             (define-key company-active-map (kbd "C-k") 'company-select-previous)
             (define-key company-active-map (kbd "C-i") 'company-select-next)
             (define-key company-active-map (kbd "C-o") 'company-select-previous)
-            ; Okay lets setup company backends the way we want it, in a single place.
+                                        ; Okay lets setup company backends the way we want it, in a single place.
             (setq company-backends
               '( company-css
                  company-elisp
@@ -507,7 +529,7 @@
           (setq js2-highlight-level 3)
           (setq js2-mode-show-parse-errors nil)
           (setq js2-mode-show-strict-warnings nil)
-          ; Use js2-mode as a minor mode (preferred way)
+                                        ; Use js2-mode as a minor mode (preferred way)
           (add-hook 'js-mode-hook 'js2-minor-mode)
           (add-to-list 'interpreter-mode-alist '("node" . js-mode)))
   :config (progn
@@ -528,8 +550,8 @@
   :preface (progn
              (defun jsxhint-predicate ()
                (and (executable-find "jsxhint")
-                                (buffer-file-name)
-                                (string-match ".*\.jsx?$" (buffer-file-name)))))
+                 (buffer-file-name)
+                 (string-match ".*\.jsx?$" (buffer-file-name)))))
   :commands web-mode
   :init (progn
           (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
@@ -554,15 +576,15 @@
           (add-to-list 'flycheck-checkers 'jsxhint)
 
           (use-package emmet-mode
-                        ;; Can't diminish this, because the logic relies on
-                        ;; reading the mode-line.
-                        ;; :diminish " e"
-                        :ensure t
-                        :commands emmet-mode
-                        :init (progn
-                                (add-hook 'sgml-mode-hook 'emmet-mode)
-                                (add-hook 'css-mode-hook  'emmet-mode)
-                                (add-hook 'web-mode-hook 'emmet-mode))))
+            ;; Can't diminish this, because the logic relies on
+            ;; reading the mode-line.
+            ;; :diminish " e"
+            :ensure t
+            :commands emmet-mode
+            :init (progn
+                    (add-hook 'sgml-mode-hook 'emmet-mode)
+                    (add-hook 'css-mode-hook  'emmet-mode)
+                    (add-hook 'web-mode-hook 'emmet-mode))))
   :config (progn
             (add-hook 'web-mode-hook
               (lambda ()
@@ -699,10 +721,10 @@
 (defvar org-agenda-files (quote ("~/.org/home.org" "~/.org/work.org" "~/.org/notes.org")))
 (defvar org-todo-keyword-faces
   '(("TODO" . org-warning)
-    ("DOING" . "white")
-    ("DONE" . "green")
-    ("DELEGATED" . "purple")
-    ("CANCELED" . "red")))
+     ("DOING" . "white")
+     ("DONE" . "green")
+     ("DELEGATED" . "purple")
+     ("CANCELED" . "red")))
 
 (use-package evil-org
   :ensure t
@@ -717,15 +739,15 @@
             (evil-add-hjkl-bindings org-agenda-mode-map 'emacs)
 
             (evil-leader/set-key "o c" 'org-capture
-                                 "o a" 'org-agenda
-                                 "o t" 'org-todo-list)
+              "o a" 'org-agenda
+              "o t" 'org-todo-list)
 
             (evil-leader/set-key "o b"
               (lambda ()
                 (interactive)
                 (let ((persp (gethash "org" perspectives-hash)))
                   (if (null persp)
-                    ; When perspective doesn't exist
+                                        ; When perspective doesn't exist
                     (progn
                       (persp-switch "org")
                       (if (file-exists-p "~/.org/home.org")
@@ -735,7 +757,7 @@
                         (progn
                           (split-window-right)
                           (find-file "~/.org/work.org"))))
-                    ; Or when it already exists
+                                        ; Or when it already exists
                     (persp-activate persp)))))
 
             (evil-leader/set-key-for-mode 'org-mode
@@ -804,8 +826,8 @@
 (provide 'init)
 ;;; init.el ends here
 (custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+  )
