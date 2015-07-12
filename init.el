@@ -339,6 +339,9 @@
 (use-package magit
   :ensure t
   :init (progn
+          (evil-set-initial-state 'git-commit-mode 'insert)
+          (evil-set-initial-state 'git-commit-major-mode 'insert)
+          (evil-set-initial-state 'text-mode 'insert) ;; Git-commit is text-mode major
           (evil-leader/set-key
             "g l" 'magit-log
             "g c" 'magit-commit
