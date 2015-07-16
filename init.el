@@ -641,8 +641,7 @@
                                          (ghc-import-module))))
   :config (progn
             (use-package company-ghc
-              :ensure t
-              :init (progn (setq company-ghc-show-info 'oneline)))))
+              :ensure t)))
 
 (use-package haskell-mode
   :ensure t
