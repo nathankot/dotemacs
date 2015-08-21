@@ -100,17 +100,6 @@
           (setq save-place-file "~/.emacs/saveplaces")
           (setq-default save-place t)))
 
-(use-package flx-ido
-  :ensure t
-  :commands (flx-ido-mode)
-  :init (progn
-          (setq ido-enable-flex-matching t)
-          (setq ido-use-faces nil)
-          (setq flx-ido-threshold 10000)
-          (ido-mode 1)
-          (ido-everywhere 1)
-          (flx-ido-mode 1)))
-
 (use-package editorconfig
   :ensure t
   :config (progn
