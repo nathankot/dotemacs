@@ -104,7 +104,8 @@
   :ensure t
   :config (progn
             (add-to-list 'edconf-indentation-alist '(swift-mode swift-indent-offset))
-            (add-to-list 'edconf-indentation-alist '(haskell-mode haskell-indent-spaces))))
+            (add-to-list 'edconf-indentation-alist '(haskell-mode haskell-indent-spaces))
+            (add-to-list 'edconf-indentation-alist '(evil-mode evil-shift-width))))
 
 (use-package smex
   :ensure t
@@ -121,7 +122,6 @@
           (setq evil-want-C-u-scroll t
                 evil-overriding-maps nil
                 evil-intercept-maps nil
-                evil-shift-width 2
                 evil-esc-delay 0 ; Prevent esc from translating to meta key in terminal mode
                 ; Cursor
                 evil-emacs-state-cursor  '("red" box)
@@ -130,7 +130,6 @@
                 evil-insert-state-cursor '("gray" bar)
                 evil-motion-state-cursor '("gray" box))
           (evil-mode 1))
-  :bind ("C-q" . delete-window)
   :config (progn
 
             (use-package evil-leader
