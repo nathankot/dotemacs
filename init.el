@@ -38,9 +38,10 @@
           (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
             (process-send-string proc text)
             (process-send-eof proc)))))
-    (setq interprogram-paste-function
-        (lambda ()
-          (shell-command-to-string "pbpaste")))))
+    (defun pbpaste ()
+      "Call pbpaste"
+      (interactive)
+      (shell-command-to-string "pbpaste"))))
 
 ;; Other stuff
 (setq inhibit-startup-screen t)
