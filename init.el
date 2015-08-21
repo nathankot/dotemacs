@@ -28,13 +28,18 @@
 (setq current-language-environment "UTF-8")
 (setenv "LC_CTYPE" "UTF-8")
 
-;; Mac Specific
-(setq interprogram-cut-function
-  (lambda (text &optional push)
-    (let ((process-connection-type nil))
-    (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
-      (process-send-string proc text)
-      (process-send-eof proc)))))
+;; OSX Specific
+(if (eq system-type 'darwin)
+  (progn
+    (setq interprogram-cut-function
+      (lambda (text &optional push)
+        (let ((process-connection-type nil))
+          (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+            (process-send-string proc text)
+            (process-send-eof proc)))))
+    (setq interprogram-paste-function
+        (lambda ()
+          (shell-command-to-string "pbpaste")))))
 
 ;; Other stuff
 (setq inhibit-startup-screen t)
