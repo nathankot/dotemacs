@@ -440,7 +440,7 @@
   :commands (helm-swoop)
   :init (progn
           (evil-leader/set-key "sb" 'helm-swoop)
-          (evil-leader/set-key "sa" 'helm-multi-swoop)))
+          (evil-leader/set-key "sa" 'helm-multi-swoop-all)))
 
 (use-package helm-flycheck
   :ensure t
