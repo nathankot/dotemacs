@@ -17,11 +17,7 @@
  ;; If there is more than one, they won't work right.
   '(custom-safe-themes
      (quote
-       ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
-  '(safe-local-variable-values
-     (quote
-       ((haskell-process-use-ghci . t)
-         (haskell-indent-spaces . 4)))))
+       ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))))
 
 ;; Use UTF-8 encoding
 (setq locale-coding-system 'utf-8)
@@ -118,7 +114,8 @@
 (use-package editorconfig
   :ensure t
   :config (progn
-          (add-to-list 'edconf-indentation-alist '(swift-mode swift-indent-offset))))
+            (add-to-list 'edconf-indentation-alist '(swift-mode swift-indent-offset))
+            (add-to-list 'edconf-indentation-alist '(haskell-mode haskell-indent-spaces))))
 
 (use-package smex
   :ensure t
