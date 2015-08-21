@@ -4,6 +4,7 @@
 
 ;;; Code:
 
+
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (package-initialize)
@@ -96,29 +97,6 @@
   :config (sml/apply-theme 'respectful))
 
 
-;; Misc.
-;; ================================================================================
-(use-package undo-tree :diminish undo-tree-mode)
-
-(use-package saveplace
-  :init (progn
-          (setq save-place-file "~/.emacs/saveplaces")
-          (setq-default save-place t)))
-
-(use-package editorconfig
-  :ensure t
-  :config (progn
-            (add-to-list 'edconf-indentation-alist '(swift-mode swift-indent-offset))
-            (add-to-list 'edconf-indentation-alist '(haskell-mode haskell-indent-spaces))
-            (add-to-list 'edconf-indentation-alist '(evil-mode evil-shift-width))))
-
-(use-package smex
-  :ensure t
-  :commands smex
-  :bind (("M-x" . smex)
-         ("≈" . smex)))
-
-
 ;; EVIL
 ;; ================================================================================
 (use-package evil
@@ -142,11 +120,11 @@
               :init (global-evil-leader-mode)
               :config (progn
                         (evil-leader/set-leader ",")
-                        (evil-leader/set-key "t" 'transpose-words)
                         (evil-leader/set-key "w" 'save-buffer)
                         (evil-leader/set-key "i" 'evil-window-move-far-left)
                         (evil-leader/set-key "a" 'align-regexp)
-                        (evil-leader/set-key "SPC" 'evil-search-highlight-persist-remove-all)))
+                        (evil-leader/set-key "SPC" 'evil-search-highlight-persist-remove-all)
+                        (evil-leader/set-key "t" 'shell-make-test)))
 
             (use-package evil-search-highlight-persist
                :ensure t
@@ -207,6 +185,41 @@
             (define-key evil-visual-state-map (kbd "C-i") 'indent-region)))
 
 
+;; Misc.
+;; ================================================================================
+(use-package undo-tree :diminish undo-tree-mode)
+
+(use-package saveplace
+  :init (progn
+          (setq save-place-file "~/.emacs/saveplaces")
+          (setq-default save-place t)))
+
+(use-package editorconfig
+  :ensure t
+  :config (progn
+            (add-to-list 'edconf-indentation-alist '(swift-mode swift-indent-offset))
+            (add-to-list 'edconf-indentation-alist '(haskell-mode haskell-indent-spaces))
+            (add-to-list 'edconf-indentation-alist '(evil-mode evil-shift-width))))
+
+(use-package smex
+  :ensure t
+  :commands smex
+  :bind (("M-x" . smex)
+         ("≈" . smex)))
+
+(use-package shell
+  :functions shell-make-test
+  :init (progn
+          (evil-set-initial-state 'shell-mode 'normal)
+          (add-hook 'shell-mode-hook 'read-only-mode)
+          (evil-define-key 'normal shell-mode-map (kbd "q") 'delete-window)
+          (defun shell-make-test ()
+            "Call `make test` in the projectile root directory under a buffer named '*shell:test*'"
+            (interactive)
+            (projectile-with-default-dir (projectile-project-root)
+              (async-shell-command "make test" "*shell:test*")))))
+
+
 ;; Visual utilities
 ;; ================================================================================
 (use-package diminish
@@ -242,8 +255,9 @@
   :config (progn
             (evil-define-key 'normal popwin:keymap (kbd "q") 'popwin:close-popup-window)
             ;; Let's override the popwin defaults
-            (setq popwin:special-display-config  '(("^\\*magit:.*\\*$" :regexp t :position top :height 20 :dedicated t)
-                                                   ("^\\*helm.*\\*$" :regexp t :position bottom :dedicated t)
+            (setq popwin:special-display-config  '(("^\\*magit:.*\\*$" :regexp t :position top :height 20)
+                                                   ("^\\*helm.*\\*$" :regexp t :position bottom)
+                                                   ("^\\*shell:.*\\*$" :regexp t :position bottom :noselect t :tail t :stick t)
                                                    (help-mode :position bottom :noselect t :stick t)
                                                    (completion-list-mode :noselect t)
                                                    (grep-mode :noselect t)
