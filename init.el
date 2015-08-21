@@ -452,7 +452,7 @@
   :init (evil-leader/set-key "e l" 'helm-flycheck))
 
 
-;; Company moed
+;; Company mode
 ;; ================================================================================
 (use-package company
   :ensure t
@@ -462,12 +462,12 @@
           (setq company-dabbrev-downcase nil)
           (global-company-mode))
   :config (progn
-                                        ; Swap some keybindings
+            ; Swap some keybindings
             (define-key company-active-map (kbd "C-j") 'company-select-next)
             (define-key company-active-map (kbd "C-k") 'company-select-previous)
             (define-key company-active-map (kbd "C-i") 'company-select-next)
             (define-key company-active-map (kbd "C-o") 'company-select-previous)
-                                        ; Okay lets setup company backends the way we want it, in a single place.
+            ; Okay lets setup company backends the way we want it, in a single place.
             (setq company-backends
               '( company-css
                  company-elisp
