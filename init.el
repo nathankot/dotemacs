@@ -627,6 +627,11 @@
             (setq flycheck-swift-sdk-path
               "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk")))
 
+(use-package dockerfile-mode
+  :ensure t
+  :init (progn
+          (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))))
+
 (use-package puppet-mode
   :ensure t
   :commands puppet-mode)
