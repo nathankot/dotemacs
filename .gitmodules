@@ -10,3 +10,9 @@
 [submodule "vendor/use-package"]
 	path = vendor/use-package
 	url = https://github.com/jwiegley/use-package.git
+[submodule "vendor/ghc-mod"]
+	path = vendor/ghc-mod
+	url = https://github.com/kazu-yamamoto/ghc-mod.git
+[submodule "vendor/company-ghc"]
+	path = vendor/company-ghc
+	url = https://github.com/iquiw/company-ghc.git

@@ -115,7 +115,6 @@
                 evil-motion-state-cursor '("gray" box))
           (evil-mode 1))
   :config (progn
-
             (use-package evil-leader
               :ensure t
               :init (global-evil-leader-mode)
@@ -125,7 +124,7 @@
                         (evil-leader/set-key "i" 'evil-window-move-far-left)
                         (evil-leader/set-key "a" 'align-regexp)
                         (evil-leader/set-key "SPC" 'evil-search-highlight-persist-remove-all)
-                        (evil-leader/set-key "t" 'shell-make-test)))
+                        (evil-leader/set-key "T" 'shell-make-test)))
 
             (use-package evil-search-highlight-persist
                :ensure t
@@ -651,19 +650,21 @@
 
 (defvar my-ghc-initialized nil)
 (use-package ghc
-  :ensure t
-  :pin melpa-stable
+  :load-path "vendor/ghc-mod/elisp"
   :init (progn
-          (add-hook 'haskell-mode-hook (lambda ()
-                                         (ghc-abbrev-init)
-                                         (ghc-type-init)
-                                         (unless my-ghc-initialized
-                                           (ghc-comp-init)
-                                           (setq my-ghc-initialized t))
-                                         (ghc-import-module))))
-  :config (progn
-            (use-package company-ghc
-              :ensure t)))
+          (use-package ghc-debug)
+          (setq ghc-debug t)
+          (add-hook 'haskell-mode-hook
+            (lambda ()
+              (ghc-abbrev-init)
+              (ghc-type-init)
+              (unless my-ghc-initialized
+                (ghc-comp-init)
+                (setq my-ghc-initialized t))
+              (ghc-import-module)))))
+
+(use-package company-ghc
+  :load-path "vendor/company-ghc")
 
 (use-package haskell-mode
   :ensure t
