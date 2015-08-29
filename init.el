@@ -654,7 +654,6 @@
   :load-path "vendor/ghc-mod/elisp"
   :init (progn
           (use-package ghc-debug)
-          (setq ghc-debug t)
           (add-hook 'haskell-mode-hook
             (lambda ()
               (ghc-abbrev-init)
