@@ -652,6 +652,7 @@
 (defvar my-ghc-initialized nil)
 (use-package ghc
   :ensure t
+  :pin melpa-stable
   :init (progn
           (add-hook 'haskell-mode-hook (lambda ()
                                          (ghc-abbrev-init)
