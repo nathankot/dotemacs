@@ -263,6 +263,7 @@
                                                    (grep-mode :noselect t)
                                                    (occur-mode :noselect t)
                                                    ("*Warnings*" :noselect t)
+                                                   ("*GHC Error*" :noselect t)
                                                    ("*Miniedit Help*" :noselect t)
                                                    ("*undo-tree*" :width 60 :position right)))))
 
