@@ -124,7 +124,10 @@
                         (evil-leader/set-key "i" 'evil-window-move-far-left)
                         (evil-leader/set-key "a" 'align-regexp)
                         (evil-leader/set-key "SPC" 'evil-search-highlight-persist-remove-all)
-                        (evil-leader/set-key "T" (lambda () (shell-make "test")))))
+                        (evil-leader/set-key "I" (lambda () (interactive) (shell-make "install")))
+                        (evil-leader/set-key "R" (lambda () (interactive) (shell-make "run")))
+                        (evil-leader/set-key "B" (lambda () (interactive) (shell-make "build")))
+                        (evil-leader/set-key "T" (lambda () (interactive) (shell-make "test")))))
 
             (use-package evil-search-highlight-persist
                :ensure t
