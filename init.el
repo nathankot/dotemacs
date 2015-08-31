@@ -638,8 +638,7 @@
   :config (progn
             (add-hook 'swift-mode-hook
               (lambda () (interactive)
-                (setq-local helm-dash-docsets '("iOS"))))
-            (add-to-list 'flycheck-checkers 'swift)))
+                (setq-local helm-dash-docsets '("iOS"))))))
 
 (use-package dockerfile-mode
   :ensure t
