@@ -632,9 +632,7 @@
             (add-hook 'swift-mode-hook
               (lambda () (interactive)
                 (setq-local helm-dash-docsets '("iOS"))))
-            (add-to-list 'flycheck-checkers 'swift)
-            (setq flycheck-swift-sdk-path
-              "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk")))
+            (add-to-list 'flycheck-checkers 'swift)))
 
 (use-package dockerfile-mode
   :ensure t
