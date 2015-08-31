@@ -220,9 +220,9 @@
           (evil-define-key 'normal shell-mode-map (kbd "q") 'delete-window)
           (defun shell-make (command)
             "Call `make *command*` in the projectile root directory under a buffer named '*shell:make*'"
-            (interactive)
+           (interactive)
             (projectile-with-default-dir (projectile-project-root)
-              (async-shell-command (format "make %s" command) "*shell:make*")))))
+              (async-shell-command (format "make %s" command) (format "*shell:make %s*" command))))))
 
 
 ;; Visual utilities
