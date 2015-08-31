@@ -127,6 +127,8 @@
                         (evil-leader/set-key "m i" (lambda () (interactive) (shell-make "install")))
                         (evil-leader/set-key "m r" (lambda () (interactive) (shell-make "run")))
                         (evil-leader/set-key "m b" (lambda () (interactive) (shel-make "build")))
+                        (evil-leader/set-key "m c" (lambda () (interactive) (shel-make "clean")))
+                        (evil-leader/set-key "m s" (lambda () (interactive) (shel-make "setup")))
                         (evil-leader/set-key "m t" (lambda () (interactive) (shell-make "test")))))
 
             (use-package evil-search-highlight-persist
