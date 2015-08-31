@@ -217,12 +217,14 @@
   :init (progn
           (evil-set-initial-state 'shell-mode 'normal)
           (add-hook 'shell-mode-hook 'read-only-mode)
-          (evil-define-key 'normal shell-mode-map (kbd "q") 'delete-window)
           (defun shell-make (command)
             "Call `make *command*` in the projectile root directory under a buffer named '*shell:make*'"
            (interactive)
             (projectile-with-default-dir (projectile-project-root)
-              (async-shell-command (format "make %s" command) (format "*shell:make %s*" command))))))
+              (async-shell-command (format "make %s" command) (format "*shell:make %s*" command)))))
+  :config (progn
+            (evil-define-key 'normal shell-mode-map (kbd "q") 'delete-window)
+            (define-key shell-mode-map (kbd "C-c C-c") (lambda () (interactive) (delete-process (buffer-name))))))
 
 
 ;; Visual utilities
