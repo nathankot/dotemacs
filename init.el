@@ -124,7 +124,7 @@
                         (evil-leader/set-key "i" 'evil-window-move-far-left)
                         (evil-leader/set-key "a" 'align-regexp)
                         (evil-leader/set-key "SPC" 'evil-search-highlight-persist-remove-all)
-                        (evil-leader/set-key "T" 'shell-make-test)))
+                        (evil-leader/set-key "T" (lambda () (shell-make "test")))))
 
             (use-package evil-search-highlight-persist
                :ensure t
@@ -208,16 +208,16 @@
          ("≈" . smex)))
 
 (use-package shell
-  :functions shell-make-test
+  :functions shell-make
   :init (progn
           (evil-set-initial-state 'shell-mode 'normal)
           (add-hook 'shell-mode-hook 'read-only-mode)
           (evil-define-key 'normal shell-mode-map (kbd "q") 'delete-window)
-          (defun shell-make-test ()
-            "Call `make test` in the projectile root directory under a buffer named '*shell:test*'"
+          (defun shell-make (command)
+            "Call `make *command*` in the projectile root directory under a buffer named '*shell:make*'"
             (interactive)
             (projectile-with-default-dir (projectile-project-root)
-              (async-shell-command "make test" "*shell:test*")))))
+              (async-shell-command (format "make %s" command) "*shell:make*")))))
 
 
 ;; Visual utilities
