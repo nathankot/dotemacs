@@ -446,7 +446,8 @@
   :commands (helm-projectile-ag)
   :init (progn
           (use-package grep)
-          (define-key evil-normal-state-map (kbd "C-s") 'helm-projectile-ag)))
+          (define-key evil-normal-state-map (kbd "C-s") 'helm-projectile-ag)
+          (setq helm-ag-base-command "ag --nocolor --nogroup --all-types")))
 
 (use-package helm-dash
   :ensure t
