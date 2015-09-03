@@ -422,7 +422,8 @@
 (use-package helm
   :ensure t
   :init (progn
-          (require 'helm-config))
+          (require 'helm-config)
+          (helm-mode 1))
   :config (progn
             (helm-autoresize-mode 1)
             (define-key evil-normal-state-map (kbd "C-b") 'helm-buffers-list)
@@ -433,47 +434,49 @@
             (define-key helm-map (kbd "C-k") 'helm-previous-line)
 
             ; Helm buffers
-            (define-key helm-buffer-map (kbd "C-d") 'helm-kill-marked-buffers)))
+            (define-key helm-buffer-map (kbd "C-d") 'helm-buffer-run-kill-buffers)
 
-(use-package helm-projectile
-  :ensure t
-  :bind ("C-p" . helm-projectile)
-  :init (progn
-          (define-key helm-map (kbd "C-l") 'projectile-invalidate-cache)
-          (define-key evil-normal-state-map (kbd "C-p") 'helm-projectile)))
+            (use-package helm-projectile
+              :ensure t
+              :bind ("C-p" . helm-projectile)
+              :init (progn
+                      (define-key evil-normal-state-map (kbd "C-p") 'helm-projectile))
+              :config (progn
+                      (define-key helm-map (kbd "C-l") 'projectile-invalidate-cache)))
 
-(use-package helm-ag
-  :ensure t
-  :commands (helm-projectile-ag)
-  :init (progn
-          (use-package grep)
-          (define-key evil-normal-state-map (kbd "C-s") 'helm-projectile-ag)
-          (setq helm-ag-base-command "ag --nocolor --nogroup --all-types")))
+            (use-package helm-ag
+              :ensure t
+              :commands (helm-projectile-ag)
+              :init (progn
+                      (use-package grep)
+                      (define-key evil-normal-state-map (kbd "C-s") 'helm-projectile-ag)
+                      (setq helm-ag-base-command "ag --nocolor --nogroup --all-types")))
 
-(use-package helm-dash
-  :ensure t
-  :init (progn
-          (setq helm-dash-docsets-path "~/.docset")
-          (setq helm-dash-common-docsets '("Lo-Dash" "HTML" "CSS"))
-          (evil-leader/set-key "f" 'helm-dash-at-point)
-          (define-key evil-normal-state-map (kbd "C-f") 'helm-dash))
-  :config (progn
-            (add-hook 'prog-mode-hook
-              (lambda ()
-                (interactive)
-                (setq helm-current-buffer (current-buffer))))))
+            (use-package helm-dash
+              :ensure t
+              :init (progn
+                      (setq helm-dash-docsets-path "~/.docset")
+                      (setq helm-dash-common-docsets '("Lo-Dash" "HTML" "CSS"))
+                      (evil-leader/set-key "f" 'helm-dash-at-point)
+                      (define-key evil-normal-state-map (kbd "C-f") 'helm-dash))
+              :config (progn
+                        (add-hook 'prog-mode-hook
+                          (lambda ()
+                            (interactive)
+                            (setq helm-current-buffer (current-buffer))))))
 
-(use-package helm-swoop
-  :ensure t
-  :commands (helm-swoop)
-  :init (progn
-          (evil-leader/set-key "sb" 'helm-swoop)
-          (evil-leader/set-key "sa" 'helm-multi-swoop-all)))
+            (use-package helm-swoop
+              :ensure t
+              :commands (helm-swoop)
+              :init (progn
+                      (evil-leader/set-key "sb" 'helm-swoop)
+                      (evil-leader/set-key "sa" 'helm-multi-swoop-all)))
 
-(use-package helm-flycheck
-  :ensure t
-  :commands helm-flycheck
-  :init (evil-leader/set-key "e l" 'helm-flycheck))
+            (use-package helm-flycheck
+              :ensure t
+              :commands helm-flycheck
+              :init (evil-leader/set-key "e l" 'helm-flycheck))))
+
 
 
 ;; Company mode
