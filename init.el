@@ -426,19 +426,20 @@
   :config (progn
             (helm-autoresize-mode 1)
             (define-key evil-normal-state-map (kbd "C-b") 'helm-buffers-list)
-            (define-key evil-normal-state-map (kbd "g o") 'helm-google-suggest)
 
-            (define-key helm-map (kbd "C-l") 'projectile-invalidate-cache)
             (define-key helm-map (kbd "C-b") 'helm-keyboard-quit)
             (define-key helm-map (kbd "C-p") 'helm-keyboard-quit)
             (define-key helm-map (kbd "C-j") 'helm-next-line)
             (define-key helm-map (kbd "C-k") 'helm-previous-line)
-            (define-key helm-map (kbd "C-d") 'helm-buffer-run-kill-persistent)))
+
+            ; Helm buffers
+            (define-key helm-buffer-map (kbd "C-d") 'helm-kill-marked-buffers)))
 
 (use-package helm-projectile
   :ensure t
   :bind ("C-p" . helm-projectile)
   :init (progn
+          (define-key helm-map (kbd "C-l") 'projectile-invalidate-cache)
           (define-key evil-normal-state-map (kbd "C-p") 'helm-projectile)))
 
 (use-package helm-ag
