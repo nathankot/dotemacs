@@ -660,6 +660,7 @@
 (use-package ghc
   :load-path "vendor/ghc-mod/elisp"
   :init (progn
+          (setq ghc-debug nil)
           (add-hook 'haskell-mode-hook
             (lambda ()
               (ghc-abbrev-init)
@@ -683,8 +684,8 @@
 
           (evil-set-initial-state 'haskell-interactive-mode 'emacs)
 
-          (setq haskell-process-auto-import-loaded-modules t)
-          (setq haskell-process-log t)
+          (setq haskell-process-auto-import-loaded-modules nil)
+          (setq haskell-process-log nil)
           (setq haskell-process-suggest-remove-import-lines t)
           (setq haskell-process-type (quote cabal-repl))
           (setq haskell-interactive-popup-errors nil)
