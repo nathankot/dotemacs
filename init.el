@@ -406,8 +406,8 @@
   :ensure t
   :diminish (yas-minor-mode . " y")
   :init (progn
-          (setq yas-snippet-dirs '("~/.snippets/yasnippet-snippets"
-                                    "~/.snippets/personal"))
+          (setq yas-snippet-dirs '("~/.emacs.d/.snippets/yasnippet-snippets"
+                                    "~/.emacs.d/.snippets/personal"))
           (yas-global-mode 1))
   :config (progn
             (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand)
