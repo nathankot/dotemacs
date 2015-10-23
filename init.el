@@ -657,65 +657,24 @@
   :ensure t
   :commands yaml-mode)
 
-(defvar my-ghc-initialized nil)
-(use-package ghc
-  :load-path "vendor/ghc-mod/elisp"
+(use-package stack-mode
+  :load-path "vendor/stack-ide/stack-mode"
   :init (progn
-          (setq ghc-debug nil)
-          (add-hook 'haskell-mode-hook
-            (lambda ()
-              (ghc-abbrev-init)
-              (ghc-type-init)
-              (unless my-ghc-initialized
-                (ghc-comp-init)
-                (setq my-ghc-initialized t))
-              (ghc-import-module)))))
-
-(use-package company-ghc
-  :load-path "vendor/company-ghc")
+          (flycheck-disable-checker 'haskell-ghc)
+          (flycheck-disable-checker 'haskell-stack-ghc)
+          (add-hook 'haskell-mode-hook 'stack-mode)))
 
 (use-package haskell-mode
   :ensure t
   :commands (haskell-mode haskell-interactive-mode)
   :init (progn
-          (use-package flycheck-haskell
-            :load-path "vendor/flycheck-haskell"
-            :init (progn
-                    (add-hook 'flycheck-mode-hook #'flycheck-haskell-setup)))
-
-          (evil-set-initial-state 'haskell-interactive-mode 'emacs)
-
-          (setq haskell-process-auto-import-loaded-modules nil)
-          (setq haskell-process-log nil)
-          (setq haskell-process-suggest-remove-import-lines t)
-          (setq haskell-process-type (quote cabal-repl))
-          (setq haskell-interactive-popup-errors nil)
-          (setq haskell-stylish-on-save t)
-
+          (setq haskell-process-type 'stack-ghci)
           (evil-define-key 'normal haskell-mode-map
             (kbd "?") 'hoogle)
-
           (evil-leader/set-key-for-mode 'haskell-mode
-            "t" 'ghc-show-type
-            "h t" 'haskell-process-do-type
-            "h i" 'haskell-interactive-bring
-            "`" 'haskell-interactive-bring
-            "h r" 'haskell-process-load-or-reload
-            "h k" 'haskell-session-kill
-            "h m" 'haskell-menu
-            "h b" 'haskell-process-cabal-build
-            "h g i" 'haskell-navigate-imports
-            "h f i" 'haskell-mode-format-imports)
-
-          (add-hook 'haskell-interactive-mode-hook
-            (lambda ()
-              (local-set-key (kbd "<up>") 'haskell-interactive-mode-history-previous)
-              (local-set-key (kbd "<down>") 'haskell-interactive-mode-history-next)
-              (local-set-key (kbd "C-j") 'evil-window-next)))
-
-          (add-hook 'haskell-mode-hook (lambda ()
-                                         (interactive-haskell-mode)
-                                         (turn-on-haskell-indentation)))))
+            "t" 'stack-mode-type
+            "i" 'stack-mode-info
+          (add-hook 'haskell-mode-hook (lambda () (turn-on-haskell-indentation)))))
 
 
 ;; Org Mode
