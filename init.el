@@ -4,7 +4,6 @@
 
 ;;; Code:
 
-
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (package-initialize)
@@ -18,9 +17,12 @@
  ;; If there is more than one, they won't work right.
   '(custom-safe-themes
      (quote
-       ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))))
+       ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
+
+ '(safe-local-variable-values (quote ((c-file-offsets (innamespace . 0))))))
 
 ;; Use UTF-8 encoding
+(setq debug-on-error t)
 (setq locale-coding-system 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
@@ -190,6 +192,61 @@
             (define-key evil-visual-state-map (kbd "C-i") 'indent-region)))
 
 
+;; Visual utilities
+;; ================================================================================
+(use-package diminish
+  :ensure t
+  :config (progn
+            (diminish 'isearch-mode " ?")))
+
+(use-package rainbow-mode
+  :ensure t
+  :diminish rainbow-mode
+  :commands (rainbow-mode)
+  :init (progn
+          (add-hook 'css-mode-hook 'rainbow-mode)
+          (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)))
+
+(use-package rainbow-delimiters
+  :ensure t
+  :commands rainbow-delimiters-mode
+  :init (progn
+          (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)))
+
+(use-package linum-relative
+  :demand
+  :ensure t
+  :init (progn
+          (global-linum-mode)
+          (setq linum-relative-format "%3s   "))
+  :config (progn
+            (linum-relative-on)))
+
+(use-package popwin
+  :ensure t
+  :commands (popwin-mode)
+  :init (popwin-mode 1)
+  :config (progn
+            (evil-define-key 'normal popwin:keymap (kbd "q") 'popwin:close-popup-window)
+            ;; Let's override the popwin defaults
+            (setq popwin:special-display-config  '(("^\\*magit:.*\\*$" :regexp t :position top :height 20)
+                                                   ("^\\*helm.*\\*$" :regexp t :position bottom)
+                                                   ("^\\*shell:.*\\*$" :regexp t :position bottom :noselect t :tail t :stick t)
+                                                   (help-mode :position bottom :noselect t :stick t)
+                                                   (completion-list-mode :noselect t)
+                                                   (grep-mode :noselect t)
+                                                   (occur-mode :noselect t)
+                                                   ("*Warnings*" :noselect t)
+                                                   ("*GHC Error*" :noselect t)
+                                                   ("*Miniedit Help*" :noselect t)
+                                                   ("*undo-tree*" :width 60 :position right)))))
+
+(use-package autopair
+  :ensure t
+  :diminish autopair-mode
+  :init (autopair-global-mode))
+
+
 ;; Misc.
 ;; ================================================================================
 (use-package undo-tree :diminish undo-tree-mode)
@@ -225,59 +282,6 @@
   :config (progn
             (evil-define-key 'normal shell-mode-map (kbd "q") 'delete-window)
             (define-key shell-mode-map (kbd "C-c C-c") (lambda () (interactive) (delete-process (buffer-name))))))
-
-
-;; Visual utilities
-;; ================================================================================
-(use-package diminish
-  :ensure t
-  :config (progn
-            (diminish 'isearch-mode " ?")))
-
-(use-package rainbow-mode
-  :ensure t
-  :diminish rainbow-mode
-  :commands (rainbow-mode)
-  :init (progn
-          (add-hook 'css-mode-hook 'rainbow-mode)
-          (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)))
-
-(use-package rainbow-delimiters
-  :ensure t
-  :commands rainbow-delimiters-mode
-  :init (progn
-          (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)))
-
-(use-package linum-relative
-  :ensure t
-  :config (progn
-          (setq linum-relative-format "%3s   ")
-          (linum-on)
-          (global-linum-mode)))
-
-(use-package popwin
-  :ensure t
-  :commands (popwin-mode)
-  :init (popwin-mode 1)
-  :config (progn
-            (evil-define-key 'normal popwin:keymap (kbd "q") 'popwin:close-popup-window)
-            ;; Let's override the popwin defaults
-            (setq popwin:special-display-config  '(("^\\*magit:.*\\*$" :regexp t :position top :height 20)
-                                                   ("^\\*helm.*\\*$" :regexp t :position bottom)
-                                                   ("^\\*shell:.*\\*$" :regexp t :position bottom :noselect t :tail t :stick t)
-                                                   (help-mode :position bottom :noselect t :stick t)
-                                                   (completion-list-mode :noselect t)
-                                                   (grep-mode :noselect t)
-                                                   (occur-mode :noselect t)
-                                                   ("*Warnings*" :noselect t)
-                                                   ("*GHC Error*" :noselect t)
-                                                   ("*Miniedit Help*" :noselect t)
-                                                   ("*undo-tree*" :width 60 :position right)))))
-
-(use-package autopair
-  :ensure t
-  :diminish autopair-mode
-  :init (autopair-global-mode))
 
 
 ;; File and buffer management
@@ -668,14 +672,13 @@
   :ensure t
   :commands (haskell-mode haskell-interactive-mode)
   :init (progn
+          (setq haskell-hoogle-url "https://www.stackage.org/lts/hoogle?q=%s")
           (setq haskell-process-type 'stack-ghci)
-          (evil-define-key 'normal haskell-mode-map
-            (kbd "?") 'hoogle)
+          (add-hook 'haskell-mode-hook (lambda () (turn-on-haskell-indentation)))
+          (evil-define-key 'normal haskell-mode-map (kbd "?") 'hoogle)
           (evil-leader/set-key-for-mode 'haskell-mode
-            "t" 'stack-mode-type
-            "i" 'stack-mode-info
-          (add-hook 'haskell-mode-hook (lambda () (turn-on-haskell-indentation)))))
-
+              "t" 'stack-mode-type
+              "i" 'stack-mode-info)))
 
 ;; Org Mode
 ;; ================================================================================
@@ -800,8 +803,8 @@
 (provide 'init)
 ;;; init.el ends here
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
-  )
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
