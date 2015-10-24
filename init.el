@@ -22,7 +22,7 @@
  '(safe-local-variable-values (quote ((c-file-offsets (innamespace . 0))))))
 
 ;; Use UTF-8 encoding
-(setq debug-on-error t)
+(setq debug-on-error nil)
 (setq locale-coding-system 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
