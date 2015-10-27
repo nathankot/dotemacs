@@ -253,7 +253,7 @@
 
 (use-package saveplace
   :init (progn
-          (setq save-place-file "~/.emacs/saveplaces")
+          (setq save-place-file "~/.emacs.d/saveplaces")
           (setq-default save-place t)))
 
 (use-package editorconfig
