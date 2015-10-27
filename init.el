@@ -503,7 +503,6 @@
                  company-elisp
                  company-clang
                  ;; company-sourcekit
-                 company-ghc
                  ( company-capf
                    company-dabbrev-code
                    ;; company-etags
