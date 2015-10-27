@@ -566,7 +566,7 @@
           (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
           (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
           (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-          (add-to-list 'auto-mode-alist '("\\.liquid\\'" . liquid-mode))
+          (add-to-list 'auto-mode-alist '("\\.liquid\\'" . web-mode))
           (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
           (add-to-list 'auto-mode-alist '("\\.tag\\'" . web-mode))
           (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
@@ -620,9 +620,6 @@
   :commands stylus-mode
   :init (progn
           (add-to-list 'auto-mode-alist '("\\.stylus\\'" . stylus-mode))))
-
-(use-package liquid-mode
-  :ensure t)
 
 (use-package scss-mode
   :ensure t
