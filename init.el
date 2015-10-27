@@ -502,6 +502,7 @@
               '( company-css
                  company-elisp
                  company-clang
+                 ;; company-sourcekit
                  company-ghc
                  ( company-capf
                    company-dabbrev-code
@@ -619,6 +620,9 @@
   :commands stylus-mode
   :init (progn
           (add-to-list 'auto-mode-alist '("\\.stylus\\'" . stylus-mode))))
+
+(use-package liquid-mode
+  :ensure t)
 
 (use-package scss-mode
   :ensure t
