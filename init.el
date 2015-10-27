@@ -251,11 +251,6 @@
 ;; ================================================================================
 (use-package undo-tree :diminish undo-tree-mode)
 
-(use-package saveplace
-  :init (progn
-          (setq save-place-file "~/.emacs.d/saveplaces")
-          (setq-default save-place t)))
-
 (use-package editorconfig
   :ensure t
   :config (progn
@@ -397,7 +392,7 @@
   :ensure t
   :diminish (flycheck-mode . " f")
   :init (progn
-          (setq flycheck-check-syntax-automatically '(mode-enabled save))
+          (setq flycheck-check-syntax-automatically '(mode-enabled idle-change))
           (global-flycheck-mode))
   :config (progn
             (define-key evil-normal-state-map (kbd "] e") 'next-error)
