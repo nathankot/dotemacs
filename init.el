@@ -301,9 +301,9 @@
   :ensure t
   :init (progn
           (add-to-list 'evil-emacs-state-modes 'direx:direx-mode)
-          (setq direx:leaf-icon "")
-          (setq direx:open-icon "-")
-          (setq direx:closed-icon "+")
+          (setq direx:leaf-icon "  ")
+          (setq direx:open-icon "- ")
+          (setq direx:closed-icon "+ ")
           (evil-leader/set-key
             "k b" 'direx-project:jump-to-project-root-other-window
             "k r" 'direx:jump-to-directory-other-window)
