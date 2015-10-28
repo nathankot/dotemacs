@@ -234,6 +234,7 @@
                                                    ("^\\*shell:.*\\*$" :regexp t :position bottom :noselect t :tail t :stick t)
                                                    (help-mode :position bottom :noselect t :stick t)
                                                    (completion-list-mode :noselect t)
+                                                   (direx:direx-mode :position left :width 30 :dedicated t :stick t)
                                                    (grep-mode :noselect t)
                                                    (occur-mode :noselect t)
                                                    ("*Warnings*" :noselect t)
@@ -296,31 +297,32 @@
             (add-to-list 'projectile-globally-ignored-directories "node_modules")
             (add-to-list 'projectile-globally-ignored-directories "bower_components")))
 
-(use-package neotree
+(use-package direx
   :ensure t
-  :commands (neotree-dir neo-global--window-exists-p)
-  :preface (progn
-             (defun projectile-neotree-project-root ()
-                (interactive)
-                (if (neo-global--window-exists-p)
-                  (neotree-hide)
-                  (if (projectile-project-p)
-                    (neotree-dir (projectile-project-root))
-                    (neotree)))))
   :init (progn
-          (evil-leader/set-key "k b" 'projectile-neotree-project-root)
-          (evil-leader/set-key "k r" 'neotree-find))
-  :config (progn
-            (evil-add-hjkl-bindings neotree-mode-map 'normal)
-            (evil-define-key 'normal neotree-mode-map
-              "q" 'neotree-hide
-              "o" 'neotree-enter
-              "v" 'neotree-enter-vertical-split
-              "r" 'neotree-refresh
-              "h" 'neotree-hidden-file-toggle
-              (kbd "m d") 'neotree-delete-node
-              (kbd "m a") 'neotree-create-node
-              (kbd "m m") 'neotree-rename-node)))
+          (add-to-list 'evil-emacs-state-modes 'direx:direx-mode)
+          (setq direx:leaf-icon "")
+          (setq direx:open-icon "-")
+          (setq direx:closed-icon "+")
+          (evil-leader/set-key
+            "k b" 'direx-project:jump-to-project-root-other-window
+            "k r" 'direx:jump-to-directory-other-window)
+          (evil-add-hjkl-bindings direx:direx-mode-map 'emacs
+            "q" 'delete-window
+            "o" 'direx:view-item
+            "v" 'direx:view-item-other-window
+            "r" 'direx:refresh-whole-tree
+            (kbd "C-u") 'evil-scroll-up
+            (kbd "C-d") 'evil-scroll-down
+            (kbd "/") 'evil-search-forward
+            (kbd "SPC") 'evil-search-forward
+            (kbd "TAB") 'direx:toggle-item
+            (kbd "m d") 'direx:do-delete-files
+            (kbd "m c") 'direx:do-copy-files
+            (kbd "m a") 'direx:create-directory
+            (kbd "m m") 'direx:do-rename-file)
+          (add-hook 'direx:direx-mode-hook
+            (lambda () (interactive) (linum-mode -1)))))
 
 (use-package perspective
   :ensure t
