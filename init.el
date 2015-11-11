@@ -315,7 +315,8 @@
               (kbd "mc") 'dired-do-copy
               (kbd "mm") 'dired-do-rename
               (kbd "mad") 'dired-create-directory
-              (kbd "maf") 'find-file)))
+              (kbd "maf") 'find-file)
+            (evil-leader/set-key "kr" 'dired)))
 
 
 ;; Git Utilities
