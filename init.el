@@ -143,10 +143,9 @@
 
             (use-package evil-snipe
               :ensure t
-              :diminish evil-snipe-mode
-              :init     (progn
-                          (evil-snipe-mode 1)
-                          (evil-snipe-override-mode 1)))
+              :init (progn
+                      (evil-snipe-mode 1)
+                      (evil-snipe-override-mode 1)))
 
             (use-package evil-surround
               :ensure t
@@ -211,7 +210,7 @@
   :ensure t
   :commands rainbow-delimiters-mode
   :init (progn
-          (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)))
+         (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)))
 
 (use-package linum-relative
   :demand
@@ -234,7 +233,6 @@
                                                    ("^\\*shell:.*\\*$" :regexp t :position bottom :noselect t :tail t :stick t)
                                                    (help-mode :position bottom :noselect t :stick t)
                                                    (completion-list-mode :noselect t)
-                                                   (direx:direx-mode :position left :width 30 :dedicated t :stick t)
                                                    (grep-mode :noselect t)
                                                    (occur-mode :noselect t)
                                                    ("*Warnings*" :noselect t)
@@ -297,33 +295,6 @@
             (add-to-list 'projectile-globally-ignored-directories "node_modules")
             (add-to-list 'projectile-globally-ignored-directories "bower_components")))
 
-(use-package direx
-  :ensure t
-  :init (progn
-          (add-to-list 'evil-emacs-state-modes 'direx:direx-mode)
-          (setq direx:leaf-icon "  ")
-          (setq direx:open-icon "- ")
-          (setq direx:closed-icon "+ ")
-          (evil-leader/set-key
-            "k b" 'direx-project:jump-to-project-root-other-window
-            "k r" 'direx:jump-to-directory-other-window)
-          (evil-add-hjkl-bindings direx:direx-mode-map 'emacs
-            "q" 'delete-window
-            "o" 'direx:view-item
-            "v" 'direx:view-item-other-window
-            "r" 'direx:refresh-whole-tree
-            (kbd "C-u") 'evil-scroll-up
-            (kbd "C-d") 'evil-scroll-down
-            (kbd "/") 'evil-search-forward
-            (kbd "SPC") 'evil-search-forward
-            (kbd "TAB") 'direx:toggle-item
-            (kbd "m d") 'direx:do-delete-files
-            (kbd "m c") 'direx:do-copy-files
-            (kbd "m a") 'direx:create-directory
-            (kbd "m m") 'direx:do-rename-file)
-          (add-hook 'direx:direx-mode-hook
-            (lambda () (interactive) (linum-mode -1)))))
-
 (use-package perspective
   :ensure t
   :init (progn
@@ -334,6 +305,17 @@
             (persp-mode))
   :config (progn
             (use-package persp-projectile :ensure t)))
+
+(use-package dired
+  :config (progn
+            (evil-add-hjkl-bindings dired-mode-map 'normal
+              "r" 'dired-do-redisplay)
+            (evil-leader/set-key-for-mode 'dired-mode
+              "md" 'dired-do-delete
+              "mc" 'dired-do-copy
+              "mm" 'dired-do-rename
+              "mad" 'dired-create-directory
+              "maf" 'find-file)))
 
 
 ;; Git Utilities
@@ -427,8 +409,6 @@
           (helm-mode 1))
   :config (progn
             (helm-autoresize-mode 1)
-            (define-key evil-normal-state-map (kbd "C-b") 'helm-buffers-list)
-
             (define-key helm-map (kbd "C-b") 'helm-keyboard-quit)
             (define-key helm-map (kbd "C-p") 'helm-keyboard-quit)
             (define-key helm-map (kbd "C-j") 'helm-next-line)
@@ -439,9 +419,11 @@
 
             (use-package helm-projectile
               :ensure t
-              :bind ("C-p" . helm-projectile)
               :init (progn
-                      (define-key evil-normal-state-map (kbd "C-p") 'helm-projectile))
+                      (global-set-key (kbd "C-p") 'helm-projectile)
+                      (define-key evil-normal-state-map (kbd "C-p") 'helm-projectile)
+                      (define-key evil-normal-state-map (kbd "C-b") 'helm-projectile-switch-to-buffer)
+                      (evil-leader/set-key "kb" 'helm-projectile-find-dir))
               :config (progn
                       (define-key helm-map (kbd "C-l") 'projectile-invalidate-cache)))
 
@@ -456,7 +438,7 @@
               :ensure t
               :init (progn
                       (setq helm-dash-docsets-path "~/.docset")
-                      (setq helm-dash-common-docsets '("Lo-Dash" "HTML" "CSS"))
+                      (setq helm-dash-common-docsets '("HTML" "CSS"))
                       (evil-leader/set-key "f" 'helm-dash-at-point)
                       (define-key evil-normal-state-map (kbd "C-f") 'helm-dash))
               :config (progn
@@ -540,13 +522,7 @@
               (lambda ()
                 (interactive)
                 (setq-local helm-dash-docsets
-                  '("AngularJS"
-                     "BackboneJS"
-                     "Lo-Dash"
-                     "Javascript"
-                     "NodeJS"
-                     "jQuery"
-                     "Chai"))))))
+                  '("Javascript" "NodeJS"))))))
 
 (use-package web-mode
   :ensure t
@@ -596,7 +572,7 @@
             (add-hook 'web-mode-hook
               (lambda ()
                 (interactive)
-                (setq-local helm-dash-docsets '("Javascript" "HTML" "CSS" "Lo-Dash" "jQuery" "Bootstrap_3"))))
+                (setq-local helm-dash-docsets '("Javascript" "HTML" "CSS"))))
             (add-hook 'web-mode-hook (lambda () (yas-activate-extra-mode 'js-mode)))
             (add-hook 'web-mode-hook 'rainbow-mode)
             (define-key prog-mode-map (kbd "C-x /") 'web-mode-element-close)))
@@ -639,11 +615,7 @@
   :load-path "vendor/swift-mode"
   :commands swift-mode
   :init (progn
-          (add-to-list 'auto-mode-alist '("\\.swift\\'" . swift-mode)))
-  :config (progn
-            (add-hook 'swift-mode-hook
-              (lambda () (interactive)
-                (setq-local helm-dash-docsets '("iOS"))))))
+          (add-to-list 'auto-mode-alist '("\\.swift\\'" . swift-mode))))
 
 (use-package dockerfile-mode
   :ensure t
