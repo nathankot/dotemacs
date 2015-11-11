@@ -310,12 +310,12 @@
   :config (progn
             (evil-add-hjkl-bindings dired-mode-map 'normal
               "r" 'dired-do-redisplay)
-            (evil-leader/set-key-for-mode 'dired-mode
-              "md" 'dired-do-delete
-              "mc" 'dired-do-copy
-              "mm" 'dired-do-rename
-              "mad" 'dired-create-directory
-              "maf" 'find-file)))
+            (define-key dired-mode-map (kbd "m") nil)
+            (define-key dired-mode-map (kbd "md") 'dired-do-delete)
+            (define-key dired-mode-map (kbd "mc") 'dired-do-copy)
+            (define-key dired-mode-map (kbd "mm") 'dired-do-rename)
+            (define-key dired-mode-map (kbd "mad") 'dired-create-directory)
+            (define-key dired-mode-map (kbd "maf") 'find-file)))
 
 
 ;; Git Utilities
