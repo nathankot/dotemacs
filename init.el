@@ -617,7 +617,11 @@
   :load-path "vendor/swift-mode"
   :commands swift-mode
   :init (progn
-          (add-to-list 'auto-mode-alist '("\\.swift\\'" . swift-mode))))
+          (add-to-list 'auto-mode-alist '("\\.swift\\'" . swift-mode))
+          (use-package company-sourcekit
+            :load-path "vendor/company-sourcekit"
+            :config (progn
+                      (add-to-list 'company-backends 'company-sourcekit)))))
 
 (use-package dockerfile-mode
   :ensure t

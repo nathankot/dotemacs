@@ -10,3 +10,6 @@
 [submodule "vendor/stack-ide"]
 	path = vendor/stack-ide
 	url = https://github.com/commercialhaskell/stack-ide.git
+[submodule "vendor/company-sourcekit"]
+	path = vendor/company-sourcekit
+	url = https://github.com/nathankot/company-sourcekit.git
