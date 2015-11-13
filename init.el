@@ -470,6 +470,7 @@
   :defines company-dabbrev-downcase
   :init (progn
           (setq company-dabbrev-downcase nil)
+          (setq company-tooltip-align-annotations t)
           (global-company-mode))
   :config (progn
             ; Swap some keybindings
