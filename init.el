@@ -483,11 +483,8 @@
               '( company-css
                  company-elisp
                  company-clang
-                 ;; company-sourcekit
                  ( company-capf
                    company-dabbrev-code
-                   ;; company-etags
-                   ;; company-gtags
                    company-keywords
                    company-files
                    company-dabbrev
