@@ -252,6 +252,7 @@
 
 (use-package editorconfig
   :ensure t
+  :init (progn (editorconfig-mode 1))
   :config (progn
             (add-to-list 'edconf-indentation-alist '(swift-mode swift-indent-offset))
             (add-to-list 'edconf-indentation-alist '(haskell-mode haskell-indent-spaces))
