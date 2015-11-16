@@ -257,7 +257,8 @@
               (lambda (arg)
                 (interactive)
                 (linum-mode (* -1 arg))
-                (focus-mode arg)))))
+                (focus-mode arg)
+                (flycheck-mode (* -1 arg))))))
 
 ;; Misc.
 ;; ================================================================================
