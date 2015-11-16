@@ -391,7 +391,8 @@
   :ensure t
   :diminish (flycheck-mode . " f")
   :init (progn
-          (setq flycheck-check-syntax-automatically '(mode-enabled))
+          (setq flycheck-idle-change-delay 6)
+          (setq flycheck-check-syntax-automatically '(mode-enabled idle-change))
           (global-flycheck-mode))
   :config (progn
             (define-key evil-normal-state-map (kbd "] e") 'next-error)
