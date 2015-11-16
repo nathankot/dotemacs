@@ -245,10 +245,19 @@
   :diminish autopair-mode
   :init (autopair-global-mode))
 
-(use-package focus
+(use-package writeroom-mode
   :ensure t
   :init (progn
-            (evil-leader/set-key "," 'focus-mode)))
+          (use-package focus :ensure t)
+          (setq writeroom-restore-window-config t)
+          (setq writeroom-width 120))
+  :config (progn
+            (evil-leader/set-key "," 'writeroom-mode)
+            (add-to-list 'writeroom-global-effects
+              (lambda (arg)
+                (interactive)
+                (linum-mode (* -1 arg))
+                (focus-mode arg)))))
 
 ;; Misc.
 ;; ================================================================================
