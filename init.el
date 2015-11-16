@@ -245,6 +245,10 @@
   :diminish autopair-mode
   :init (autopair-global-mode))
 
+(use-package focus
+  :ensure t
+  :init (progn
+            (evil-leader/set-key "," 'focus-mode)))
 
 ;; Misc.
 ;; ================================================================================
