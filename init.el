@@ -490,6 +490,7 @@
           (global-company-mode))
   :config (progn
             ; Swap some keybindings
+            (define-key company-active-map (kbd "<backtab>") 'company-select-previous)
             (define-key company-active-map (kbd "C-j") 'company-select-next)
             (define-key company-active-map (kbd "C-k") 'company-select-previous)
             (define-key company-active-map (kbd "C-i") 'company-select-next)
