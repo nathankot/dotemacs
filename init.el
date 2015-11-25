@@ -78,7 +78,7 @@
 
           (use-package evil-commentary
             :ensure t
-            :init (evil-commentary-mode))
+            :commands evil-commentary-mode)
 
           (use-package evil-snipe
             :ensure t
@@ -87,7 +87,6 @@
           (use-package evil-surround
             :ensure t
             :commands (global-evil-surround-mode evil-surround-mode))
-
 
           (use-package evil-matchit
             :ensure t
@@ -101,6 +100,7 @@
             (global-evil-leader-mode)
             (evil-snipe-mode 1)
             (global-evil-search-highlight-persist)
+            (evil-commentary-mode)
             (evil-snipe-override-mode 1)
             (global-evil-surround-mode 1)
             (global-evil-matchit-mode 1)
@@ -140,8 +140,13 @@
             (evil-leader/set-key "m s" (lambda () (interactive) (shel-make "setup")))
             (evil-leader/set-key "m t" (lambda () (interactive) (shell-make "test")))
 
+            ;; Buffer Management
+            (define-key evil-visual-state-map (kbd "SPC") 'evil-search-forward)
+            (define-key evil-normal-state-map (kbd "SPC") 'evil-search-forward)
+            (define-key evil-visual-state-map (kbd "C-i") 'indent-region)
+
             ;; Default keys for emacs state
-            (dolist (mode evil-emacs-state-modes)
+            (defun apply-emacs-defaults-to-mode (mode)
               (let ((keymap-symbol (intern (concat (symbol-name mode) "-map"))))
                 (evil-delay
                   `(and (boundp ',keymap-symbol) (keymapp (symbol-value ',keymap-symbol)))
@@ -155,10 +160,9 @@
                   'after-load-functions t nil
                   (format "evil-define-emacs-defaults-in-%s" (symbol-name keymap-symbol)))))
 
-            ;; Buffer Management
-            (define-key evil-visual-state-map (kbd "SPC") 'evil-search-forward)
-            (define-key evil-normal-state-map (kbd "SPC") 'evil-search-forward)
-            (define-key evil-visual-state-map (kbd "C-i") 'indent-region)))
+            (dolist (mode evil-emacs-state-modes) (apply-emacs-defaults-to-mode mode))
+            (add-function :after (symbol-function 'evil-set-initial-state)
+              (lambda (mode state) (when (eq state 'emacs) (apply-emacs-defaults-to-mode mode))))))
 
 
 ;; Utilities
@@ -289,27 +293,22 @@
             (evil-leader/set-key "g a" 'git-gutter:stage-hunk)
             (evil-leader/set-key "g r" 'git-gutter:revert-hunk)))
 
-(use-package git-rebase-mode
-  :no-require t
-  :init (evil-set-initial-state 'git-rebase-mode 'emacs)
-  :config (evil-define-key 'emacs git-rebase-mode-map
-              (kbd "s") 'git-rebase-squash
-              (kbd "p") 'git-rebase-pick
-              (kbd "r") 'git-rebase-reword
-              (kbd "e") 'git-rebase-edit))
-
-(use-package git-commit-mode
-  :no-require t
-  :init (progn
-          (evil-set-initial-state 'git-commit-mode 'insert)
-          (evil-set-initial-state 'git-commit-major-mode 'insert)))
-
 (use-package magit
   :ensure t
-  :commands (magit-log magit-commit magit-commit-amend
-              magit-status magit-diff-unstaged magit-diff-staged
-              magit-blage magit-stage-file)
+  :commands (magit-log
+              magit-commit
+              magit-commit-amend
+              magit-status
+              magit-diff-unstaged
+              magit-diff-staged
+              magit-stage-file
+              git-rebase-mode
+              git-commit-mode
+              git-commit-major-mode)
   :init (progn
+          (evil-set-initial-state 'git-commit-mode 'insert)
+          (evil-set-initial-state 'git-commit-major-mode 'insert)
+          (evil-set-initial-state 'git-rebase-mode 'emacs)
           (evil-leader/set-key
             "g l" 'magit-log
             "g c" 'magit-commit
@@ -318,7 +317,13 @@
             "g d" 'magit-diff-unstaged
             "g D" 'magit-diff-staged
             "g b" 'magit-blame
-            "g w" 'magit-stage-file)))
+            "g w" 'magit-stage-file))
+  :config (progn
+            (evil-define-key 'emacs git-rebase-mode-map
+              (kbd "s") 'git-rebase-squash
+              (kbd "p") 'git-rebase-pick
+              (kbd "r") 'git-rebase-reword
+              (kbd "e") 'git-rebase-edit)))
 
 (use-package flycheck
   :ensure t
