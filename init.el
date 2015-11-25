@@ -21,71 +21,22 @@
 
  '(safe-local-variable-values (quote ((c-file-offsets (innamespace . 0))))))
 
-;; Use UTF-8 encoding
-(setq debug-on-error nil)
-(setq locale-coding-system 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(set-selection-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
-(setq current-language-environment "UTF-8")
-(setenv "LC_CTYPE" "UTF-8")
 
-;; OSX Specific
-(if (eq system-type 'darwin)
-  (progn
-    (setq interprogram-cut-function
-      (lambda (text &optional push)
-        (let ((process-connection-type nil))
-          (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
-            (process-send-string proc text)
-            (process-send-eof proc)))))
-    (defun pbpaste ()
-      "Call pbpaste"
-      (interactive)
-      (shell-command-to-string "pbpaste"))))
-
-;; Other stuff
-(setq inhibit-startup-screen t)
-(menu-bar-mode -1) ;; Disable menu bar
-(when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-(setq-default tab-width 2 indent-tabs-mode nil) ;; Spaces
-(setq standard-indent 2)
-(setq make-backup-files nil)
-(setq backup-inhibited t)
-(setq auto-save-default nil)
-(auto-save-mode nil) ;; Disable autosaving
-(show-paren-mode t) ;; Show matching parens
-(setq scroll-margin 5 scroll-conservatively 9999 scroll-step 1) ;; Smooth scrolling
-(setq gc-cons-threshold 20000000) ;; Increase garbage collection limit
-(setq visible-bell 1)
-(setq ring-bell-function 'ignore)
-(setq blink-matching-paren nil)
-(setq require-final-newline t)
-(setq initial-scratch-message ";; Hello, NK")
-(fset 'yes-or-no-p 'y-or-n-p)
-(global-auto-revert-mode 1)
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
-(setq-default fill-column 80)
-(setq large-file-warning-threshold 100000000)
-(column-number-mode 1)
-
-(use-package exec-path-from-shell
-  :ensure t
-  :init (progn
-          (exec-path-from-shell-initialize)))
+(use-package dash :ensure t)
+(use-package exec-path-from-shell :ensure t :init (exec-path-from-shell-initialize))
 
 ;; Theme.
 ;; ================================================================================
+
 (use-package hc-zenburn-theme
   :load-path "vendor/hc-zenburn-theme"
-  :init (progn
-          (require 'hc-zenburn-theme)
-          (load-theme 'hc-zenburn t)))
+  :commands (load-theme)
+  :init (require 'hc-zenburn-theme))
 
 (use-package smart-mode-line
   :ensure t
-  :init (progn
+  :commands (sml/setup sml/apply-theme)
+  :config (progn
           (setq sml/shorten-directory t)
           (setq sml/shorten-modes t)
           (setq sml/name-width 30)
@@ -95,15 +46,15 @@
           (setq sml/mule-info nil)
           (setq sml/show-client nil)
           (setq sml/show-remote nil)
-          (setq sml/position-percentage-format nil)
-          (sml/setup))
-  :config (sml/apply-theme 'respectful))
+          (setq sml/position-percentage-format nil)))
 
 
 ;; EVIL
 ;; ================================================================================
+
 (use-package evil
   :ensure t
+  :commands evil-mode
   :init (progn
           (setq evil-want-C-u-scroll t
                 evil-overriding-maps nil
@@ -115,51 +66,47 @@
                 evil-visual-state-cursor '("gray" box)
                 evil-insert-state-cursor '("gray" bar)
                 evil-motion-state-cursor '("gray" box))
-          (evil-mode 1))
+
+          (use-package evil-leader
+            :ensure t
+            :commands (global-evil-leader-mode)
+            :config (evil-leader/set-leader ","))
+
+          (use-package evil-search-highlight-persist
+            :ensure t
+            :commands (global-evil-search-highlight-persist))
+
+          (use-package evil-commentary
+            :ensure t
+            :init (evil-commentary-mode))
+
+          (use-package evil-snipe
+            :ensure t
+            :commands (evil-snipe-mode evil-snipe-override-mode))
+
+          (use-package evil-surround
+            :ensure t
+            :commands (global-evil-surround-mode evil-surround-mode))
+
+
+          (use-package evil-matchit
+            :ensure t
+            :commands (global-evil-matchit-mode evil-matchit-mode))
+
+          (use-package evil-jumper
+            :ensure t
+            :commands (global-evil-jumper-mode evil-jumper-mode)))
+
   :config (progn
-            (use-package evil-leader
-              :ensure t
-              :init (global-evil-leader-mode)
-              :config (progn
-                        (evil-leader/set-leader ",")
-                        (evil-leader/set-key "w" 'save-buffer)
-                        (evil-leader/set-key "i" 'evil-window-move-far-left)
-                        (evil-leader/set-key "a" 'align-regexp)
-                        (evil-leader/set-key "SPC" 'evil-search-highlight-persist-remove-all)
-                        (evil-leader/set-key "m i" (lambda () (interactive) (shell-make "install")))
-                        (evil-leader/set-key "m r" (lambda () (interactive) (shell-make "run")))
-                        (evil-leader/set-key "m b" (lambda () (interactive) (shel-make "build")))
-                        (evil-leader/set-key "m c" (lambda () (interactive) (shel-make "clean")))
-                        (evil-leader/set-key "m s" (lambda () (interactive) (shel-make "setup")))
-                        (evil-leader/set-key "m t" (lambda () (interactive) (shell-make "test")))))
+            (global-evil-leader-mode)
+            (evil-snipe-mode 1)
+            (global-evil-search-highlight-persist)
+            (evil-snipe-override-mode 1)
+            (global-evil-surround-mode 1)
+            (global-evil-matchit-mode 1)
+            (global-evil-jumper-mode)
 
-            (use-package evil-search-highlight-persist
-               :ensure t
-               :init (global-evil-search-highlight-persist))
-
-            (use-package evil-commentary
-              :ensure t
-              :init (evil-commentary-mode))
-
-            (use-package evil-snipe
-              :ensure t
-              :init (progn
-                      (evil-snipe-mode 1)
-                      (evil-snipe-override-mode 1)))
-
-            (use-package evil-surround
-              :ensure t
-              :init (global-evil-surround-mode 1))
-
-            (use-package evil-matchit
-              :ensure t
-              :init (global-evil-matchit-mode 1))
-
-            (use-package evil-jumper
-              :ensure t
-              :init (global-evil-jumper-mode))
-
-            ; Window management
+            ;; Window management
             (global-set-key (kbd "C-q") 'delete-window)
             (global-set-key (kbd "C-j") 'evil-window-next)
             (global-set-key (kbd "C-k") 'evil-window-prev)
@@ -182,53 +129,50 @@
                 (split-window-horizontally)
                     (other-window 1)))
 
-            ; Buffer Management
+            (evil-leader/set-key "w" 'save-buffer)
+            (evil-leader/set-key "i" 'evil-window-move-far-left)
+            (evil-leader/set-key "a" 'align-regexp)
+            (evil-leader/set-key "SPC" 'evil-search-highlight-persist-remove-all)
+            (evil-leader/set-key "m i" (lambda () (interactive) (shell-make "install")))
+            (evil-leader/set-key "m r" (lambda () (interactive) (shell-make "run")))
+            (evil-leader/set-key "m b" (lambda () (interactive) (shel-make "build")))
+            (evil-leader/set-key "m c" (lambda () (interactive) (shel-make "clean")))
+            (evil-leader/set-key "m s" (lambda () (interactive) (shel-make "setup")))
+            (evil-leader/set-key "m t" (lambda () (interactive) (shell-make "test")))
+
+            ;; Default keys for emacs state
+            (dolist (mode evil-emacs-state-modes)
+              (let ((keymap-symbol (intern (concat (symbol-name mode) "-map"))))
+                (evil-delay
+                  `(and (boundp ',keymap-symbol) (keymapp (symbol-value ',keymap-symbol)))
+                  `(let ((map (symbol-value ',keymap-symbol)))
+                     (dolist (k '("h" "j" "k" "l" "v"))
+                       (-when-let (def (lookup-key map k))
+                         (define-key map (upcase k) def)
+                         (define-key map k nil)))
+                     (evil-add-hjkl-bindings map 'emacs
+                       "v" 'evil-visual-char))
+                  'after-load-functions t nil
+                  (format "evil-define-emacs-defaults-in-%s" (symbol-name keymap-symbol)))))
+
+            ;; Buffer Management
             (define-key evil-visual-state-map (kbd "SPC") 'evil-search-forward)
             (define-key evil-normal-state-map (kbd "SPC") 'evil-search-forward)
-            (evil-add-hjkl-bindings package-menu-mode-map 'emacs)
-            (evil-add-hjkl-bindings outline-mode-map 'emacs)
-            (evil-add-hjkl-bindings occur-mode-map 'emacs)
             (define-key evil-visual-state-map (kbd "C-i") 'indent-region)))
 
 
-;; Visual utilities
+;; Utilities
 ;; ================================================================================
-(use-package diminish
-  :ensure t
-  :config (progn
-            (diminish 'isearch-mode " ?")))
-
-(use-package rainbow-mode
-  :ensure t
-  :diminish rainbow-mode
-  :commands (rainbow-mode)
-  :init (progn
-          (add-hook 'css-mode-hook 'rainbow-mode)
-          (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)))
-
-(use-package rainbow-delimiters
-  :ensure t
-  :commands rainbow-delimiters-mode
-  :init (progn
-         (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)))
 
 (use-package linum-relative
-  :demand
   :ensure t
-  :init (progn
-          (global-linum-mode)
-          (setq linum-relative-format "%3s   "))
-  :config (progn
-            (linum-relative-on)))
+  :commands linum-relative-on
+  :init (setq linum-relative-format "%3s   "))
 
 (use-package popwin
   :ensure t
-  :commands (popwin-mode)
-  :init (popwin-mode 1)
-  :config (progn
-            (evil-define-key 'normal popwin:keymap (kbd "q") 'popwin:close-popup-window)
-            ;; Let's override the popwin defaults
-            (setq popwin:special-display-config  '(("^\\*magit:.*\\*$" :regexp t :position top :height 20)
+  :commands popwin-mode
+  :init (setq popwin:special-display-config  '(("^\\*magit:.*\\*$" :regexp t :position top :height 20)
                                                    ("^\\*helm.*\\*$" :regexp t :position bottom)
                                                    ("^\\*shell:.*\\*$" :regexp t :position bottom :noselect t :tail t :stick t)
                                                    (help-mode :position bottom :noselect t :stick t)
@@ -238,21 +182,26 @@
                                                    ("*Warnings*" :noselect t)
                                                    ("*GHC Error*" :noselect t)
                                                    ("*Miniedit Help*" :noselect t)
-                                                   ("*undo-tree*" :width 60 :position right)))))
+                                                   ("*undo-tree*" :width 60 :position right)))
+  :config (progn
+            (evil-define-key 'normal popwin:keymap (kbd "q") 'popwin:close-popup-window)))
 
 (use-package autopair
   :ensure t
-  :diminish autopair-mode
-  :init (autopair-global-mode))
+  :commands autopair-global-mode
+  :diminish autopair-mode)
 
 (use-package writeroom-mode
   :ensure t
+  :commands writeroom-mode
   :init (progn
-          (use-package focus :ensure t)
+          (use-package focus
+            :commands focus-mode
+            :ensure t)
           (setq writeroom-restore-window-config t)
-          (setq writeroom-width 120))
+          (setq writeroom-width 120)
+          (evil-leader/set-key "," 'writeroom-mode))
   :config (progn
-            (evil-leader/set-key "," 'writeroom-mode)
             (add-to-list 'writeroom-global-effects
               (lambda (arg)
                 (interactive)
@@ -260,13 +209,12 @@
                 (focus-mode arg)
                 (flycheck-mode (* -1 arg))))))
 
-;; Misc.
-;; ================================================================================
-(use-package undo-tree :diminish undo-tree-mode)
+(use-package undo-tree
+  :diminish undo-tree-mode)
 
 (use-package editorconfig
   :ensure t
-  :init (progn (editorconfig-mode 1))
+  :commands editorconfig-mode
   :config (progn
             (add-to-list 'edconf-indentation-alist '(swift-mode swift-indent-offset))
             (add-to-list 'edconf-indentation-alist '(haskell-mode haskell-indent-spaces))
@@ -292,17 +240,14 @@
             (evil-define-key 'normal shell-mode-map (kbd "q") 'delete-window)
             (define-key shell-mode-map (kbd "C-c C-c") (lambda () (interactive) (delete-process (buffer-name))))))
 
-
-;; File and buffer management
-;; ================================================================================
 (use-package projectile
   :ensure t
   :diminish projectile-mode
+  :commands projectile-global-mode
   :init (progn
           (setq projectile-enable-caching t)
           (setq projectile-completion-system 'ido)
-          (setq projectile-indexing-method 'alien)
-          (projectile-global-mode +1))
+          (setq projectile-indexing-method 'alien))
   :config (progn
             (add-to-list 'projectile-globally-ignored-directories ".cache")
             (add-to-list 'projectile-globally-ignored-directories ".tmp")
@@ -312,18 +257,18 @@
 
 (use-package perspective
   :ensure t
+  :commands persp-mode
   :init (progn
+          (use-package persp-projectile
+            :ensure t)))
+
+(use-package dired
+  :config (progn
             (define-key evil-normal-state-map (kbd "C-@") 'persp-switch)
             (define-key evil-normal-state-map (kbd ")") 'persp-next)
             (define-key evil-normal-state-map (kbd "(") 'persp-prev)
             (evil-leader/set-key "p k" 'persp-kill)
-            (persp-mode))
-  :config (progn
-            (use-package persp-projectile :ensure t)))
-
-(use-package dired
-  :config (progn
-            (evil-add-hjkl-bindings dired-mode-map 'normal
+            (evil-define-key 'normal dired-mode-map
               (kbd "m") nil
               (kbd "r") 'revert-buffer
               (kbd "md") 'dired-do-delete
@@ -333,13 +278,10 @@
               (kbd "maf") 'find-file)
             (evil-leader/set-key "kr" 'dired)))
 
-
-;; Git Utilities
-;; ================================================================================
 (use-package git-gutter
   :ensure t
   :diminish git-gutter-mode
-  :init (global-git-gutter-mode +1)
+  :commands global-git-gutter-mode
   :config (progn
             (git-gutter:linum-setup)
             (define-key evil-normal-state-map (kbd "] c") 'git-gutter:next-hunk)
@@ -347,12 +289,27 @@
             (evil-leader/set-key "g a" 'git-gutter:stage-hunk)
             (evil-leader/set-key "g r" 'git-gutter:revert-hunk)))
 
-(use-package magit
-  :ensure t
+(use-package git-rebase-mode
+  :no-require t
+  :init (evil-set-initial-state 'git-rebase-mode 'emacs)
+  :config (evil-define-key 'emacs git-rebase-mode-map
+              (kbd "s") 'git-rebase-squash
+              (kbd "p") 'git-rebase-pick
+              (kbd "r") 'git-rebase-reword
+              (kbd "e") 'git-rebase-edit))
+
+(use-package git-commit-mode
+  :no-require t
   :init (progn
           (evil-set-initial-state 'git-commit-mode 'insert)
-          (evil-set-initial-state 'git-commit-major-mode 'insert)
-          (evil-set-initial-state 'text-mode 'insert) ;; Git-commit is text-mode major
+          (evil-set-initial-state 'git-commit-major-mode 'insert)))
+
+(use-package magit
+  :ensure t
+  :commands (magit-log magit-commit magit-commit-amend
+              magit-status magit-diff-unstaged magit-diff-staged
+              magit-blage magit-stage-file)
+  :init (progn
           (evil-leader/set-key
             "g l" 'magit-log
             "g c" 'magit-commit
@@ -361,130 +318,90 @@
             "g d" 'magit-diff-unstaged
             "g D" 'magit-diff-staged
             "g b" 'magit-blame
-            "g w" 'magit-stage-file))
-  :config (progn
-            (setq magit-keymaps
-              '(magit-mode-map magit-log-mode-map magit-refs-mode-map
-                 magit-diff-mode-map magit-stash-mode-map magit-blame-mode-map
-                 magit-reflog-mode-map magit-status-mode-map magit-tag-section-map
-                 magit-cherry-mode-map magit-hunk-section-map magit-file-section-map
-                 magit-process-mode-map magit-stashes-mode-map magit-revision-mode-map
-                 magit-log-read-revs-map magit-stash-section-map magit-staged-section-map
-                 magit-remote-section-map magit-commit-section-map magit-branch-section-map
-                 magit-stashes-section-map magit-log-select-mode-map magit-unpulled-section-map
-                 magit-unstaged-section-map magit-unpushed-section-map magit-untracked-section-map
-                 magit-module-commit-section-map))
-            (dolist (map-name magit-keymaps)
-              (let* ((map (symbol-value map-name)))
-                (-when-let (def (lookup-key map "v"))
-                  (define-key map "V" def)
-                  (define-key map "v" nil))
-                (-when-let (def (lookup-key map "k"))
-                  (define-key map "K" def)
-                  (define-key map "k" nil))
-                (evil-add-hjkl-bindings map 'emacs
-                  "v" 'evil-visual-char)))))
+            "g w" 'magit-stage-file)))
 
-
-;; Flycheck
-;; ================================================================================
 (use-package flycheck
   :ensure t
   :diminish (flycheck-mode . " f")
+  :commands global-flycheck-mode
   :init (progn
           (setq flycheck-idle-change-delay 6)
-          (setq flycheck-check-syntax-automatically '(mode-enabled idle-change))
-          (global-flycheck-mode))
+          (setq flycheck-check-syntax-automatically '(mode-enabled idle-change)))
   :config (progn
             (define-key evil-normal-state-map (kbd "] e") 'next-error)
             (define-key evil-normal-state-map (kbd "[ e") 'previous-error)))
 
-
-;; Yasnippet
-;; ================================================================================
 (use-package yasnippet
   :ensure t
+  :commands yas-global-mode
   :diminish (yas-minor-mode . " y")
   :init (progn
           (setq yas-snippet-dirs '("~/.emacs.d/.snippets/yasnippet-snippets"
-                                    "~/.emacs.d/.snippets/personal"))
-          (yas-global-mode 1))
+                                    "~/.emacs.d/.snippets/personal")))
   :config (progn
             (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand)
             (define-key yas-keymap (kbd "C-e") 'yas-next-field-or-maybe-expand)))
 
-
-;; Helm
-;; ================================================================================
 (use-package helm
   :ensure t
+  :commands helm-mode
   :init (progn
           (require 'helm-config)
-          (helm-mode 1))
+
+          (use-package helm-projectile
+            :ensure t
+            :config (progn
+                      (global-set-key (kbd "C-p") 'helm-projectile)
+                      (define-key evil-normal-state-map (kbd "C-p") 'helm-projectile)
+                      (define-key evil-normal-state-map (kbd "C-b") 'helm-projectile-switch-to-buffer)
+                      (evil-leader/set-key "kb" 'helm-projectile-find-dir)
+                      (define-key helm-map (kbd "C-l") 'projectile-invalidate-cache)))
+
+          (use-package helm-ag
+            :ensure t
+            :init (progn (use-package grep))
+            :config (progn (define-key evil-normal-state-map (kbd "C-s") 'helm-projectile-ag)))
+
+          (use-package helm-dash
+            :ensure t
+            :init (progn
+                    (setq helm-dash-docsets-path "~/.docset")
+                    (setq helm-dash-common-docsets '("HTML" "CSS")))
+            :config (progn
+                      (evil-leader/set-key "f" 'helm-dash-at-point)
+                      (define-key evil-normal-state-map (kbd "C-f") 'helm-dash)
+                      (add-hook 'prog-mode-hook
+                        (lambda ()
+                          (interactive)
+                          (setq helm-current-buffer (current-buffer))))))
+
+          (use-package helm-swoop
+            :ensure t
+            :config (progn
+                        (evil-leader/set-key "sb" 'helm-swoop)
+                        (evil-leader/set-key "sa" 'helm-multi-swoop-all)))
+
+          (use-package helm-flycheck
+            :ensure t
+            :config (evil-leader/set-key "e l" 'helm-flycheck)))
+
   :config (progn
             (helm-autoresize-mode 1)
             (define-key helm-map (kbd "C-b") 'helm-keyboard-quit)
             (define-key helm-map (kbd "C-p") 'helm-keyboard-quit)
             (define-key helm-map (kbd "C-j") 'helm-next-line)
             (define-key helm-map (kbd "C-k") 'helm-previous-line)
-
             ; Helm buffers
-            (define-key helm-buffer-map (kbd "C-d") 'helm-buffer-run-kill-buffers)
+            (define-key helm-buffer-map (kbd "C-d") 'helm-buffer-run-kill-buffers)))
 
-            (use-package helm-projectile
-              :ensure t
-              :init (progn
-                      (global-set-key (kbd "C-p") 'helm-projectile)
-                      (define-key evil-normal-state-map (kbd "C-p") 'helm-projectile)
-                      (define-key evil-normal-state-map (kbd "C-b") 'helm-projectile-switch-to-buffer)
-                      (evil-leader/set-key "kb" 'helm-projectile-find-dir))
-              :config (progn
-                      (define-key helm-map (kbd "C-l") 'projectile-invalidate-cache)))
-
-            (use-package helm-ag
-              :ensure t
-              :commands (helm-projectile-ag)
-              :init (progn
-                      (use-package grep)
-                      (define-key evil-normal-state-map (kbd "C-s") 'helm-projectile-ag)))
-
-            (use-package helm-dash
-              :ensure t
-              :init (progn
-                      (setq helm-dash-docsets-path "~/.docset")
-                      (setq helm-dash-common-docsets '("HTML" "CSS"))
-                      (evil-leader/set-key "f" 'helm-dash-at-point)
-                      (define-key evil-normal-state-map (kbd "C-f") 'helm-dash))
-              :config (progn
-                        (add-hook 'prog-mode-hook
-                          (lambda ()
-                            (interactive)
-                            (setq helm-current-buffer (current-buffer))))))
-
-            (use-package helm-swoop
-              :ensure t
-              :commands (helm-swoop)
-              :init (progn
-                      (evil-leader/set-key "sb" 'helm-swoop)
-                      (evil-leader/set-key "sa" 'helm-multi-swoop-all)))
-
-            (use-package helm-flycheck
-              :ensure t
-              :commands helm-flycheck
-              :init (evil-leader/set-key "e l" 'helm-flycheck))))
-
-
-
-;; Company mode
-;; ================================================================================
 (use-package company
   :ensure t
   :diminish " c"
+  :commands global-company-mode
   :defines company-dabbrev-downcase
   :init (progn
           (setq company-dabbrev-downcase nil)
-          (setq company-tooltip-align-annotations t)
-          (global-company-mode))
+          (setq company-tooltip-align-annotations t))
   :config (progn
             ; Swap some keybindings
             (define-key company-active-map (kbd "<backtab>") 'company-select-previous)
@@ -507,6 +424,13 @@
 
 ;; LANGUAGE PACKS
 ;; ================================================================================
+
+(use-package text-mode
+  :preface (provide 'text-mode)
+  :no-require t
+  :init (progn
+          (add-hook 'text-mode-hook 'turn-on-auto-fill)
+          (setq-default fill-column 80)))
 
 (use-package js2-mode
   :ensure t
@@ -578,7 +502,8 @@
             :init (progn
                     (add-hook 'sgml-mode-hook 'emmet-mode)
                     (add-hook 'css-mode-hook  'emmet-mode)
-                    (add-hook 'web-mode-hook 'emmet-mode)
+                    (add-hook 'web-mode-hook 'emmet-mode))
+            :config (progn
                     (evil-define-key 'insert emmet-mode-keymap
                       (kbd "C-j") 'emmet-expand-line))))
   :config (progn
@@ -636,6 +561,7 @@
 
 (use-package dockerfile-mode
   :ensure t
+  :commands dockerfile-mode
   :init (progn
           (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))))
 
@@ -649,10 +575,12 @@
 
 (use-package stack-mode
   :load-path "vendor/stack-ide/stack-mode"
+  :commands stack-mode
   :init (progn
+          (add-hook 'haskell-mode-hook 'stack-mode))
+  :config (progn
           (flycheck-disable-checker 'haskell-ghc)
-          (flycheck-disable-checker 'haskell-stack-ghc)
-          (add-hook 'haskell-mode-hook 'stack-mode)))
+          (flycheck-disable-checker 'haskell-stack-ghc)))
 
 (use-package haskell-mode
   :ensure t
@@ -660,17 +588,54 @@
   :init (progn
           (setq haskell-hoogle-url "https://www.stackage.org/lts/hoogle?q=%s")
           (setq haskell-process-type 'stack-ghci)
-          (add-hook 'haskell-mode-hook (lambda () (turn-on-haskell-indentation)))
-          (evil-define-key 'normal haskell-mode-map (kbd "?") 'hoogle)
-          (evil-leader/set-key-for-mode 'haskell-mode
+          (add-hook 'haskell-mode-hook (lambda () (turn-on-haskell-indentation))))
+  :config (progn
+            (evil-define-key 'normal haskell-mode-map (kbd "?") 'hoogle)
+            (evil-leader/set-key-for-mode 'haskell-mode
               "t" 'stack-mode-type
               "i" 'stack-mode-info)))
 
-;; Org Mode
+(use-package rainbow-mode
+  :ensure t
+  :diminish rainbow-mode
+  :commands (rainbow-mode)
+  :init (progn
+          (add-hook 'css-mode-hook 'rainbow-mode)
+          (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)))
+
+(use-package rainbow-delimiters
+  :ensure t
+  :commands rainbow-delimiters-mode
+  :init (progn
+         (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)))
+
+(use-package ledger-mode
+  :ensure t
+  :commands ledger-mode
+  :init (progn
+          (add-to-list 'auto-mode-alist '("\\.ledger\\'" . ledger-mode))
+          (use-package flycheck-ledger
+            :ensure t))
+  :config (progn
+            (evil-define-key 'normal ledger-mode-map
+              (kbd "Y") 'ledger-copy-transaction-at-point
+              (kbd "C") 'ledger-post-edit-amount
+              (kbd "!") 'ledger-post-align-postings)
+
+            (evil-leader/set-key-for-mode 'ledger-mode
+              "n" 'ledger-add-transaction
+              "r" 'ledger-reconcile
+              "d" 'ledger-delete-current-transaction
+              "?" 'ledger-display-balance-at-point)))
+
+
+;; PROGRAMS
 ;; ================================================================================
+
 (use-package org-mode
   :init (progn
           (use-package evil-org :ensure t)
+
           (setq org-directory "~/.org/")
           (setq orglog-done 'time)
           (setq org-hide-leading-stars nil)
@@ -698,102 +663,128 @@
               (local-unset-key (kbd ",")) ;; Don't shadow the <leader>
               ;; Autosave:
               (add-hook 'auto-save-hook 'org-save-all-org-buffers nil t)
-              (auto-save-mode)))
-
-          (evil-leader/set-key "o b"
-            (lambda ()
-              (interactive)
-              (let ((persp (gethash "org" perspectives-hash)))
-                (if (null persp) ; When perspective doesn't exist
-                  (progn
-                    (persp-switch "org")
-                    (if (file-exists-p "~/.org/home.org")
-                      (progn
-                        (find-file "~/.org/home.org")))
-                    (if (file-exists-p "~/.org/work.org")
-                      (progn
-                        (split-window-right)
-                        (find-file "~/.org/work.org")))) ; Or when it already exists
-                  (persp-activate persp)))))
-
-          (evil-add-hjkl-bindings org-agenda-mode-map 'emacs)
-
-          (evil-leader/set-key
-            "o c" 'org-capture
-            "o a" 'org-agenda-list
-            "o t" 'org-todo-list)
-
-          (evil-leader/set-key-for-mode 'org-mode
-            "d" 'org-deadline
-            "s" 'org-schedule
-            "c" 'org-toggle-checkbox
-            "o" (lambda ()
-                  (interactive)
-                  (evil-org-eol-call (quote org-insert-heading-respect-content))))
-
-          (evil-define-key 'normal org-mode-map
-            (kbd "m") 'org-set-tags
-            (kbd "+") 'org-priority-up
-            (kbd "-") 'org-priority-down)
-
-          (evil-define-key 'emacs org-agenda-mode-map
-            (kbd "d") 'org-agenda-deadline
-            (kbd "s") 'org-agenda-schedule
-            (kbd "+") 'org-priority-up
-            (kbd "-") 'org-priority-down
-            (kbd "q") 'org-agenda-quit
-            (kbd "w") 'org-save-all-org-buffers)
-
-          (evil-leader/set-key-for-mode 'org-agenda-mode-map
-            (kbd "w") 'org-save-all-org-buffers)))
-
-
-;; Ledger-mode
-;; ================================================================================
-(use-package ledger-mode
-  :ensure t
-  :commands ledger-mode
-  :init (progn
-          (add-to-list 'auto-mode-alist '("\\.ledger\\'" . ledger-mode)))
+              (auto-save-mode))))
   :config (progn
-            (evil-define-key 'normal ledger-mode-map
-              (kbd "Y") 'ledger-copy-transaction-at-point
-              (kbd "C") 'ledger-post-edit-amount
-              (kbd "!") 'ledger-post-align-postings)
+            (evil-leader/set-key "o b"
+              (lambda ()
+                (interactive)
+                (let ((persp (gethash "org" perspectives-hash)))
+                  (when (null persp) ; When perspective doesn't exist
+                    (persp-switch "org")
+                    (when (file-exists-p "~/.org/home.org")
+                      (find-file "~/.org/home.org"))
+                    (when (file-exists-p "~/.org/work.org")
+                      (split-window-right)
+                      (find-file "~/.org/work.org")) ; Or when it already exists
+                    (persp-activate persp)))))
 
-            (evil-leader/set-key-for-mode 'ledger-mode
-              "n" 'ledger-add-transaction
-              "r" 'ledger-reconcile
-              "d" 'ledger-delete-current-transaction
-              "?" 'ledger-display-balance-at-point)))
+            (evil-leader/set-key
+              "o c" 'org-capture
+              "o a" 'org-agenda-list
+              "o t" 'org-todo-list)
 
-(use-package flycheck-ledger :ensure t)
+            (evil-leader/set-key-for-mode 'org-mode
+              "d" 'org-deadline
+              "s" 'org-schedule
+              "c" 'org-toggle-checkbox
+              "o" (lambda ()
+                    (interactive)
+                    (evil-org-eol-call (quote org-insert-heading-respect-content))))
+
+            (evil-define-key 'normal org-mode-map
+              (kbd "m") 'org-set-tags
+              (kbd "+") 'org-priority-up
+              (kbd "-") 'org-priority-down)
+
+            (evil-define-key 'emacs org-agenda-mode-map
+              (kbd "d") 'org-agenda-deadline
+              (kbd "s") 'org-agenda-schedule
+              (kbd "+") 'org-priority-up
+              (kbd "-") 'org-priority-down
+              (kbd "q") 'org-agenda-quit
+              (kbd "w") 'org-save-all-org-buffers)
+
+            (evil-leader/set-key-for-mode 'org-agenda-mode-map
+              (kbd "w") 'org-save-all-org-buffers)
+
+            (if (file-exists-p (expand-file-name "README.org"))
+              (add-to-list 'org-agenda-files (expand-file-name "README.org")))
+
+            (if (file-exists-p (expand-file-name "project.org"))
+              (add-to-list 'org-agenda-files (expand-file-name "project.org")))))
+
+(use-package sx
+  :ensure t
+  :commands (sx-tab-newest sx-search sx-authenticate sx-ask
+              sx-inbox sx-tab-month sx-tab-starred sx-tab-featured
+              sx-tab-topvoted sx-tab-frontpage sx-tab-unanswered
+              sx-tab-unanswered-my-tags))
+
+;; Bootloader
+;; ================================================================================
+(when (eq system-type 'darwin)
+  (setq interprogram-cut-function
+    (lambda (text &optional push)
+      (let ((process-connection-type nil))
+        (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+          (process-send-string proc text)
+          (process-send-eof proc)))))
+  (defun pbpaste ()
+    "Call pbpaste and insert the results"
+    (interactive)
+    (insert (shell-command-to-string "pbpaste"))))
+
+(setq debug-on-error nil)
+(setq locale-coding-system 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+(setq current-language-environment "UTF-8")
+(setenv "LC_CTYPE" "UTF-8")
+(setq inhibit-startup-screen t)
+(setq-default tab-width 2 indent-tabs-mode nil) ;; Spaces
+(setq standard-indent 2)
+(setq make-backup-files nil)
+(setq backup-inhibited t)
+(setq auto-save-default nil)
+(setq scroll-margin 5 scroll-conservatively 9999 scroll-step 1) ;; Smooth scrolling
+(setq gc-cons-threshold 20000000) ;; Increase garbage collection limit
+(setq visible-bell 1)
+(setq ring-bell-function 'ignore)
+(setq blink-matching-paren nil)
+(setq initial-scratch-message ";; Hello.")
+(fset 'yes-or-no-p 'y-or-n-p)
+(setq large-file-warning-threshold 100000000)
+
+(load-theme 'hc-zenburn t)
+(sml/setup)
+(sml/apply-theme 'respectful)
+(when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(menu-bar-mode -1) ;; Disable menu bar
+(auto-save-mode nil) ;; Disable autosaving
+(show-paren-mode t) ;; Show matching parens
+(global-auto-revert-mode 1)
+(column-number-mode 1)
+(global-undo-tree-mode 1)
+(global-linum-mode)
+(linum-relative-on)
+(popwin-mode 1)
+(autopair-global-mode)
+(editorconfig-mode 1)
+(projectile-global-mode +1)
+(persp-mode)
+(global-git-gutter-mode +1)
+(global-flycheck-mode)
+(global-company-mode)
+(yas-global-mode 1)
+(helm-mode 1)
+(evil-mode 1)
 
 ;; Load any local configuration if it exists
-
-(if (file-exists-p (expand-file-name ".emacs.el"))
-  (progn
-    (load (expand-file-name ".emacs.el"))))
-
-(if (file-exists-p (expand-file-name "README.org"))
-  (progn
-    (add-to-list 'org-agenda-files (expand-file-name "README.org"))))
-
-(if (file-exists-p (expand-file-name "project.org"))
-  (progn
-    (add-to-list 'org-agenda-files (expand-file-name "project.org"))))
+(and
+  (file-exists-p (expand-file-name ".emacs.el"))
+  (load (expand-file-name ".emacs.el")))
 
 (provide 'init)
 ;;; init.el ends here
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-
-
-;; Stack Exchange
-;; ================================================================================
-(use-package sx
-  :ensure t)
