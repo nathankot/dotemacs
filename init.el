@@ -426,6 +426,21 @@
                    company-dabbrev
                    :with company-yasnippet)))))
 
+(use-package paredit
+  :ensure t
+  :commands (enable-paredit-mode paredit-mode)
+  :init (progn
+          (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode))
+  :config
+  (evil-define-key 'insert paredit-mode-map
+    (kbd "C-n") 'paredit-open-round
+    (kbd "C-l") 'paredit-forward
+    (kbd "C-h") 'paredit-backward
+    (kbd "C-j") 'paredit-raise-sexp
+    (kbd "C-k") 'paredit-wrap-round
+    (kbd "C-i") 'paredit-forward-slurp-sexp
+    (kbd "C-o") 'paredit-forward-barf-sexp))
+
 
 ;; LANGUAGE PACKS
 ;; ================================================================================
