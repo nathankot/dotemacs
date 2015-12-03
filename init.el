@@ -250,6 +250,7 @@
   :diminish projectile-mode
   :commands projectile-global-mode
   :init (progn
+          (setq projectile-require-project-root nil)
           (setq projectile-enable-caching t)
           (setq projectile-completion-system 'ido)
           (setq projectile-indexing-method 'alien))
