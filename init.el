@@ -254,6 +254,8 @@
           (setq projectile-completion-system 'ido)
           (setq projectile-indexing-method 'alien))
   :config (progn
+            (add-to-list 'projectile-project-root-files ".projectile")
+            (add-to-list 'projectile-project-root-files ".git")
             (add-to-list 'projectile-globally-ignored-directories ".cache")
             (add-to-list 'projectile-globally-ignored-directories ".tmp")
             (add-to-list 'projectile-globally-ignored-directories "tmp")
