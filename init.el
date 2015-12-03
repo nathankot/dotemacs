@@ -432,8 +432,9 @@
     (kbd "C-n") 'paredit-open-round
     (kbd "C-l") 'paredit-forward
     (kbd "C-h") 'paredit-backward
-    (kbd "C-j") 'paredit-raise-sexp
-    (kbd "C-k") 'paredit-wrap-round
+    (kbd "C-k") 'paredit-raise-sexp
+    (kbd "C-j") 'paredit-wrap-round
+    (kbd "C-c") 'paredit-convolute-sexp
     (kbd "C-i") 'paredit-forward-slurp-sexp
     (kbd "C-o") 'paredit-forward-barf-sexp))
 
