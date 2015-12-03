@@ -21,9 +21,10 @@
 
  '(safe-local-variable-values (quote ((c-file-offsets (innamespace . 0))))))
 
-
 (use-package dash :ensure t)
 (use-package exec-path-from-shell :ensure t :init (exec-path-from-shell-initialize))
+
+(defun print-point () (interactive) (message "%d" (point)))
 
 ;; Theme.
 ;; ================================================================================
@@ -210,7 +211,7 @@
               (lambda (arg)
                 (interactive)
                 (linum-mode (* -1 arg))
-                (focus-mode arg)
+                ;; (focus-mode arg)
                 (flycheck-mode (* -1 arg))))))
 
 (use-package undo-tree
