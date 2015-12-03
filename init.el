@@ -299,9 +299,10 @@
 (use-package magit
   :ensure t
   :init (progn
-          (evil-set-initial-state 'git-commit-mode 'insert)
-          (evil-set-initial-state 'git-commit-major-mode 'insert)
           (evil-set-initial-state 'git-rebase-mode 'emacs)
+          (evil-set-initial-state 'text-mode 'insert)
+          (evil-set-initial-state 'git-commit-major-mode 'insert)
+
           (evil-leader/set-key
             "g l" 'magit-log
             "g c" 'magit-commit
@@ -311,6 +312,7 @@
             "g D" 'magit-diff-staged
             "g b" 'magit-blame
             "g w" 'magit-stage-file))
+
   :config (progn
             (evil-define-key 'emacs git-rebase-mode-map
               (kbd "s") 'git-rebase-squash
