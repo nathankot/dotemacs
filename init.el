@@ -296,16 +296,6 @@
 
 (use-package magit
   :ensure t
-  :commands (magit-log
-              magit-commit
-              magit-commit-amend
-              magit-status
-              magit-diff-unstaged
-              magit-diff-staged
-              magit-stage-file
-              git-rebase-mode
-              git-commit-mode
-              git-commit-major-mode)
   :init (progn
           (evil-set-initial-state 'git-commit-mode 'insert)
           (evil-set-initial-state 'git-commit-major-mode 'insert)
