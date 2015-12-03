@@ -271,6 +271,8 @@
             :ensure t)))
 
 (use-package dired
+  :init (progn
+          (setq dired-use-ls-dired nil))
   :config (progn
             (define-key evil-normal-state-map (kbd "C-@") 'persp-switch)
             (define-key evil-normal-state-map (kbd ")") 'persp-next)
