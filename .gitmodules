@@ -13,3 +13,6 @@
 [submodule "vendor/company-sourcekit"]
 	path = vendor/company-sourcekit
 	url = https://github.com/nathankot/company-sourcekit.git
+[submodule "vendor/linum-relative"]
+	path = vendor/linum-relative
+	url = https://github.com/coldnew/linum-relative.git

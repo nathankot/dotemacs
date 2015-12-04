@@ -175,7 +175,7 @@
 ;; ================================================================================
 
 (use-package linum-relative
-  :ensure t
+  :load-path "vendor/linum-relative"
   :commands linum-relative-on
   :init (setq linum-relative-format "%3s   "))
 
