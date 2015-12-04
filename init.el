@@ -208,8 +208,8 @@
             (kbd "C-k") 'sp-splice-sexp-killing-backward
             (kbd "C-j") 'sp-rewrap-sexp
             (kbd "C-c") 'sp-convolute-sexp
-            (kbd "C-i") 'sp-forward-slurp-sexp
-            (kbd "C-o") 'sp-forward-barf-sexp))
+            (kbd "M-i") 'sp-forward-slurp-sexp
+            (kbd "M-o") 'sp-forward-barf-sexp))
 
 (use-package writeroom-mode
   :ensure t
