@@ -200,7 +200,10 @@
   :ensure t
   :commands (smartparens-global-mode show-smartparens-global-mode)
   :init (use-package smartparens-config)
-  :config (evil-define-key 'insert smartparens-mode-map
+  :config
+  (sp-local-pair 'makefile-mode "$(" ")")
+  (sp-local-pair 'makefile-bsdmake-mode "$(" ")")
+  (evil-define-key 'insert smartparens-mode-map
             (kbd "C-l") 'sp-forward-sexp
             (kbd "C-h") 'sp-backward-sexp
             (kbd "C-e") 'sp-down-sexp
