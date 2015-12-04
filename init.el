@@ -594,27 +594,25 @@
   :ensure t
   :commands yaml-mode)
 
-(use-package stack-mode
-  :load-path "vendor/stack-ide/stack-mode"
-  :commands stack-mode
-  :init (progn
-          (add-hook 'haskell-mode-hook 'stack-mode))
-  :config (progn
-          (flycheck-disable-checker 'haskell-ghc)
-          (flycheck-disable-checker 'haskell-stack-ghc)))
 
 (use-package haskell-mode
   :ensure t
   :commands (haskell-mode haskell-interactive-mode)
-  :init (progn
-          (setq haskell-hoogle-url "https://www.stackage.org/lts/hoogle?q=%s")
-          (setq haskell-process-type 'stack-ghci)
-          (add-hook 'haskell-mode-hook (lambda () (turn-on-haskell-indentation))))
-  :config (progn
-            (evil-define-key 'normal haskell-mode-map (kbd "?") 'hoogle)
-            (evil-leader/set-key-for-mode 'haskell-mode
-              "t" 'stack-mode-type
-              "i" 'stack-mode-info)))
+  :init (use-package stack-mode
+          :load-path "vendor/stack-ide/stack-mode"
+          :commands stack-mode
+          :init (add-hook 'haskell-mode-hook 'stack-mode)
+          :config (evil-define-key 'normal
+                    stack-mode-map (kbd "M-i") 'stack-mode-info)
+          (evil-leader/set-key-for-mode 'haskell-mode
+            "t" 'stack-mode-type))
+
+  (setq haskell-hoogle-url "https://www.stackage.org/lts/hoogle?q=%s")
+  (setq haskell-process-type 'stack-ghci)
+  (add-hook 'haskell-mode-hook (lambda () (turn-on-haskell-indentation)))
+
+  :config (evil-define-key 'normal
+            haskell-mode-map (kbd "?") 'hoogle))
 
 (use-package rainbow-mode
   :ensure t
