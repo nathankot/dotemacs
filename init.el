@@ -55,7 +55,12 @@
 
 (use-package evil
   :ensure t
-  :commands evil-mode
+  :commands (evil-mode
+              evil-define-key
+              evil-set-initial-state
+              evil-add-hjkl-bindings
+              evil-leader/set-key
+              evil-leader/set-key-for-mode)
   :init (progn
           (setq evil-want-C-u-scroll t
                 evil-overriding-maps nil
@@ -191,10 +196,20 @@
   :config (progn
             (evil-define-key 'normal popwin:keymap (kbd "q") 'popwin:close-popup-window)))
 
-(use-package autopair
+(use-package smartparens
   :ensure t
-  :commands autopair-global-mode
-  :diminish autopair-mode)
+  :commands (smartparens-global-mode show-smartparens-global-mode)
+  :init (use-package smartparens-config)
+  :config (evil-define-key 'insert smartparens-mode-map
+            (kbd "C-l") 'sp-forward-sexp
+            (kbd "C-h") 'sp-backward-sexp
+            (kbd "C-e") 'sp-down-sexp
+            (kbd "C-y") 'sp-up-sexp
+            (kbd "C-k") 'sp-splice-sexp-killing-backward
+            (kbd "C-j") 'sp-rewrap-sexp
+            (kbd "C-c") 'sp-convolute-sexp
+            (kbd "C-i") 'sp-forward-slurp-sexp
+            (kbd "C-o") 'sp-forward-barf-sexp))
 
 (use-package writeroom-mode
   :ensure t
@@ -423,22 +438,6 @@
                    company-files
                    company-dabbrev
                    :with company-yasnippet)))))
-
-(use-package paredit
-  :ensure t
-  :commands (enable-paredit-mode paredit-mode)
-  :init (progn
-          (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode))
-  :config
-  (evil-define-key 'insert paredit-mode-map
-    (kbd "C-n") 'paredit-open-round
-    (kbd "C-l") 'paredit-forward
-    (kbd "C-h") 'paredit-backward
-    (kbd "C-k") 'paredit-raise-sexp
-    (kbd "C-j") 'paredit-wrap-round
-    (kbd "C-c") 'paredit-convolute-sexp
-    (kbd "C-i") 'paredit-forward-slurp-sexp
-    (kbd "C-o") 'paredit-forward-barf-sexp))
 
 
 ;; LANGUAGE PACKS
@@ -789,7 +788,8 @@
 (global-linum-mode)
 (linum-relative-on)
 (popwin-mode 1)
-(autopair-global-mode)
+(smartparens-global-mode t)
+(show-smartparens-global-mode t)
 (editorconfig-mode 1)
 (projectile-global-mode +1)
 (persp-mode)
