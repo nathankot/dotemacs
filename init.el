@@ -603,15 +603,9 @@
           :commands stack-mode
           :init
           (add-hook 'haskell-mode-hook 'stack-mode)
-          (add-hook 'haskell-mode-hook
-            (lambda ()
-              (add-to-list 'flycheck-disabled-checkers 'haskell-ghc)
-              (add-to-list 'flycheck-disabled-checkers 'haskell-hlint)
-              (add-to-list 'flycheck-disabled-checkers 'haskell-stack-ghc)))
-          :config (evil-define-key 'normal
-                    stack-mode-map (kbd "M-i") 'stack-mode-info)
-          (evil-leader/set-key-for-mode 'haskell-mode
-            "t" 'stack-mode-type))
+          :config
+          (evil-define-key 'normal stack-mode-map (kbd "M-i") 'stack-mode-info)
+          (evil-leader/set-key-for-mode 'haskell-mode "t" 'stack-mode-type))
 
   (setq haskell-hoogle-url "https://www.stackage.org/lts/hoogle?q=%s")
   (setq haskell-process-type 'stack-ghci)
