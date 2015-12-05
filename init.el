@@ -121,7 +121,7 @@
             (define-key evil-normal-state-map (kbd "C-k") 'evil-window-prev)
             (define-key evil-normal-state-map (kbd "C-l") 'evil-window-increase-width)
             (define-key evil-normal-state-map (kbd "C-h") 'evil-window-decrease-width)
-            (define-key evil-insert-state-map (kbd "C-j") 'comment-indent-new-line)
+            (define-key evil-insert-state-map (kbd "M-RET") 'comment-indent-new-line)
 
             (define-key evil-normal-state-map (kbd "-")
               (lambda ()
@@ -526,7 +526,7 @@
                     (add-hook 'web-mode-hook 'emmet-mode))
             :config (progn
                     (evil-define-key 'insert emmet-mode-keymap
-                      (kbd "C-j") 'emmet-expand-line))))
+                      (kbd "M-RET") 'emmet-expand-line))))
   :config (progn
             (add-hook 'web-mode-hook
               (lambda ()
