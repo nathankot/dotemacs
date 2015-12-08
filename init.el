@@ -204,15 +204,18 @@
   (sp-local-pair 'makefile-mode "$(" ")")
   (sp-local-pair 'makefile-bsdmake-mode "$(" ")")
   (evil-define-key 'insert smartparens-mode-map
-            (kbd "C-l") 'sp-forward-sexp
-            (kbd "C-h") 'sp-backward-sexp
-            (kbd "C-e") 'sp-down-sexp
-            (kbd "C-y") 'sp-up-sexp
-            (kbd "C-k") 'sp-splice-sexp-killing-backward
-            (kbd "C-j") 'sp-rewrap-sexp
-            (kbd "C-c") 'sp-convolute-sexp
-            (kbd "M-i") 'sp-forward-slurp-sexp
-            (kbd "M-o") 'sp-forward-barf-sexp))
+    (kbd "C-l") 'sp-forward-sexp
+    (kbd "C-h") 'sp-backward-sexp
+    (kbd "C-e") 'sp-down-sexp
+    (kbd "C-y") 'sp-up-sexp
+    (kbd "C-k") 'sp-splice-sexp-killing-backward
+    (kbd "C-j") 'sp-rewrap-sexp
+    (kbd "C-c") 'sp-convolute-sexp
+    (kbd "C-b") 'sp-backward-unwrap-sexp
+    (kbd "C-w") 'sp-kill-sexp
+    (kbd "C-x") 'sp-backward-kill-sexp
+    (kbd "M-i") 'sp-forward-slurp-sexp
+    (kbd "M-o") 'sp-forward-barf-sexp))
 
 (use-package writeroom-mode
   :ensure t
