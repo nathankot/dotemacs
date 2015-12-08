@@ -654,86 +654,87 @@
 ;; PROGRAMS
 ;; ================================================================================
 
-(use-package org-mode
-  :init (progn
-          (use-package evil-org :ensure t)
+(use-package org
+  :ensure nil
+  :init
+  (use-package evil-org :ensure t)
+  (setq org-directory "~/.org/")
+  (setq orglog-done 'time)
+  (setq org-hide-leading-stars nil)
+  (setq org-alphabetical-lists t)
+  (setq org-src-fontify-natively t)  ;; you want this to activate coloring in blocks
+  (setq org-src-tab-acts-natively t) ;; you want this to have completion in blocks
+  (setq org-hide-emphasis-markers t) ;; to hide the *,=, or / markers
+  (setq org-pretty-entities t)       ;; to have \alpha, \to and others display as utf8 http://orgmode.org/manual/Special-symbols.html
+  (setq org-agenda-files (list "~/.org/home.org" "~/.org/work.org" "~/.org/notes.org"))
+  (setq org-default-notes-file (concat org-directory "/notes.org"))
+  (setq org-enforce-todo-checkbox-dependencies t)
+  (setq org-enforce-todo-dependencies t)
+  (setq org-todo-keywords '((sequence "TODO" "DOING" "|" "DONE" "CANCELED" "DELEGATED")))
+  (setq org-agenda-files (quote ("~/.org/home.org" "~/.org/work.org" "~/.org/notes.org")))
+  (setq org-todo-keyword-faces
+    '(("TODO" . org-warning)
+       ("DOING" . "white")
+       ("DONE" . "green")
+       ("DELEGATED" . "purple")
+       ("CANCELED" . "red")))
 
-          (setq org-directory "~/.org/")
-          (setq orglog-done 'time)
-          (setq org-hide-leading-stars nil)
-          (setq org-alphabetical-lists t)
-          (setq org-src-fontify-natively t)  ;; you want this to activate coloring in blocks
-          (setq org-src-tab-acts-natively t) ;; you want this to have completion in blocks
-          (setq org-hide-emphasis-markers t) ;; to hide the *,=, or / markers
-          (setq org-pretty-entities t)       ;; to have \alpha, \to and others display as utf8 http://orgmode.org/manual/Special-symbols.html
-          (setq org-agenda-files (list "~/.org/home.org" "~/.org/work.org" "~/.org/notes.org"))
-          (setq org-default-notes-file (concat org-directory "/notes.org"))
-          (setq org-enforce-todo-checkbox-dependencies t)
-          (setq org-enforce-todo-dependencies t)
-          (setq org-todo-keywords '((sequence "TODO" "DOING" "|" "DONE" "CANCELED" "DELEGATED")))
-          (setq org-agenda-files (quote ("~/.org/home.org" "~/.org/work.org" "~/.org/notes.org")))
-          (setq org-todo-keyword-faces
-            '(("TODO" . org-warning)
-               ("DOING" . "white")
-               ("DONE" . "green")
-               ("DELEGATED" . "purple")
-               ("CANCELED" . "red")))
+  (add-hook 'org-mode-hook 'org-indent-mode)
+  (add-hook 'org-agenda-mode-hook
+    (lambda ()
+      (local-unset-key (kbd ",")) ;; Don't shadow the <leader>
+      ;; Autosave:
+      (add-hook 'auto-save-hook 'org-save-all-org-buffers nil t)
+      (auto-save-mode)))
 
-          (add-hook 'org-mode-hook 'org-indent-mode)
-          (add-hook 'org-agenda-mode-hook
-            (lambda ()
-              (local-unset-key (kbd ",")) ;; Don't shadow the <leader>
-              ;; Autosave:
-              (add-hook 'auto-save-hook 'org-save-all-org-buffers nil t)
-              (auto-save-mode))))
-  :config (progn
-            (evil-leader/set-key "o b"
-              (lambda ()
-                (interactive)
-                (let ((persp (gethash "org" perspectives-hash)))
-                  (when (null persp) ; When perspective doesn't exist
-                    (persp-switch "org")
-                    (when (file-exists-p "~/.org/home.org")
-                      (find-file "~/.org/home.org"))
-                    (when (file-exists-p "~/.org/work.org")
-                      (split-window-right)
-                      (find-file "~/.org/work.org")) ; Or when it already exists
-                    (persp-activate persp)))))
+  :config
+  (evil-leader/set-key "o b"
+    (lambda ()
+      (interactive)
+      (let ((persp (gethash "org" perspectives-hash)))
+        (when (null persp) ; When perspective doesn't exist
+          (persp-switch "org")
+          (when (file-exists-p "~/.org/home.org")
+            (find-file "~/.org/home.org"))
+          (when (file-exists-p "~/.org/work.org")
+            (split-window-right)
+            (find-file "~/.org/work.org")) ; Or when it already exists
+          (persp-activate persp)))))
 
-            (evil-leader/set-key
-              "o c" 'org-capture
-              "o a" 'org-agenda-list
-              "o t" 'org-todo-list)
+  (evil-leader/set-key
+    "o c" 'org-capture
+    "o a" 'org-agenda-list
+    "o t" 'org-todo-list)
 
-            (evil-leader/set-key-for-mode 'org-mode
-              "d" 'org-deadline
-              "s" 'org-schedule
-              "c" 'org-toggle-checkbox
-              "o" (lambda ()
-                    (interactive)
-                    (evil-org-eol-call (quote org-insert-heading-respect-content))))
+  (evil-leader/set-key-for-mode 'org-mode
+    "d" 'org-deadline
+    "s" 'org-schedule
+    "c" 'org-toggle-checkbox
+    "o" (lambda ()
+          (interactive)
+          (evil-org-eol-call (quote org-insert-heading-respect-content))))
 
-            (evil-define-key 'normal org-mode-map
-              (kbd "m") 'org-set-tags
-              (kbd "+") 'org-priority-up
-              (kbd "-") 'org-priority-down)
+  (evil-define-key 'normal org-mode-map
+    (kbd "m") 'org-set-tags
+    (kbd "+") 'org-priority-up
+    (kbd "-") 'org-priority-down)
 
-            (evil-define-key 'emacs org-agenda-mode-map
-              (kbd "d") 'org-agenda-deadline
-              (kbd "s") 'org-agenda-schedule
-              (kbd "+") 'org-priority-up
-              (kbd "-") 'org-priority-down
-              (kbd "q") 'org-agenda-quit
-              (kbd "w") 'org-save-all-org-buffers)
+  (evil-define-key 'emacs org-agenda-mode-map
+    (kbd "d") 'org-agenda-deadline
+    (kbd "s") 'org-agenda-schedule
+    (kbd "+") 'org-priority-up
+    (kbd "-") 'org-priority-down
+    (kbd "q") 'org-agenda-quit
+    (kbd "w") 'org-save-all-org-buffers)
 
-            (evil-leader/set-key-for-mode 'org-agenda-mode-map
-              (kbd "w") 'org-save-all-org-buffers)
+  (evil-leader/set-key-for-mode 'org-agenda-mode-map
+    (kbd "w") 'org-save-all-org-buffers)
 
-            (if (file-exists-p (expand-file-name "README.org"))
-              (add-to-list 'org-agenda-files (expand-file-name "README.org")))
+  (if (file-exists-p (expand-file-name "README.org"))
+    (add-to-list 'org-agenda-files (expand-file-name "README.org")))
 
-            (if (file-exists-p (expand-file-name "project.org"))
-              (add-to-list 'org-agenda-files (expand-file-name "project.org")))))
+  (if (file-exists-p (expand-file-name "project.org"))
+    (add-to-list 'org-agenda-files (expand-file-name "project.org"))))
 
 (use-package sx
   :ensure t
