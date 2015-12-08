@@ -203,6 +203,9 @@
   :config
   (sp-local-pair 'makefile-mode "$(" ")")
   (sp-local-pair 'makefile-bsdmake-mode "$(" ")")
+  (sp-local-pair 'swift-mode "\\(" nil :actions nil)
+  (sp-local-pair 'swift-mode "\\(" ")")
+  (sp-local-pair 'swift-mode "<" ">")
   (evil-define-key 'insert smartparens-mode-map
     (kbd "C-l") 'sp-forward-sexp
     (kbd "C-h") 'sp-backward-sexp
@@ -606,6 +609,7 @@
           :commands stack-mode
           :init
           (add-hook 'haskell-mode-hook 'stack-mode)
+          (setq stack-mode-manage-flycheck nil)
           :config
           (evil-define-key 'normal stack-mode-map (kbd "M-i") 'stack-mode-info)
           (evil-leader/set-key-for-mode 'haskell-mode "t" 'stack-mode-type))
