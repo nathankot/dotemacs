@@ -247,10 +247,9 @@
   :ensure t
   :commands editorconfig-mode
   :config (progn
-            (add-to-list 'edconf-indentation-alist '(swift-mode swift-indent-offset))
-            (add-to-list 'edconf-indentation-alist '(haskell-mode haskell-indent-spaces))
-            (add-to-list 'edconf-indentation-alist '(haskell-mode haskell-indent-offset))
-            (add-to-list 'edconf-indentation-alist '(evil-mode evil-shift-width))))
+            (add-to-list 'editorconfig-indentation-alist '(swift-mode swift-indent-offset))
+            (add-to-list 'editorconfig-indentation-alist '(haskell-mode haskell-indent-spaces haskell-indent-offset))
+            (add-to-list 'editorconfig-indentation-alist '(evil-mode evil-shift-width))))
 
 (use-package smex
   :ensure t
