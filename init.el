@@ -249,6 +249,7 @@
   :config (progn
             (add-to-list 'edconf-indentation-alist '(swift-mode swift-indent-offset))
             (add-to-list 'edconf-indentation-alist '(haskell-mode haskell-indent-spaces))
+            (add-to-list 'edconf-indentation-alist '(haskell-mode haskell-indent-offset))
             (add-to-list 'edconf-indentation-alist '(evil-mode evil-shift-width))))
 
 (use-package smex
