@@ -16,3 +16,6 @@
 [submodule "vendor/linum-relative"]
 	path = vendor/linum-relative
 	url = https://github.com/coldnew/linum-relative.git
+[submodule "vendor/ghc-mod"]
+	path = vendor/ghc-mod
+	url = https://github.com/kazu-yamamoto/ghc-mod.git
