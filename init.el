@@ -20,7 +20,7 @@
        ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
   '(package-selected-packages
      (quote
-       (company-ghc yasnippet yaml-mode writeroom-mode web-mode sx stylus-mode sourcekit smex smartparens smart-mode-line scss-mode rainbow-mode rainbow-delimiters puppet-mode popwin php-mode persp-projectile magit lua-mode less-css-mode ledger-mode js2-mode helm-swoop helm-projectile helm-flycheck helm-dash helm-ag haskell-mode git-gutter focus flycheck-ledger fish-mode exec-path-from-shell evil-surround evil-snipe evil-search-highlight-persist evil-org evil-matchit evil-jumper evil-commentary emmet-mode editorconfig dockerfile-mode company-tern)))
+       (yasnippet yaml-mode writeroom-mode web-mode sx stylus-mode sourcekit smex smartparens smart-mode-line scss-mode rainbow-mode rainbow-delimiters puppet-mode popwin php-mode persp-projectile magit lua-mode less-css-mode ledger-mode js2-mode helm-swoop helm-projectile helm-flycheck helm-dash helm-ag haskell-mode git-gutter focus flycheck-ledger fish-mode exec-path-from-shell evil-surround evil-snipe evil-search-highlight-persist evil-org evil-matchit evil-jumper evil-commentary emmet-mode editorconfig dockerfile-mode company-tern)))
  '(safe-local-variable-values (quote ((c-file-offsets (innamespace . 0))))))
 
 (use-package dash :ensure t)
@@ -628,11 +628,7 @@
 
     :config
     (evil-define-key 'normal haskell-mode-map (kbd "M-i") 'ghc-show-info)
-    (evil-leader/set-key-for-mode 'haskell-mode "t" 'ghc-show-type)
-    (use-package company-ghc
-      :ensure t
-      :init
-      (add-to-list 'company-backends 'company-ghc)))
+    (evil-leader/set-key-for-mode 'haskell-mode "t" 'ghc-show-type))
 
   :config
   (evil-define-key 'normal haskell-mode-map (kbd "?") 'hoogle))
