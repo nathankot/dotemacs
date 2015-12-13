@@ -226,9 +226,6 @@
   :ensure t
   :commands writeroom-mode
   :init (progn
-          (use-package focus
-            :commands focus-mode
-            :ensure t)
           (setq writeroom-restore-window-config t)
           (setq writeroom-width 120)
           (evil-leader/set-key "," 'writeroom-mode))
@@ -237,7 +234,6 @@
               (lambda (arg)
                 (interactive)
                 (linum-mode (* -1 arg))
-                ;; (focus-mode arg)
                 (flycheck-mode (* -1 arg))))))
 
 (use-package undo-tree
