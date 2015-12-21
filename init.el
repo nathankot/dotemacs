@@ -384,13 +384,13 @@
 
           (use-package helm-ag
             :ensure t
-            :init (use-package grep)
+            :init
+            (use-package grep)
+            (evil-set-initial-state 'helm-ag-mode 'emacs)
             :config
-            (define-key evil-normal-state-map (kbd "C-s")
-              (lambda () (interactive)
-                (-if-let (buffer (get-buffer "*helm-ag*"))
-                  (helm-resume "*helm-ag*")
-                  (helm-projectile-ag)))))
+            (define-key helm-ag-map (kbd "C-s") 'helm-ag--run-save-buffer)
+            (define-key evil-normal-state-map (kbd "C-s") 'helm-projectile-ag)
+            (evil-define-key 'emacs helm-ag-mode-map (kbd "RET") 'helm-ag-mode-jump-other-window))
 
           (use-package helm-dash
             :ensure t
@@ -413,17 +413,18 @@
 
           (use-package helm-flycheck
             :ensure t
-            :config (evil-leader/set-key "e l" 'helm-flycheck)))
+            :config (evil-leader/set-key "e l" 'helm-flycheck))
+
+          (use-package helm-buffer
+            :config
+            (define-key helm-buffer-map (kbd "C-d") 'helm-buffer-run-kill-buffers)))
 
   :config (progn
             (helm-autoresize-mode 1)
-            (define-key helm-map (kbd "C-s") 'helm-delete-minibuffer-contents)
             (define-key helm-map (kbd "C-b") 'helm-keyboard-quit)
             (define-key helm-map (kbd "C-p") 'helm-keyboard-quit)
             (define-key helm-map (kbd "C-j") 'helm-next-line)
-            (define-key helm-map (kbd "C-k") 'helm-previous-line)
-            ; Helm buffers
-            (define-key helm-buffer-map (kbd "C-d") 'helm-buffer-run-kill-buffers)))
+            (define-key helm-map (kbd "C-k") 'helm-previous-line)))
 
 (use-package company
   :ensure t
