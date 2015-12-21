@@ -384,8 +384,13 @@
 
           (use-package helm-ag
             :ensure t
-            :init (progn (use-package grep))
-            :config (progn (define-key evil-normal-state-map (kbd "C-s") 'helm-projectile-ag)))
+            :init (use-package grep)
+            :config
+            (define-key evil-normal-state-map (kbd "C-s")
+              (lambda () (interactive)
+                (-if-let (buffer (get-buffer "*helm-ag*"))
+                  (helm-resume "*helm-ag*")
+                  (helm-projectile-ag)))))
 
           (use-package helm-dash
             :ensure t
