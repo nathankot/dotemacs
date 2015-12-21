@@ -185,7 +185,7 @@
   :ensure t
   :commands popwin-mode
   :init (setq popwin:special-display-config  '(("^\\*magit:.*\\*$" :regexp t :position top :height 20)
-                                                   ("^\\*helm.*\\*$" :regexp t :position bottom)
+                                                   ("^\\*helm.*\\*$" :regexp t :position bottom :stick t)
                                                    ("^\\*shell:.*\\*$" :regexp t :position bottom :noselect t :tail t :stick t)
                                                    (help-mode :position bottom :noselect t :stick t)
                                                    (completion-list-mode :noselect t)
@@ -417,6 +417,7 @@
 
   :config (progn
             (helm-autoresize-mode 1)
+            (define-key helm-map (kbd "C-s") 'helm-delete-minibuffer-contents)
             (define-key helm-map (kbd "C-b") 'helm-keyboard-quit)
             (define-key helm-map (kbd "C-p") 'helm-keyboard-quit)
             (define-key helm-map (kbd "C-j") 'helm-next-line)
