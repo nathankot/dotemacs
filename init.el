@@ -114,6 +114,13 @@
             (global-evil-matchit-mode 1)
             (global-evil-jumper-mode)
 
+            ;; Remove pesky combos
+            (global-unset-key (kbd "M-u"))
+            (global-unset-key (kbd "M-h"))
+            (global-unset-key (kbd "M-j"))
+            (global-unset-key (kbd "M-k"))
+            (global-unset-key (kbd "M-l"))
+
             ;; Window management
             (global-set-key (kbd "C-q") 'delete-window)
             (global-set-key (kbd "C-j") 'evil-window-next)
