@@ -743,7 +743,8 @@
   (evil-define-key 'normal org-mode-map
     (kbd "m") 'org-set-tags
     (kbd "+") 'org-priority-up
-    (kbd "-") 'org-priority-down)
+    (kbd "-") 'org-priority-down
+    (kbd "C-i") 'org-cycle)
 
   (evil-define-key 'emacs org-agenda-mode-map
     (kbd "d") 'org-agenda-deadline
