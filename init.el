@@ -709,6 +709,7 @@
   (add-hook 'org-agenda-mode-hook
     (lambda ()
       (local-unset-key (kbd ",")) ;; Don't shadow the <leader>
+      (local-unset-key (kbd "C-k"))
       ;; Autosave:
       (add-hook 'auto-save-hook 'org-save-all-org-buffers nil t)
       (auto-save-mode)))
