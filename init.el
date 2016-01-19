@@ -331,6 +331,7 @@
 (use-package magit
   :ensure t
   :init (progn
+          (setq vc-handled-backends ())
           (evil-set-initial-state 'git-rebase-mode 'emacs)
           (evil-set-initial-state 'text-mode 'insert)
           (evil-set-initial-state 'git-commit-major-mode 'insert)
