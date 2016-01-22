@@ -416,6 +416,7 @@
             :config (progn
                       (define-key evil-normal-state-map (kbd "?") 'helm-dash-at-point)
                       (define-key evil-normal-state-map (kbd "C-f") 'helm-dash)
+                      (add-hook 'ruby-mode-hook (lambda () (setq-local helm-dash-docsets '("Ruby"))))
                       (add-hook 'dockerfile-mode-hook (lambda () (setq-local helm-dash-docsets '("Docker"))))
                       (add-hook 'js2-minor-mode-hook (lambda () (setq-local helm-dash-docsets '("Javascript" "NodeJS"))))
                       (add-hook 'web-mode-hook (lambda () (setq-local helm-dash-docsets '("Javascript" "HTML" "CSS"))))
