@@ -375,6 +375,13 @@
             (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand)
             (define-key yas-keymap (kbd "C-e") 'yas-next-field-or-maybe-expand)))
 
+(use-package eww
+  :config (progn
+            (evil-define-key 'normal eww-mode-map
+              (kbd "q")   'quit-window
+              (kbd "C-o") 'eww-back-url
+              (kbd "C-i") 'eww-forward-url)))
+
 (use-package helm
   :ensure t
   :commands helm-mode
@@ -404,14 +411,17 @@
             :ensure t
             :init (progn
                     (setq helm-dash-docsets-path "~/.docset")
+                    (setq helm-dash-browser-func 'eww)
                     (setq helm-dash-common-docsets '("HTML" "CSS")))
             :config (progn
                       (evil-leader/set-key "f" 'helm-dash-at-point)
                       (define-key evil-normal-state-map (kbd "C-f") 'helm-dash)
-                      (add-hook 'prog-mode-hook
-                        (lambda ()
-                          (interactive)
-                          (setq helm-current-buffer (current-buffer))))))
+                      (define-key evil-normal-state-map (kbd "?") 'helm-dash)
+                      (add-hook 'dockerfile-mode-hook (lambda () (setq-local helm-dash-docsets '("Docker"))))
+                      (add-hook 'js2-minor-mode-hook (lambda () (setq-local helm-dash-docsets '("Javascript" "NodeJS"))))
+                      (add-hook 'web-mode-hook (lambda () (setq-local helm-dash-docsets '("Javascript" "HTML" "CSS"))))
+                      (add-hook 'swift-mode-hook (lambda () (setq-local helm-dash-docsets '("iOS" "Swift"))))
+                      (add-hook 'prog-mode-hook (lambda () (interactive) (setq helm-current-buffer (current-buffer))))))
 
           (use-package helm-swoop
             :ensure t
@@ -476,7 +486,6 @@
   :ensure t
   :diminish js2-minor-mode
   :commands (js2-mode js-mode js2-minor-mode)
-  :defines helm-dash-docsets
   :init (progn
           (use-package tern
             :diminish " T"
@@ -493,13 +502,7 @@
           (setq js2-mode-show-strict-warnings nil)
                                         ; Use js2-mode as a minor mode (preferred way)
           (add-hook 'js-mode-hook 'js2-minor-mode)
-          (add-to-list 'interpreter-mode-alist '("node" . js-mode)))
-  :config (progn
-            (add-hook 'js2-minor-mode-hook
-              (lambda ()
-                (interactive)
-                (setq-local helm-dash-docsets
-                  '("Javascript" "NodeJS"))))))
+          (add-to-list 'interpreter-mode-alist '("node" . js-mode))))
 
 (use-package web-mode
   :ensure t
@@ -547,10 +550,6 @@
                     (evil-define-key 'insert emmet-mode-keymap
                       (kbd "M-RET") 'emmet-expand-line))))
   :config (progn
-            (add-hook 'web-mode-hook
-              (lambda ()
-                (interactive)
-                (setq-local helm-dash-docsets '("Javascript" "HTML" "CSS"))))
             (add-hook 'web-mode-hook (lambda () (yas-activate-extra-mode 'js-mode)))
             (add-hook 'web-mode-hook 'rainbow-mode)
             (define-key prog-mode-map (kbd "C-x /") 'web-mode-element-close)))
