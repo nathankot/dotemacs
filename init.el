@@ -612,6 +612,16 @@
   :ensure t
   :commands yaml-mode)
 
+(use-package ruby-mode
+  :init
+  (use-package robe
+    :ensure t
+    :init (progn
+            (when (executable-find "pry")
+              (add-hook 'ruby-mode-hook 'robe-mode)))
+    :config (progn
+              (when (executable-find "pry")
+                (add-to-list 'company-backends 'company-robe)))))
 
 (use-package haskell-mode
   :ensure t
