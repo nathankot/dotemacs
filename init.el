@@ -21,7 +21,12 @@
   '(package-selected-packages
      (quote
        (yasnippet yaml-mode writeroom-mode web-mode sx stylus-mode sourcekit smex smartparens smart-mode-line scss-mode rainbow-mode rainbow-delimiters puppet-mode popwin php-mode persp-projectile magit lua-mode less-css-mode ledger-mode js2-mode helm-swoop helm-projectile helm-flycheck helm-dash helm-ag haskell-mode git-gutter focus flycheck-ledger fish-mode exec-path-from-shell evil-surround evil-snipe evil-search-highlight-persist evil-org evil-matchit evil-jumper evil-commentary emmet-mode editorconfig dockerfile-mode company-tern)))
- '(safe-local-variable-values (quote ((c-file-offsets (innamespace . 0))))))
+  '(safe-local-variable-values
+     (quote
+       ((haskell-process-use-ghci . t)
+         (haskell-indent-spaces . 4)
+         (c-file-offsets
+           (innamespace . 0))))))
 
 (use-package dash :ensure t)
 (use-package exec-path-from-shell :ensure t :init (exec-path-from-shell-initialize))
@@ -250,6 +255,10 @@
   :ensure t
   :commands editorconfig-mode
   :config (progn
+            (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-markup-indent-offset))
+            (add-to-list 'editorconfig-indentation-alist '(web-mode js2-basic-offset))
+            (add-to-list 'editorconfig-indentation-alist '(js2-minor-mode js2-basic-offset))
+            (add-to-list 'editorconfig-indentation-alist '(js2-mode js2-basic-offset))
             (add-to-list 'editorconfig-indentation-alist '(swift-mode swift-indent-offset))
             (add-to-list 'editorconfig-indentation-alist '(haskell-mode haskell-indent-spaces haskell-indent-offset))
             (add-to-list 'editorconfig-indentation-alist '(evil-mode evil-shift-width))))
