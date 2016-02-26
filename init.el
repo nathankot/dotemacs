@@ -315,6 +315,7 @@
             (define-key evil-normal-state-map (kbd "C-@") 'persp-switch)
             (define-key evil-normal-state-map (kbd ")") 'persp-next)
             (define-key evil-normal-state-map (kbd "(") 'persp-prev)
+            (evil-leader/set-key "p r" 'persp-rename)
             (evil-leader/set-key "p k" 'persp-kill)
             (evil-define-key 'normal dired-mode-map
               (kbd "m") nil
