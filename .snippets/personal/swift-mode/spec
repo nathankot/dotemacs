@@ -1,0 +1,9 @@
+class $1 : QuickSpec {
+
+  override func spec() {
+
+    $0
+
+  }
+
+}
