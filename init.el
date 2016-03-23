@@ -5,31 +5,11 @@
 ;;; Code:
 
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-(package-initialize)
-(add-to-list 'load-path "~/.emacs.d/vendor/use-package")
-(require 'use-package)
+(require 'cask (concat (getenv "HOMEBREW_ROOT") "/share/emacs/site-lisp/cask/cask.el"))
+(cask-initialize)
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
-  '(custom-safe-themes
-     (quote
-       ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
-  '(package-selected-packages
-     (quote
-       (yasnippet yaml-mode writeroom-mode web-mode sx stylus-mode sourcekit smex smartparens smart-mode-line scss-mode rainbow-mode rainbow-delimiters puppet-mode popwin php-mode persp-projectile magit lua-mode less-css-mode ledger-mode js2-mode helm-swoop helm-projectile helm-flycheck helm-dash helm-ag haskell-mode git-gutter focus flycheck-ledger fish-mode exec-path-from-shell evil-surround evil-snipe evil-search-highlight-persist evil-org evil-matchit evil-jumper evil-commentary emmet-mode editorconfig dockerfile-mode company-tern)))
-  '(safe-local-variable-values
-     (quote
-       ((haskell-process-use-ghci . t)
-         (haskell-indent-spaces . 4)
-         (c-file-offsets
-           (innamespace . 0))))))
-
-(use-package dash :ensure t)
-(use-package exec-path-from-shell :ensure t :init (exec-path-from-shell-initialize))
+(use-package dash)
+(use-package exec-path-from-shell :init (exec-path-from-shell-initialize))
 
 (defun print-point () (interactive) (message "%d" (point)))
 
@@ -42,7 +22,6 @@
   :init (require 'hc-zenburn-theme))
 
 (use-package smart-mode-line
-  :ensure t
   :commands (sml/setup sml/apply-theme)
   :config (progn
           (setq sml/shorten-directory t)
@@ -61,7 +40,6 @@
 ;; ================================================================================
 
 (use-package evil
-  :ensure t
   :commands (evil-mode
               evil-define-key
               evil-set-initial-state
@@ -81,33 +59,23 @@
                 evil-motion-state-cursor '("gray" box))
 
           (use-package evil-leader
-            :ensure t
             :commands (global-evil-leader-mode)
             :config (evil-leader/set-leader ","))
 
           (use-package evil-search-highlight-persist
-            :ensure t
             :commands (global-evil-search-highlight-persist))
 
           (use-package evil-commentary
-            :ensure t
             :commands evil-commentary-mode)
 
           (use-package evil-snipe
-            :ensure t
             :commands (evil-snipe-mode evil-snipe-override-mode))
 
           (use-package evil-surround
-            :ensure t
             :commands (global-evil-surround-mode evil-surround-mode))
 
           (use-package evil-matchit
-            :ensure t
-            :commands (global-evil-matchit-mode evil-matchit-mode))
-
-          (use-package evil-jumper
-            :ensure t
-            :commands (global-evil-jumper-mode evil-jumper-mode)))
+            :commands (global-evil-matchit-mode evil-matchit-mode)))
 
   :config (progn
             (global-evil-leader-mode)
@@ -117,7 +85,6 @@
             (evil-snipe-override-mode 1)
             (global-evil-surround-mode 1)
             (global-evil-matchit-mode 1)
-            (global-evil-jumper-mode)
 
             ;; Remove pesky combos
             (global-unset-key (kbd "M-u"))
@@ -194,7 +161,6 @@
   :init (setq linum-relative-format "%3s   "))
 
 (use-package popwin
-  :ensure t
   :commands popwin-mode
   :init (setq popwin:special-display-config  '(("^\\*magit:.*\\*$" :regexp t :position top :height 20)
                                                    ("^\\*helm.*\\*$" :regexp t :position bottom :stick t)
@@ -211,7 +177,6 @@
             (evil-define-key 'normal popwin:keymap (kbd "q") 'popwin:close-popup-window)))
 
 (use-package smartparens
-  :ensure t
   :commands (smartparens-global-mode show-smartparens-global-mode)
   :init (use-package smartparens-config)
   :config
@@ -235,7 +200,6 @@
     (kbd "M-o") 'sp-forward-barf-sexp))
 
 (use-package writeroom-mode
-  :ensure t
   :commands writeroom-mode
   :init (progn
           (setq writeroom-restore-window-config t)
@@ -252,7 +216,6 @@
   :diminish undo-tree-mode)
 
 (use-package editorconfig
-  :ensure t
   :commands editorconfig-mode
   :config (progn
             (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-markup-indent-offset))
@@ -264,7 +227,6 @@
             (add-to-list 'editorconfig-indentation-alist '(evil-mode evil-shift-width))))
 
 (use-package smex
-  :ensure t
   :commands smex
   :bind (("M-x" . smex)
          ("≈" . smex)))
@@ -284,7 +246,6 @@
             (define-key shell-mode-map (kbd "C-c C-c") (lambda () (interactive) (delete-process (buffer-name))))))
 
 (use-package projectile
-  :ensure t
   :diminish projectile-mode
   :commands projectile-global-mode
   :init (progn
@@ -302,11 +263,9 @@
             (add-to-list 'projectile-globally-ignored-directories "bower_components")))
 
 (use-package perspective
-  :ensure t
   :commands persp-mode
   :init (progn
-          (use-package persp-projectile
-            :ensure t)))
+          (use-package persp-projectile)))
 
 (use-package dired
   :init (progn
@@ -328,7 +287,6 @@
             (evil-leader/set-key "kr" 'dired)))
 
 (use-package git-gutter
-  :ensure t
   :diminish git-gutter-mode
   :commands global-git-gutter-mode
   :config (progn
@@ -339,7 +297,6 @@
             (evil-leader/set-key "g r" 'git-gutter:revert-hunk)))
 
 (use-package magit
-  :ensure t
   :init (progn
           (setq vc-handled-backends ())
           (evil-set-initial-state 'git-rebase-mode 'emacs)
@@ -364,7 +321,6 @@
               (kbd "e") 'git-rebase-edit)))
 
 (use-package flycheck
-  :ensure t
   :diminish (flycheck-mode . " f")
   :commands global-flycheck-mode
   :init (progn
@@ -375,7 +331,6 @@
             (define-key evil-normal-state-map (kbd "[ e") 'previous-error)))
 
 (use-package yasnippet
-  :ensure t
   :commands yas-global-mode
   :diminish (yas-minor-mode . " y")
   :init (progn
@@ -393,13 +348,11 @@
               (kbd "C-i") 'eww-forward-url)))
 
 (use-package helm
-  :ensure t
   :commands helm-mode
   :init (progn
           (require 'helm-config)
 
           (use-package helm-projectile
-            :ensure t
             :config (progn
                       (global-set-key (kbd "C-p") 'helm-projectile)
                       (define-key evil-normal-state-map (kbd "C-p") 'helm-projectile)
@@ -408,7 +361,6 @@
                       (define-key helm-map (kbd "C-l") 'projectile-invalidate-cache)))
 
           (use-package helm-ag
-            :ensure t
             :init
             (use-package grep)
             (evil-set-initial-state 'helm-ag-mode 'emacs)
@@ -418,7 +370,6 @@
             (evil-define-key 'emacs helm-ag-mode-map (kbd "RET") 'helm-ag-mode-jump-other-window))
 
           (use-package helm-dash
-            :ensure t
             :init (progn
                     (setq helm-dash-docsets-path "~/.docset")
                     (setq helm-dash-browser-func 'eww)
@@ -434,28 +385,22 @@
                       (add-hook 'prog-mode-hook (lambda () (interactive) (setq helm-current-buffer (current-buffer))))))
 
           (use-package helm-swoop
-            :ensure t
             :config (progn
                         (evil-leader/set-key "sb" 'helm-swoop)
                         (evil-leader/set-key "sa" 'helm-multi-swoop-all)))
 
           (use-package helm-flycheck
-            :ensure t
-            :config (evil-leader/set-key "e l" 'helm-flycheck))
-
-          (use-package helm-buffer
-            :config
-            (define-key helm-buffer-map (kbd "C-d") 'helm-buffer-run-kill-buffers)))
+            :config (evil-leader/set-key "e l" 'helm-flycheck)))
 
   :config (progn
             (helm-autoresize-mode 1)
+            (define-key helm-buffer-map (kbd "C-d") 'helm-buffer-run-kill-buffers)
             (define-key helm-map (kbd "C-b") 'helm-keyboard-quit)
             (define-key helm-map (kbd "C-p") 'helm-keyboard-quit)
             (define-key helm-map (kbd "C-j") 'helm-next-line)
             (define-key helm-map (kbd "C-k") 'helm-previous-line)))
 
 (use-package company
-  :ensure t
   :diminish " c"
   :commands global-company-mode
   :defines company-dabbrev-downcase
@@ -493,18 +438,15 @@
           (setq-default fill-column 80)))
 
 (use-package js2-mode
-  :ensure t
   :diminish js2-minor-mode
   :commands (js2-mode js-mode js2-minor-mode)
   :init (progn
           (use-package tern
             :diminish " T"
             :commands (tern-mode)
-            :ensure t
             :init (progn
                     (add-hook 'js-mode-hook 'tern-mode)))
           (use-package company-tern
-            :ensure t
             :config (progn
                       (add-to-list 'company-backends 'company-tern)))
           (setq js2-highlight-level 3)
@@ -515,7 +457,6 @@
           (add-to-list 'interpreter-mode-alist '("node" . js-mode))))
 
 (use-package web-mode
-  :ensure t
   :preface (progn
              (defun jsxhint-predicate ()
                (and (executable-find "jsxhint")
@@ -551,7 +492,6 @@
             ;; Can't diminish this, because the logic relies on
             ;; reading the mode-line.
             ;; :diminish " e"
-            :ensure t
             :commands emmet-mode
             :init (progn
                     (add-hook 'sgml-mode-hook 'emmet-mode)
@@ -566,37 +506,30 @@
             (define-key prog-mode-map (kbd "C-x /") 'web-mode-element-close)))
 
 (use-package fish-mode
-  :ensure t
   :commands fish-mode)
 
 (use-package less-css-mode
-  :ensure t
   :commands less-css-mode
   :init (progn
           (add-to-list 'auto-mode-alist '("\\.less\\'" . less-css-mode))))
 
 (use-package stylus-mode
-  :ensure t
   :commands stylus-mode
   :init (progn
           (add-to-list 'auto-mode-alist '("\\.stylus\\'" . stylus-mode))))
 
 (use-package scss-mode
-  :ensure t
   :init (progn
           (add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
           (setq scss-compile-at-save nil)))
 
 (use-package php-mode
-  :ensure t
   :commands php-mode)
 
 (use-package markdown-mode
-  :ensure t
   :commands markdown-mode)
 
 (use-package lua-mode
-  :ensure t
   :commands lua-mode)
 
 (use-package swift-mode
@@ -610,23 +543,19 @@
                       (add-to-list 'company-backends 'company-sourcekit)))))
 
 (use-package dockerfile-mode
-  :ensure t
   :commands dockerfile-mode
   :init (progn
           (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))))
 
 (use-package puppet-mode
-  :ensure t
   :commands puppet-mode)
 
 (use-package yaml-mode
-  :ensure t
   :commands yaml-mode)
 
 (use-package ruby-mode
   :init
   (use-package robe
-    :ensure t
     :init (progn
             (when (executable-find "pry")
               (add-hook 'ruby-mode-hook 'robe-mode)))
@@ -635,7 +564,6 @@
                 (add-to-list 'company-backends 'company-robe)))))
 
 (use-package haskell-mode
-  :ensure t
   :commands (haskell-mode haskell-interactive-mode)
   :init
   (setq haskell-hoogle-url "https://www.stackage.org/lts/hoogle?q=%s")
@@ -665,7 +593,6 @@
   (evil-define-key 'normal haskell-mode-map (kbd "?") 'hoogle))
 
 (use-package rainbow-mode
-  :ensure t
   :diminish rainbow-mode
   :commands (rainbow-mode)
   :init (progn
@@ -673,18 +600,15 @@
           (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)))
 
 (use-package rainbow-delimiters
-  :ensure t
   :commands rainbow-delimiters-mode
   :init (progn
          (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)))
 
 (use-package ledger-mode
-  :ensure t
   :commands ledger-mode
   :init (progn
           (add-to-list 'auto-mode-alist '("\\.ledger\\'" . ledger-mode))
-          (use-package flycheck-ledger
-            :ensure t))
+          (use-package flycheck-ledger))
   :config (progn
             (evil-define-key 'normal ledger-mode-map
               (kbd "Y") 'ledger-copy-transaction-at-point
@@ -704,7 +628,7 @@
 (use-package org
   :ensure nil
   :init
-  (use-package evil-org :ensure t)
+  (use-package evil-org)
   (setq org-directory "~/.org/")
   (setq orglog-done 'time)
   (setq org-hide-leading-stars nil)
@@ -786,7 +710,6 @@
     (add-to-list 'org-agenda-files (expand-file-name "project.org"))))
 
 (use-package sx
-  :ensure t
   :commands (sx-tab-newest sx-search sx-authenticate sx-ask
               sx-inbox sx-tab-month sx-tab-starred sx-tab-featured
               sx-tab-topvoted sx-tab-frontpage sx-tab-unanswered

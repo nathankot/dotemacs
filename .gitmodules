@@ -4,9 +4,6 @@
 [submodule "vendor/hc-zenburn-theme"]
 	path = vendor/hc-zenburn-theme
 	url = https://github.com/nathankot/hc-zenburn-emacs.git
-[submodule "vendor/use-package"]
-	path = vendor/use-package
-	url = https://github.com/jwiegley/use-package.git
 [submodule "vendor/stack-ide"]
 	path = vendor/stack-ide
 	url = https://github.com/commercialhaskell/stack-ide.git
