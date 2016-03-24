@@ -32,7 +32,6 @@
 (depends-on "helm-swoop")
 (depends-on "helm-projectile")
 (depends-on "helm-flycheck")
-(depends-on "helm-buffer")
 
 (depends-on "magit")
 (depends-on "git-gutter")
