@@ -338,6 +338,8 @@
               (kbd "r") 'git-rebase-reword
               (kbd "e") 'git-rebase-edit)))
 
+(use-package gist)
+
 (use-package flycheck
   :diminish (flycheck-mode . " f")
   :commands global-flycheck-mode

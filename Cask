@@ -34,6 +34,7 @@
 (depends-on "helm-flycheck")
 
 (depends-on "magit")
+(depends-on "gist")
 (depends-on "git-gutter")
 
 (depends-on "projectile")
