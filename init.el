@@ -439,7 +439,7 @@
               '( company-css
                  company-elisp
                  company-clang
-                 ( company-capf
+                 ( ; company-capf
                    company-dabbrev-code
                    company-keywords
                    company-files
