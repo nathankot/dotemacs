@@ -802,5 +802,8 @@
   (file-exists-p (expand-file-name ".emacs.el"))
   (load (expand-file-name ".emacs.el")))
 
+(if (file-readable-p ".vars")
+  (load-file ".vars"))
+
 (provide 'init)
 ;;; init.el ends here
