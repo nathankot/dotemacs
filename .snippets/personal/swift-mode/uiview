@@ -1,0 +1,31 @@
+class $1 : UIView {
+
+  required init?(coder: NSCoder) {
+    super.init(coder: coder)
+    sharedInit()
+  }
+
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+    sharedInit()
+  }
+
+  func sharedInit() {
+    digest()
+  }
+
+  func digest() {
+    $0
+  }
+
+  override func prepareForInterfaceBuilder() {
+    super.prepareForInterfaceBuilder()
+    digest()
+  }
+
+  override func awakeFromNib() {
+    super.awakeFromNib()
+    digest()
+  }
+
+}
