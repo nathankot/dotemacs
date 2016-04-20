@@ -657,12 +657,12 @@
   (setq org-src-tab-acts-natively t) ;; you want this to have completion in blocks
   (setq org-hide-emphasis-markers t) ;; to hide the *,=, or / markers
   (setq org-pretty-entities t)       ;; to have \alpha, \to and others display as utf8 http://orgmode.org/manual/Special-symbols.html
-  (setq org-agenda-files (list "~/.org/home.org" "~/.org/work.org" "~/.org/notes.org"))
+  (setq org-agenda-files (list "~/.org/tasks.org" "~/.org/notes.org"))
   (setq org-default-notes-file (concat org-directory "/notes.org"))
   (setq org-enforce-todo-checkbox-dependencies t)
   (setq org-enforce-todo-dependencies t)
   (setq org-todo-keywords '((sequence "TODO" "DOING" "|" "DONE" "CANCELED" "DELEGATED")))
-  (setq org-agenda-files (quote ("~/.org/home.org" "~/.org/work.org" "~/.org/notes.org")))
+  (setq org-agenda-files (quote ("~/.org/tasks.org" "~/.org/notes.org")))
   (setq org-todo-keyword-faces
     '(("TODO" . org-warning)
        ("DOING" . "white")
@@ -686,11 +686,11 @@
       (let ((persp (gethash "org" perspectives-hash)))
         (when (null persp) ; When perspective doesn't exist
           (persp-switch "org")
-          (when (file-exists-p "~/.org/home.org")
-            (find-file "~/.org/home.org"))
-          (when (file-exists-p "~/.org/work.org")
+          (when (file-exists-p "~/.org/tasks.org")
+            (find-file "~/.org/tasks.org"))
+          (when (file-exists-p "~/.org/notes.org")
             (split-window-right)
-            (find-file "~/.org/work.org")) ; Or when it already exists
+            (find-file "~/.org/notes.org")) ; Or when it already exists
           (persp-activate persp)))))
 
   (evil-leader/set-key
@@ -707,18 +707,18 @@
           (evil-org-eol-call (quote org-insert-heading-respect-content))))
 
   (evil-define-key 'normal org-mode-map
-    (kbd "m") 'org-set-tags
-    (kbd "+") 'org-priority-up
-    (kbd "-") 'org-priority-down
+    (kbd "m")   'org-set-tags
+    (kbd "+")   'org-priority-up
+    (kbd "-")   'org-priority-down
     (kbd "C-i") 'org-cycle)
 
   (evil-define-key 'emacs org-agenda-mode-map
-    (kbd "d") 'org-agenda-deadline
-    (kbd "s") 'org-agenda-schedule
-    (kbd "+") 'org-priority-up
-    (kbd "-") 'org-priority-down
-    (kbd "q") 'org-agenda-quit
-    (kbd "w") 'org-save-all-org-buffers)
+    (kbd "d")   'org-agenda-deadline
+    (kbd "s")   'org-agenda-schedule
+    (kbd "+")   'org-priority-up
+    (kbd "-")   'org-priority-down
+    (kbd "q")   'org-agenda-quit
+    (kbd "w")   'org-save-all-org-buffers)
 
   (evil-leader/set-key-for-mode 'org-agenda-mode-map
     (kbd "w") 'org-save-all-org-buffers)
