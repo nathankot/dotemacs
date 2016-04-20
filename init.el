@@ -120,7 +120,9 @@
             (define-key evil-normal-state-map (kbd "C-k") 'evil-window-prev)
             (define-key evil-normal-state-map (kbd "C-l") 'evil-window-increase-width)
             (define-key evil-normal-state-map (kbd "C-h") 'evil-window-decrease-width)
-            (define-key evil-insert-state-map (kbd "M-RET") 'comment-indent-new-line)
+
+            (define-key evil-insert-state-map (kbd "M-RET") 'newline-and-indent)
+            (define-key evil-insert-state-map (kbd "RET") 'comment-indent-new-line)
 
             (define-key evil-normal-state-map (kbd "-")
               (lambda ()
@@ -460,21 +462,25 @@
 (use-package js2-mode
   :diminish js2-minor-mode
   :commands (js2-mode js-mode js2-minor-mode)
-  :init (progn
-          (use-package tern
-            :diminish " T"
-            :commands (tern-mode)
-            :init (progn
-                    (add-hook 'js-mode-hook 'tern-mode)))
-          (use-package company-tern
-            :config (progn
-                      (add-to-list 'company-backends 'company-tern)))
-          (setq js2-highlight-level 3)
-          (setq js2-mode-show-parse-errors nil)
-          (setq js2-mode-show-strict-warnings nil)
+  :init
+  (progn
+    (use-package tern
+      :diminish " T"
+      :commands (tern-mode)
+      :init (progn
+              (add-hook 'js-mode-hook 'tern-mode)))
+    (use-package company-tern
+      :config (progn
+                (add-to-list 'company-backends 'company-tern)))
+    (setq js2-highlight-level 3)
+    (setq js2-mode-show-parse-errors nil)
+    (setq js2-mode-show-strict-warnings nil)
                                         ; Use js2-mode as a minor mode (preferred way)
-          (add-hook 'js-mode-hook 'js2-minor-mode)
-          (add-to-list 'interpreter-mode-alist '("node" . js-mode))))
+    (add-hook 'js-mode-hook 'js2-minor-mode)
+    (add-to-list 'interpreter-mode-alist '("node" . js-mode)))
+  :config
+  (progn
+    (evil-define-key 'insert js2-minor-mode-map (kbd "RET") 'js2-line-break)))
 
 (use-package web-mode
   :preface (progn
