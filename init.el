@@ -110,6 +110,7 @@
             (global-unset-key (kbd "M-j"))
             (global-unset-key (kbd "M-k"))
             (global-unset-key (kbd "M-l"))
+            (global-unset-key (kbd "C-w"))
 
             ;; Window management
             (global-set-key (kbd "C-q") 'delete-window)
@@ -121,6 +122,7 @@
             (define-key evil-normal-state-map (kbd "C-l") 'evil-window-increase-width)
             (define-key evil-normal-state-map (kbd "C-h") 'evil-window-decrease-width)
 
+            (define-key evil-insert-state-map (kbd "C-w") 'backward-kill-word)
             (define-key evil-insert-state-map (kbd "M-RET") 'newline-and-indent)
             (define-key evil-insert-state-map (kbd "RET") 'comment-indent-new-line)
 
