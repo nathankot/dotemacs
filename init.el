@@ -268,6 +268,11 @@
             (evil-define-key 'normal shell-mode-map (kbd "q") 'delete-window)
             (define-key shell-mode-map (kbd "C-c C-c") (lambda () (interactive) (delete-process (buffer-name))))))
 
+(use-package profiler
+  :ensure nil
+  :init (progn
+          (evil-set-initial-state 'profiler-report-mode 'emacs)))
+
 (use-package projectile
   :diminish projectile-mode
   :commands projectile-global-mode
