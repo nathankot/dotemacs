@@ -259,6 +259,8 @@
   :init (progn
           (evil-set-initial-state 'shell-mode 'normal)
           (add-hook 'shell-mode-hook 'read-only-mode)
+          (add-hook 'shell-mode-hook (lambda () (linum-mode -1)))
+          (add-hook 'shell-mode-hook (lambda () (interactive) (buffer-disable-undo)))
           (defun shell-make (command)
             "Call `make *command*` in the projectile root directory under a buffer named '*shell:make*'"
            (interactive)
