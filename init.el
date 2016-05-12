@@ -492,6 +492,8 @@
   (progn
     (evil-define-key 'insert js2-minor-mode-map (kbd "RET") 'js2-line-break)))
 
+(use-package coffee-mode)
+
 (use-package web-mode
   :preface (progn
              (defun jsxhint-predicate ()
