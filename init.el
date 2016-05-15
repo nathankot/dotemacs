@@ -202,7 +202,8 @@
           (setq projectile-enable-caching t)
           (setq projectile-completion-system 'ivy)
           (setq projectile-indexing-method 'alien)
-          (evil-leader/set-key "f o" 'projectile-find-other-file))
+          (evil-leader/set-key "f o" 'projectile-find-other-file)
+          (evil-leader/set-key "f t" 'projectile-find-implementation-or-test))
   :config (progn
             (define-key ivy-minibuffer-map (kbd "C-l") 'projectile-invalidate-cache)
             (add-to-list 'projectile-project-root-files ".projectile")
