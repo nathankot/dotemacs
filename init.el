@@ -163,12 +163,27 @@
                 (evil-delay
                   `(and (boundp ',keymap-symbol) (keymapp (symbol-value ',keymap-symbol)))
                   `(let ((map (symbol-value ',keymap-symbol)))
-                     (dolist (k '("h" "j" "k" "l" "v"))
+                     (dolist (k '("h" "j" "k" "l" "v" "m" "n"))
                        (-when-let (def (lookup-key map k))
                          (define-key map (upcase k) def)
                          (define-key map k nil)))
+
                      (evil-add-hjkl-bindings map 'emacs
-                       "v" 'evil-visual-char))
+                       "v" 'evil-visual-char)
+
+                     (evil-define-key 'emacs map
+                       (kbd "m") nil
+                       (kbd "C-e") 'evil-scroll-line-down
+                       (kbd "C-y") 'evil-scroll-line-up
+                       (kbd "C-u") 'evil-scroll-up
+                       (kbd "C-d") 'evil-scroll-down
+                       (kbd "SPC") 'evil-search-forward
+                       (kbd "/") 'evil-search-forward
+                       (kbd "n") 'evil-search-next
+                       (kbd "M") 'evil-window-middle
+                       (kbd "H") 'evil-window-top
+                       (kbd "L") 'evil-window-bottom
+                       (kbd "gg") 'evil-goto-first-line))
                   'after-load-functions t nil
                   (format "evil-define-emacs-defaults-in-%s" (symbol-name keymap-symbol)))))
 
