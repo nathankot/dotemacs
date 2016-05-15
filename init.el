@@ -542,15 +542,6 @@
           (add-to-list 'auto-mode-alist '("\\.html.jsx\\'" . web-mode))
           (add-to-list 'magic-mode-alist '("\/\*\*.*@jsx" . web-mode))
 
-          (flycheck-define-checker jsxhint
-            "A JSX syntax and style checker based on JSXHint."
-            :command ("jsxhint" source)
-            :error-patterns ((error line-start (1+ nonl) ": line " line ", col " column ", " (message) line-end))
-            :predicate jsxhint-predicate
-            :modes (web-mode))
-
-          (add-to-list 'flycheck-checkers 'jsxhint)
-
           (use-package emmet-mode
             ;; Can't diminish this, because the logic relies on
             ;; reading the mode-line.
@@ -566,7 +557,16 @@
   :config (progn
             (add-hook 'web-mode-hook (lambda () (yas-activate-extra-mode 'js-mode)))
             (add-hook 'web-mode-hook 'rainbow-mode)
-            (define-key prog-mode-map (kbd "C-x /") 'web-mode-element-close)))
+            (define-key prog-mode-map (kbd "C-x /") 'web-mode-element-close)
+
+            (flycheck-define-checker jsxhint
+              "A JSX syntax and style checker based on JSXHint."
+              :command ("jsxhint" source)
+              :error-patterns ((error line-start (1+ nonl) ": line " line ", col " column ", " (message) line-end))
+              :predicate jsxhint-predicate
+              :modes (web-mode))
+
+            (add-to-list 'flycheck-checkers 'jsxhint)))
 
 (use-package fish-mode
   :commands fish-mode)
