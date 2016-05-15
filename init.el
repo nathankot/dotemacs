@@ -4,7 +4,6 @@
 
 ;;; Code:
 
-;; (require 'package)
 ;; (package-initialize)
 
 (custom-set-faces
