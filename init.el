@@ -229,6 +229,7 @@
                       (define-key swiper-map (kbd "C-r") 'swiper-query-replace)))
 
           (use-package counsel
+            :diminish counsel-mode
             :bind (("C-s" . counsel-ag))))
 
   :config (progn
@@ -441,14 +442,13 @@
             (defvar counsel-dash--results nil)
 
             (defun counsel-dash-collection (s &rest _)
-              (if (< (length s) 3)
-                (counsel-more-chars 3)
+              (when (>= (length s) 3)
                 (let* ( (helm-pattern s)
                         (results (helm-dash-search)) )
                   (setq counsel-dash--results results)
                   (mapcar 'car results))))
 
-            (defun counsel-dash ()
+            (defun counsel-dash (&optional initial)
               (interactive)
               (helm-dash-initialize-debugging-buffer)
               (helm-dash-create-buffer-connections)
@@ -457,12 +457,13 @@
                 'counsel-dash-collection
                 :dynamic-collection t
                 :history 'helm-dash-history-input
+                :initial-input initial
                 :action (lambda (s)
                           (-when-let (result (-drop 1 (-first (-compose (-partial 'string= s) 'car) counsel-dash--results)))
                             (helm-dash-browse-url result)))))
 
-            (define-key evil-normal-state-map (kbd "?") 'helm-dash-at-point)
-            (define-key evil-normal-state-map (kbd "C-f") 'helm-dash)
+            (define-key evil-normal-state-map (kbd "?") (lambda () (interactive) (counsel-dash (thing-at-point 'symbol))))
+            (define-key evil-normal-state-map (kbd "C-f") 'counsel-dash)
 
             (add-hook 'ruby-mode-hook (lambda () (setq-local helm-dash-docsets '("Ruby"))))
             (add-hook 'dockerfile-mode-hook (lambda () (setq-local helm-dash-docsets '("Docker"))))
@@ -854,6 +855,7 @@
 (projectile-global-mode +1)
 (persp-mode)
 (ivy-mode 1)
+(counsel-mode 1)
 (global-flycheck-mode)
 (global-company-mode)
 (yas-global-mode 1)
