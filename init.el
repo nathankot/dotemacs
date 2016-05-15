@@ -150,6 +150,10 @@
             (define-key evil-normal-state-map (kbd "SPC") 'evil-search-forward)
             (define-key evil-visual-state-map (kbd "C-i") 'indent-region)
 
+            ;; Remove keys that we want to use
+            (define-key evil-normal-state-map (kbd "C-p") nil)
+            (define-key evil-motion-state-map (kbd "C-b") nil)
+
             ;; Default keys for emacs state
             (defun apply-emacs-defaults-to-mode (mode)
               (let ((keymap-symbol (intern (concat (symbol-name mode) "-map"))))
@@ -188,6 +192,60 @@
 ;; Utilities
 ;; ================================================================================
 
+(use-package projectile
+  :diminish projectile-mode
+  :commands projectile-global-mode
+  :bind ( ("C-p" . projectile-find-file)
+          ("C-b" . projectile-switch-to-buffer) )
+  :init (progn
+          (setq projectile-require-project-root nil)
+          (setq projectile-enable-caching t)
+          (setq projectile-completion-system 'ivy)
+          (setq projectile-indexing-method 'alien)
+          (evil-leader/set-key "f o" 'projectile-find-other-file))
+  :config (progn
+            (define-key ivy-minibuffer-map (kbd "C-l") 'projectile-invalidate-cache)
+            (add-to-list 'projectile-project-root-files ".projectile")
+            (add-to-list 'projectile-project-root-files ".git")
+            (add-to-list 'projectile-globally-ignored-directories ".cache")
+            (add-to-list 'projectile-globally-ignored-directories ".tmp")
+            (add-to-list 'projectile-globally-ignored-directories "tmp")
+            (add-to-list 'projectile-globally-ignored-directories "node_modules")
+            (add-to-list 'projectile-globally-ignored-directories "bower_components")))
+
+(use-package ivy
+  :diminish ivy-mode
+  :commands ivy-mode
+  :init (progn
+          (define-key evil-normal-state-map (kbd "DEL") 'ivy-resume)
+
+          (use-package swiper
+            :init (progn
+                    (evil-leader/set-key
+                      "ss" 'swiper
+                      "sa" 'swiper-all))
+            :config (progn
+                      (define-key swiper-map (kbd "C-r") 'swiper-query-replace)))
+
+          (use-package counsel
+            :bind (("C-s" . counsel-ag))))
+
+  :config (progn
+
+            (define-key ivy-minibuffer-map (kbd "C-q") 'keyboard-escape-quit)
+            (define-key ivy-minibuffer-map (kbd "C-p") 'keyboard-escape-quit)
+            (define-key ivy-minibuffer-map (kbd "C-s") 'keyboard-escape-quit)
+            (define-key ivy-minibuffer-map (kbd "C-b") 'keyboard-escape-quit)
+
+            (define-key ivy-minibuffer-map (kbd "TAB") 'ivy-dispatching-done)
+            (define-key ivy-minibuffer-map (kbd "M-RET") 'ivy-next-line-and-call)
+            (define-key ivy-minibuffer-map (kbd "C-@") 'ivy-restrict-to-matches)
+
+            (define-key ivy-minibuffer-map (kbd "C-j") 'ivy-next-line)
+            (define-key ivy-minibuffer-map (kbd "C-k") 'ivy-previous-line)
+            (define-key ivy-minibuffer-map (kbd "C-i") 'ivy-next-history-element)
+            (define-key ivy-minibuffer-map (kbd "C-o") 'ivy-previous-history-element)))
+
 (use-package linum-relative
   :load-path "vendor/linum-relative"
   :commands linum-relative-on
@@ -196,16 +254,15 @@
 (use-package popwin
   :commands popwin-mode
   :init (setq popwin:special-display-config  '(("^\\*magit:.*\\*$" :regexp t :position top :height 20)
-                                                   ("^\\*helm.*\\*$" :regexp t :position bottom :stick t)
-                                                   ("^\\*shell:.*\\*$" :regexp t :position bottom :noselect t :tail t :stick t)
-                                                   (help-mode :position bottom :noselect t :stick t)
-                                                   (completion-list-mode :noselect t)
-                                                   (grep-mode :noselect t)
-                                                   (occur-mode :noselect t)
-                                                   ("*Warnings*" :noselect t)
-                                                   ("*GHC Error*" :noselect t)
-                                                   ("*Miniedit Help*" :noselect t)
-                                                   ("*undo-tree*" :width 60 :position right)))
+                                                ("^\\*shell:.*\\*$" :regexp t :position bottom :noselect t :tail t :stick t)
+                                                (help-mode :position bottom :noselect t :stick t)
+                                                (completion-list-mode :noselect t)
+                                                (grep-mode :noselect t)
+                                                (occur-mode :noselect t)
+                                                ("*Warnings*" :noselect t)
+                                                ("*GHC Error*" :noselect t)
+                                                ("*Miniedit Help*" :noselect t)
+                                                ("*undo-tree*" :width 60 :position right)))
   :config (progn
             (evil-define-key 'normal popwin:keymap (kbd "q") 'popwin:close-popup-window)))
 
@@ -259,11 +316,6 @@
             (add-to-list 'editorconfig-indentation-alist '(haskell-mode haskell-indent-spaces haskell-indent-offset))
             (add-to-list 'editorconfig-indentation-alist '(evil-mode evil-shift-width))))
 
-(use-package smex
-  :commands smex
-  :bind (("M-x" . smex)
-         ("≈" . smex)))
-
 (use-package shell
   :functions shell-make
   :init (progn
@@ -285,31 +337,10 @@
   :init (progn
           (evil-set-initial-state 'profiler-report-mode 'emacs)))
 
-(use-package projectile
-  :diminish projectile-mode
-  :commands projectile-global-mode
-  :init (progn
-          (setq projectile-require-project-root nil)
-          (setq projectile-enable-caching t)
-          (setq projectile-completion-system 'ido)
-          (setq projectile-indexing-method 'alien))
-  :config (progn
-            (add-to-list 'projectile-project-root-files ".projectile")
-            (add-to-list 'projectile-project-root-files ".git")
-            (add-to-list 'projectile-globally-ignored-directories ".cache")
-            (add-to-list 'projectile-globally-ignored-directories ".tmp")
-            (add-to-list 'projectile-globally-ignored-directories "tmp")
-            (add-to-list 'projectile-globally-ignored-directories "node_modules")
-            (add-to-list 'projectile-globally-ignored-directories "bower_components")))
-
 (use-package perspective
   :commands persp-mode
   :init (progn
-          (use-package persp-projectile)))
-
-(use-package dired
-  :init (progn
-          (setq dired-use-ls-dired nil))
+          (use-package persp-projectile))
   :config (progn
             (define-key evil-normal-state-map (kbd "C-@") 'persp-switch)
             (define-key evil-normal-state-map (kbd ")") 'persp-next)
@@ -347,6 +378,7 @@
 (use-package magit
   :init (progn
           (setq vc-handled-backends ())
+          (setq magit-completing-read-function 'ivy-completing-read)
           (evil-set-initial-state 'git-rebase-mode 'emacs)
           (evil-set-initial-state 'text-mode 'insert)
           (evil-set-initial-state 'git-commit-major-mode 'insert)
@@ -397,58 +429,46 @@
               (kbd "C-o") 'eww-back-url
               (kbd "C-i") 'eww-forward-url)))
 
-(use-package helm
-  :commands helm-mode
+(use-package helm-dash
+  :functions (counsel-dash-collection counsel-dash)
   :init (progn
-          (require 'helm-config)
-
-          (use-package helm-projectile
-            :config (progn
-                      (global-set-key (kbd "C-p") 'helm-projectile)
-                      (define-key evil-normal-state-map (kbd "C-p") 'helm-projectile)
-                      (define-key evil-normal-state-map (kbd "C-b") 'helm-projectile-switch-to-buffer)
-                      (evil-leader/set-key "kb" 'helm-projectile-find-dir)
-                      (define-key helm-map (kbd "C-l") 'projectile-invalidate-cache)))
-
-          (use-package helm-ag
-            :init
-            (use-package grep)
-            (evil-set-initial-state 'helm-ag-mode 'emacs)
-            :config
-            (define-key helm-ag-map (kbd "C-s") 'helm-ag--run-save-buffer)
-            (define-key evil-normal-state-map (kbd "C-s") 'helm-projectile-ag)
-            (evil-define-key 'emacs helm-ag-mode-map (kbd "RET") 'helm-ag-mode-jump-other-window))
-
-          (use-package helm-dash
-            :init (progn
-                    (setq helm-dash-docsets-path "~/.docset")
-                    (setq helm-dash-browser-func 'eww)
-                    (setq helm-dash-common-docsets '("HTML" "CSS")))
-            :config (progn
-                      (define-key evil-normal-state-map (kbd "?") 'helm-dash-at-point)
-                      (define-key evil-normal-state-map (kbd "C-f") 'helm-dash)
-                      (add-hook 'ruby-mode-hook (lambda () (setq-local helm-dash-docsets '("Ruby"))))
-                      (add-hook 'dockerfile-mode-hook (lambda () (setq-local helm-dash-docsets '("Docker"))))
-                      (add-hook 'js2-minor-mode-hook (lambda () (setq-local helm-dash-docsets '("Javascript" "NodeJS"))))
-                      (add-hook 'web-mode-hook (lambda () (setq-local helm-dash-docsets '("Javascript" "HTML" "CSS"))))
-                      (add-hook 'swift-mode-hook (lambda () (setq-local helm-dash-docsets '("iOS" "Swift"))))
-                      (add-hook 'prog-mode-hook (lambda () (interactive) (setq helm-current-buffer (current-buffer))))))
-
-          (use-package helm-swoop
-            :config (progn
-                        (evil-leader/set-key "sb" 'helm-swoop)
-                        (evil-leader/set-key "sa" 'helm-multi-swoop-all)))
-
-          (use-package helm-flycheck
-            :config (evil-leader/set-key "e l" 'helm-flycheck)))
+          (setq helm-dash-docsets-path "~/.docset")
+          (setq helm-dash-browser-func 'eww)
+          (setq helm-dash-common-docsets '("HTML" "CSS")))
 
   :config (progn
-            (helm-autoresize-mode 1)
-            (define-key helm-buffer-map (kbd "C-d") 'helm-buffer-run-kill-buffers)
-            (define-key helm-map (kbd "C-b") 'helm-keyboard-quit)
-            (define-key helm-map (kbd "C-p") 'helm-keyboard-quit)
-            (define-key helm-map (kbd "C-j") 'helm-next-line)
-            (define-key helm-map (kbd "C-k") 'helm-previous-line)))
+            (defvar counsel-dash--results nil)
+
+            (defun counsel-dash-collection (s &rest _)
+              (if (< (length s) 3)
+                (counsel-more-chars 3)
+                (let* ( (helm-pattern s)
+                        (results (helm-dash-search)) )
+                  (setq counsel-dash--results results)
+                  (mapcar 'car results))))
+
+            (defun counsel-dash ()
+              (interactive)
+              (helm-dash-initialize-debugging-buffer)
+              (helm-dash-create-buffer-connections)
+              (helm-dash-create-common-connections)
+              (ivy-read "Documentation for: "
+                'counsel-dash-collection
+                :dynamic-collection t
+                :history 'helm-dash-history-input
+                :action (lambda (s)
+                          (-when-let (result (-drop 1 (-first (-compose (-partial 'string= s) 'car) counsel-dash--results)))
+                            (helm-dash-browse-url result)))))
+
+            (define-key evil-normal-state-map (kbd "?") 'helm-dash-at-point)
+            (define-key evil-normal-state-map (kbd "C-f") 'helm-dash)
+
+            (add-hook 'ruby-mode-hook (lambda () (setq-local helm-dash-docsets '("Ruby"))))
+            (add-hook 'dockerfile-mode-hook (lambda () (setq-local helm-dash-docsets '("Docker"))))
+            (add-hook 'js2-minor-mode-hook (lambda () (setq-local helm-dash-docsets '("Javascript" "NodeJS"))))
+            (add-hook 'web-mode-hook (lambda () (setq-local helm-dash-docsets '("Javascript" "HTML" "CSS"))))
+            (add-hook 'swift-mode-hook (lambda () (setq-local helm-dash-docsets '("iOS" "Swift"))))
+            (add-hook 'prog-mode-hook (lambda () (interactive) (setq helm-current-buffer (current-buffer))))))
 
 (use-package company
   :diminish " c"
@@ -832,7 +852,7 @@
 (evil-mode 1)
 (projectile-global-mode +1)
 (persp-mode)
-(global-git-gutter-mode +1)
+(ivy-mode 1)
 (global-flycheck-mode)
 (global-company-mode)
 (yas-global-mode 1)

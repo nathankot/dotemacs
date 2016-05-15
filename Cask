@@ -19,19 +19,16 @@
 (depends-on "sx")
 (depends-on "smartparens")
 (depends-on "smart-mode-line")
-(depends-on "smex")
 (depends-on "writeroom-mode")
 (depends-on "tern")
 
 (depends-on "flycheck")
 (depends-on "flycheck-ledger")
 
-(depends-on "helm")
-(depends-on "helm-ag")
+(depends-on "ivy")
+(depends-on "counsel")
+(depends-on "swiper")
 (depends-on "helm-dash")
-(depends-on "helm-swoop")
-(depends-on "helm-projectile")
-(depends-on "helm-flycheck")
 
 (depends-on "magit")
 (depends-on "gist")
