@@ -36,7 +36,6 @@
 
 (depends-on "projectile")
 (depends-on "perspective")
-(depends-on "persp-projectile")
 
 (depends-on "yasnippet")
 

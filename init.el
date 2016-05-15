@@ -138,6 +138,7 @@
             (evil-leader/set-key "i" 'evil-window-move-far-left)
             (evil-leader/set-key "a" 'align-regexp)
             (evil-leader/set-key "SPC" 'evil-search-highlight-persist-remove-all)
+
             (evil-leader/set-key "m i" (lambda () (interactive) (shell-make "install")))
             (evil-leader/set-key "m r" (lambda () (interactive) (shell-make "run")))
             (evil-leader/set-key "m b" (lambda () (interactive) (shel-make "build")))
@@ -209,6 +210,8 @@
             (add-to-list 'projectile-project-root-files ".projectile")
             (add-to-list 'projectile-project-root-files ".git")
             (add-to-list 'projectile-globally-ignored-directories ".cache")
+            (add-to-list 'projectile-globally-ignored-directories ".cask")
+            (add-to-list 'projectile-globally-ignored-directories ".stack")
             (add-to-list 'projectile-globally-ignored-directories ".tmp")
             (add-to-list 'projectile-globally-ignored-directories "tmp")
             (add-to-list 'projectile-globally-ignored-directories "node_modules")
@@ -285,9 +288,8 @@
     (kbd "C-k") 'sp-splice-sexp-killing-backward
     (kbd "C-j") 'sp-rewrap-sexp
     (kbd "C-c") 'sp-convolute-sexp
-    (kbd "C-b") 'sp-backward-unwrap-sexp
     (kbd "C-w") 'sp-kill-sexp
-    (kbd "C-x") 'sp-backward-kill-sexp
+    (kbd "C-b") 'sp-backward-kill-sexp
     (kbd "M-i") 'sp-forward-slurp-sexp
     (kbd "M-o") 'sp-forward-barf-sexp))
 
@@ -341,8 +343,6 @@
 
 (use-package perspective
   :commands persp-mode
-  :init (progn
-          (use-package persp-projectile))
   :config (progn
             (define-key evil-normal-state-map (kbd "C-@") 'persp-switch)
             (define-key evil-normal-state-map (kbd ")") 'persp-next)
@@ -405,7 +405,7 @@
 (use-package gist)
 
 (use-package flycheck
-  :diminish (flycheck-mode . " f")
+  :diminish flycheck-mode
   :commands global-flycheck-mode
   :init (progn
           (setq flycheck-idle-change-delay 6)
