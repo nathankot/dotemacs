@@ -819,6 +819,7 @@
 (load-theme 'hc-zenburn t)
 (sml/setup)
 (sml/apply-theme 'respectful)
+
 (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (menu-bar-mode -1) ;; Disable menu bar
 (auto-save-mode nil) ;; Disable autosaving
@@ -828,18 +829,20 @@
 (global-undo-tree-mode 1)
 (global-linum-mode)
 (linum-relative-on)
+
 (popwin-mode 1)
 (smartparens-global-mode t)
 (show-smartparens-global-mode t)
+(global-git-gutter-mode +1)
 (editorconfig-mode 1)
+
+(evil-mode 1)
 (projectile-global-mode +1)
 (persp-mode)
 (global-git-gutter-mode +1)
 (global-flycheck-mode)
 (global-company-mode)
 (yas-global-mode 1)
-(helm-mode 1)
-(evil-mode 1)
 
 ;; Load any local configuration if it exists
 (and
