@@ -823,7 +823,7 @@
 (setq backup-inhibited t)
 (setq auto-save-default nil)
 (setq scroll-margin 5 scroll-conservatively 9999 scroll-step 1) ;; Smooth scrolling
-(setq gc-cons-threshold 20000000) ;; Increase garbage collection limit
+(setq gc-cons-threshold 134217728) ;; Increase garbage collection limit
 (setq visible-bell nil)
 (setq ring-bell-function 'ignore)
 (setq blink-matching-paren nil)
