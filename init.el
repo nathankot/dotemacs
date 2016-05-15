@@ -322,16 +322,24 @@
             (define-key evil-normal-state-map (kbd ")") 'persp-next)
             (define-key evil-normal-state-map (kbd "(") 'persp-prev)
             (evil-leader/set-key "p r" 'persp-rename)
-            (evil-leader/set-key "p k" 'persp-kill)
-            (evil-define-key 'normal dired-mode-map
+            (evil-leader/set-key "p k" 'persp-kill)))
+
+(use-package dired
+  :init (progn
+          (setq dired-use-ls-dired nil)
+          (evil-leader/set-key "kr" 'dired)
+          (evil-set-initial-state 'dired-mode 'emacs))
+  :config (progn
+            (define-key dired-mode-map (kbd "(") nil)
+            (evil-define-key 'emacs dired-mode-map
               (kbd "m") nil
+              (kbd "TAB") 'dired-hide-details-mode
               (kbd "r") 'revert-buffer
               (kbd "md") 'dired-do-delete
               (kbd "mc") 'dired-do-copy
               (kbd "mm") 'dired-do-rename
               (kbd "mad") 'dired-create-directory
-              (kbd "maf") 'find-file)
-            (evil-leader/set-key "kr" 'dired)))
+              (kbd "maf") 'find-file)))
 
 (use-package git-gutter
   :diminish git-gutter-mode
