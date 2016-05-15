@@ -57,12 +57,6 @@
 ;; ================================================================================
 
 (use-package evil
-  :commands (evil-mode
-              evil-define-key
-              evil-set-initial-state
-              evil-add-hjkl-bindings
-              evil-leader/set-key
-              evil-leader/set-key-for-mode)
   :init (progn
           (setq evil-want-C-u-scroll t
                 evil-overriding-maps nil
