@@ -284,7 +284,11 @@
             :diminish counsel-mode
             :preface (defun counsel-projectile-ag () (interactive) (counsel-ag "" (projectile-project-root)))
             :functions (counsel-projectile-ag)
-            :bind (("C-s" . counsel-projectile-ag)))
+            :bind (("C-s" . counsel-projectile-ag))
+            :init (evil-leader/set-key "s"
+                    (lambda ()
+                      (interactive)
+                      (counsel-ag (thing-at-point 'symbol) (projectile-project-root)))))
 
           (use-package wgrep
             :commands (wgrep-change-to-wgrep-mode)
@@ -546,7 +550,7 @@
           (setq helm-dash-docsets-path "~/.docset")
           (setq helm-dash-browser-func 'eww)
           (setq helm-dash-common-docsets '("HTML" "CSS"))
-          (define-key evil-normal-state-map (kbd "?") (lambda () (interactive) (counsel-dash (thing-at-point 'symbol))))
+          (evil-leader/set-key "f" (lambda () (interactive) (counsel-dash (thing-at-point 'symbol))))
           (define-key evil-normal-state-map (kbd "C-f") 'counsel-dash))
 
   :config (progn
