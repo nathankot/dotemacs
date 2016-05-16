@@ -552,15 +552,13 @@
           (setq helm-dash-browser-func 'eww)
           (setq helm-dash-common-docsets '("HTML" "CSS"))
           (evil-leader/set-key "f" (lambda () (interactive) (counsel-dash (thing-at-point 'symbol))))
-          (define-key evil-normal-state-map (kbd "C-f") 'counsel-dash))
-
-  :config (progn
-            (add-hook 'ruby-mode-hook (lambda () (setq-local helm-dash-docsets '("Ruby"))))
-            (add-hook 'dockerfile-mode-hook (lambda () (setq-local helm-dash-docsets '("Docker"))))
-            (add-hook 'js2-minor-mode-hook (lambda () (setq-local helm-dash-docsets '("Javascript" "NodeJS"))))
-            (add-hook 'web-mode-hook (lambda () (setq-local helm-dash-docsets '("Javascript" "HTML" "CSS"))))
-            (add-hook 'swift-mode-hook (lambda () (setq-local helm-dash-docsets '("iOS" "Swift"))))
-            (add-hook 'prog-mode-hook (lambda () (interactive) (setq helm-current-buffer (current-buffer))))))
+          (define-key evil-normal-state-map (kbd "C-f") 'counsel-dash)
+          (add-hook 'ruby-mode-hook (lambda () (setq-local helm-dash-docsets '("Ruby"))))
+          (add-hook 'dockerfile-mode-hook (lambda () (setq-local helm-dash-docsets '("Docker"))))
+          (add-hook 'js2-minor-mode-hook (lambda () (setq-local helm-dash-docsets '("Javascript" "NodeJS"))))
+          (add-hook 'web-mode-hook (lambda () (setq-local helm-dash-docsets '("Javascript" "HTML""CSS"))))
+          (add-hook 'swift-mode-hook (lambda () (setq-local helm-dash-docsets '("iOS" "Swift"))))
+          (add-hook 'prog-mode-hook (lambda () (interactive) (setq helm-current-buffer (current-buffer))))))
 
 (use-package company
   :diminish " c"
