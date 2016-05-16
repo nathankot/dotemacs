@@ -28,7 +28,46 @@
 (use-package dash)
 (use-package exec-path-from-shell :init (exec-path-from-shell-initialize))
 
+;; Basic settings.
+;; ================================================================================
+
+(when (eq system-type 'darwin)
+  (setq interprogram-cut-function
+    (lambda (text &optional push)
+      (let ((process-connection-type nil))
+        (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+          (process-send-string proc text)
+          (process-send-eof proc)))))
+  (defun pbpaste ()
+    "Call pbpaste and insert the results"
+    (interactive)
+    (insert (shell-command-to-string "pbpaste"))))
+
 (defun print-point () (interactive) (message "%d" (point)))
+(setq debug-on-error nil)
+(setq ad-redefinition-action 'accept)
+(setq locale-coding-system 'utf-8)
+(setq load-prefer-newer t)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+(setq current-language-environment "UTF-8")
+(setenv "LC_CTYPE" "UTF-8")
+(setq inhibit-startup-screen t)
+(setq-default tab-width 2 indent-tabs-mode nil) ;; Spaces
+(setq standard-indent 2)
+(setq make-backup-files nil)
+(setq backup-inhibited t)
+(setq auto-save-default nil)
+(setq scroll-margin 5 scroll-conservatively 9999 scroll-step 1) ;; Smooth scrolling
+(setq gc-cons-threshold 134217728) ;; Increase garbage collection limit
+(setq visible-bell nil)
+(setq ring-bell-function 'ignore)
+(setq blink-matching-paren nil)
+(setq initial-scratch-message ";; Hello.")
+(fset 'yes-or-no-p 'y-or-n-p)
+(setq large-file-warning-threshold 100000000)
 
 ;; Theme.
 ;; ================================================================================
@@ -36,10 +75,15 @@
 (use-package hc-zenburn-theme
   :load-path "vendor/hc-zenburn-theme"
   :commands (load-theme)
-  :init (require 'hc-zenburn-theme))
+  :init (progn
+          (require 'hc-zenburn-theme)
+          (load-theme 'hc-zenburn t)))
 
 (use-package smart-mode-line
   :commands (sml/setup sml/apply-theme)
+  :init (progn
+          (sml/setup)
+          (sml/apply-theme 'respectful))
   :config (progn
           (setq sml/shorten-directory t)
           (setq sml/shorten-modes t)
@@ -248,9 +292,7 @@
                         (lambda (old-fun &rest args)
                           (if (eq (current-local-map) wgrep-mode-map)
                             (wgrep-finish-edit)
-                            (apply old-fun args))))))
-
-          (use-package occur))
+                            (apply old-fun args)))))))
 
   :config (progn
 
@@ -814,46 +856,6 @@
 
 ;; Bootloader
 ;; ================================================================================
-(when (eq system-type 'darwin)
-  (setq interprogram-cut-function
-    (lambda (text &optional push)
-      (let ((process-connection-type nil))
-        (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
-          (process-send-string proc text)
-          (process-send-eof proc)))))
-  (defun pbpaste ()
-    "Call pbpaste and insert the results"
-    (interactive)
-    (insert (shell-command-to-string "pbpaste"))))
-
-(setq debug-on-error nil)
-(setq locale-coding-system 'utf-8)
-(setq load-prefer-newer t)
-(setq ad-redefinition-action 'accept)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(set-selection-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
-(setq current-language-environment "UTF-8")
-(setenv "LC_CTYPE" "UTF-8")
-(setq inhibit-startup-screen t)
-(setq-default tab-width 2 indent-tabs-mode nil) ;; Spaces
-(setq standard-indent 2)
-(setq make-backup-files nil)
-(setq backup-inhibited t)
-(setq auto-save-default nil)
-(setq scroll-margin 5 scroll-conservatively 9999 scroll-step 1) ;; Smooth scrolling
-(setq gc-cons-threshold 134217728) ;; Increase garbage collection limit
-(setq visible-bell nil)
-(setq ring-bell-function 'ignore)
-(setq blink-matching-paren nil)
-(setq initial-scratch-message ";; Hello.")
-(fset 'yes-or-no-p 'y-or-n-p)
-(setq large-file-warning-threshold 100000000)
-
-(load-theme 'hc-zenburn t)
-(sml/setup)
-(sml/apply-theme 'respectful)
 
 (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (menu-bar-mode -1) ;; Disable menu bar
@@ -879,14 +881,6 @@
 (global-flycheck-mode)
 (global-company-mode)
 (yas-global-mode 1)
-
-;; Load any local configuration if it exists
-(and
-  (file-exists-p (expand-file-name ".emacs.el"))
-  (load (expand-file-name ".emacs.el")))
-
-(if (file-readable-p ".vars")
-  (load-file ".vars"))
 
 (provide 'init)
 ;;; init.el ends here
