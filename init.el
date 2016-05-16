@@ -516,7 +516,7 @@
               (kbd "C-i") 'eww-forward-url)))
 
 (use-package helm-dash
-  :commands (counsel-dash)
+  :commands (counsel-dash helm-dash-initialize-debugging-buffer helm-dash)
   :functions (counsel-dash-collection counsel-dash)
   :preface (progn
              (defvar counsel-dash--results nil)
