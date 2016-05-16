@@ -289,19 +289,28 @@
           (use-package wgrep
             :commands (wgrep-change-to-wgrep-mode)
             :config (progn
-                      (evil-leader/set-key-for-mode 'wgrep-mode "w" 'wgrep-save-all-buffers)
+                      (advice-add #'save-buffer :around
+                        (lambda (old-fun &rest args)
+                          (if (not (eq (current-local-map) wgrep-mode-map))
+                            (apply old-fun args)
+                            (wgrep-finish-edit)
+                            (wgrep-save-all-buffers)
+                            (wgrep-change-to-wgrep-mode))))
 
                       (advice-add #'evil-quit :around
                         (lambda (old-fun &rest args)
-                          (if (eq (current-local-map) wgrep-mode-map)
-                            (wgrep-exit)
-                            (apply old-fun args))))
+                          (if (not (eq (current-local-map) wgrep-mode-map))
+                            (apply old-fun args)
+                            (wgrep-abort-changes)
+                            (evil-delete-buffer (current-buffer)))))
 
                       (advice-add #'evil-save-and-close :around
                         (lambda (old-fun &rest args)
-                          (if (eq (current-local-map) wgrep-mode-map)
+                          (if (not (eq (current-local-map) wgrep-mode-map))
+                            (apply old-fun args)
                             (wgrep-finish-edit)
-                            (apply old-fun args)))))))
+                            (wgrep-save-all-buffers)
+                            (evil-delete-buffer (current-buffer))))))))
 
   :config (progn
             (define-key ivy-minibuffer-map (kbd "C-w") 'ivy-occur)
