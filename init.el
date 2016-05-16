@@ -282,7 +282,9 @@
           (use-package counsel
             :commands (counsel-mode counsel-ag)
             :diminish counsel-mode
-            :bind (("C-s" . counsel-ag)))
+            :preface (defun counsel-projectile-ag () (interactive) (counsel-ag "" (projectile-project-root)))
+            :functions (counsel-projectile-ag)
+            :bind (("C-s" . counsel-projectile-ag)))
 
           (use-package wgrep
             :commands (wgrep-change-to-wgrep-mode)
