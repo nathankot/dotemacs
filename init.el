@@ -221,21 +221,40 @@
   :diminish ivy-mode
   :commands ivy-mode
   :init (progn
+          (setq ivy-display-style 'fancy)
           (define-key evil-normal-state-map (kbd "DEL") 'ivy-resume)
 
           (use-package swiper
             :init (progn
                     (evil-leader/set-key
                       "ss" 'swiper
-                      "sa" 'swiper-all))
-            :config (progn
-                      (define-key swiper-map (kbd "C-r") 'swiper-query-replace)))
+                      "sa" 'swiper-all)))
 
           (use-package counsel
             :diminish counsel-mode
-            :bind (("C-s" . counsel-ag))))
+            :bind (("C-s" . counsel-ag)))
+
+          (use-package wgrep
+            :config (progn
+                      (evil-leader/set-key-for-mode 'wgrep-mode "w" 'wgrep-save-all-buffers)
+
+                      (advice-add #'evil-quit :around
+                        (lambda (old-fun &rest args)
+                          (if (eq (current-local-map) wgrep-mode-map)
+                            (wgrep-abort-changes)
+                            (apply old-fun args))))
+
+                      (advice-add #'evil-save-and-close :around
+                        (lambda (old-fun &rest args)
+                          (if (eq (current-local-map) wgrep-mode-map)
+                            (wgrep-finish-edit)
+                            (apply old-fun args))))))
+
+          (use-package occur))
 
   :config (progn
+
+            (define-key ivy-minibuffer-map (kbd "C-w") 'ivy-occur)
 
             (define-key ivy-minibuffer-map (kbd "C-q") 'keyboard-escape-quit)
             (define-key ivy-minibuffer-map (kbd "C-p") 'keyboard-escape-quit)
@@ -810,6 +829,7 @@
 (setq debug-on-error nil)
 (setq locale-coding-system 'utf-8)
 (setq load-prefer-newer t)
+(setq ad-redefinition-action 'accept)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (set-selection-coding-system 'utf-8)

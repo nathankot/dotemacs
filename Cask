@@ -21,6 +21,7 @@
 (depends-on "smart-mode-line")
 (depends-on "writeroom-mode")
 (depends-on "tern")
+(depends-on "wgrep")
 
 (depends-on "flycheck")
 (depends-on "flycheck-ledger")
