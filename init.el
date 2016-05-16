@@ -18,9 +18,12 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))))
+  '(custom-safe-themes
+     (quote
+       ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
+  '(package-selected-packages
+     (quote
+       (guide-key yasnippet yaml-mode writeroom-mode wgrep web-mode use-package sx stylus-mode smartparens smart-mode-line scss-mode robe rainbow-mode rainbow-delimiters puppet-mode projectile popwin php-mode perspective magit lua-mode less-css-mode ledger-mode js2-mode idle-highlight-mode htmlize helm-dash haskell-mode git-gutter gist flycheck-ledger flycheck-cask fish-mode expand-region exec-path-from-shell evil-surround evil-snipe evil-search-highlight-persist evil-org evil-matchit evil-commentary emmet-mode editorconfig dockerfile-mode counsel company-tern coffee-mode cask))))
 
 (require 'cask (concat (getenv "HOMEBREW_ROOT") "/share/emacs/site-lisp/cask/cask.el"))
 (cask-initialize)
@@ -74,13 +77,11 @@
 
 (use-package hc-zenburn-theme
   :load-path "vendor/hc-zenburn-theme"
-  :commands (load-theme)
   :init (progn
           (require 'hc-zenburn-theme)
           (load-theme 'hc-zenburn t)))
 
 (use-package smart-mode-line
-  :commands (sml/setup sml/apply-theme)
   :init (progn
           (sml/setup)
           (sml/apply-theme 'respectful))
@@ -149,10 +150,17 @@
             (global-unset-key (kbd "M-l"))
             (global-unset-key (kbd "C-w"))
 
+            ;; Remove keys that we want to use
+            (define-key evil-normal-state-map (kbd "C-p") nil)
+            (define-key evil-motion-state-map (kbd "C-b") nil)
+            (define-key evil-motion-state-map (kbd "C-w") nil)
+            (define-key evil-emacs-state-map (kbd "C-w") nil)
+
             ;; Window management
             (global-set-key (kbd "C-q") 'delete-window)
             (global-set-key (kbd "C-j") 'evil-window-next)
             (global-set-key (kbd "C-k") 'evil-window-prev)
+
             (define-key evil-normal-state-map (kbd "C-q") 'delete-window)
             (define-key evil-normal-state-map (kbd "C-j") 'evil-window-next)
             (define-key evil-normal-state-map (kbd "C-k") 'evil-window-prev)
@@ -195,10 +203,6 @@
             (define-key evil-normal-state-map (kbd "SPC") 'evil-search-forward)
             (define-key evil-visual-state-map (kbd "C-i") 'indent-region)
 
-            ;; Remove keys that we want to use
-            (define-key evil-normal-state-map (kbd "C-p") nil)
-            (define-key evil-motion-state-map (kbd "C-b") nil)
-
             ;; Default keys for emacs state
             (defun apply-emacs-defaults-to-mode (mode)
               (let ((keymap-symbol (intern (concat (symbol-name mode) "-map"))))
@@ -239,7 +243,7 @@
 
 (use-package projectile
   :diminish projectile-mode
-  :commands projectile-global-mode
+  :commands (projectile-global-mode projectile-invalidate-cache)
   :bind ( ("C-p" . projectile-find-file)
           ("C-b" . projectile-switch-to-buffer) )
   :init (progn
@@ -248,9 +252,9 @@
           (setq projectile-completion-system 'ivy)
           (setq projectile-indexing-method 'alien)
           (evil-leader/set-key "f o" 'projectile-find-other-file)
-          (evil-leader/set-key "f t" 'projectile-find-implementation-or-test))
+          (evil-leader/set-key "f t" 'projectile-find-implementation-or-test)
+          (with-eval-after-load 'ivy (define-key ivy-minibuffer-map (kbd "C-l") 'projectile-invalidate-cache)))
   :config (progn
-            (define-key ivy-minibuffer-map (kbd "C-l") 'projectile-invalidate-cache)
             (add-to-list 'projectile-project-root-files ".projectile")
             (add-to-list 'projectile-project-root-files ".git")
             (add-to-list 'projectile-globally-ignored-directories ".cache")
@@ -263,29 +267,32 @@
 
 (use-package ivy
   :diminish ivy-mode
-  :commands ivy-mode
+  :commands (ivy-mode ivy-read)
   :init (progn
           (setq ivy-display-style 'fancy)
           (define-key evil-normal-state-map (kbd "DEL") 'ivy-resume)
 
           (use-package swiper
+            :commands (swiper swiper-all)
             :init (progn
                     (evil-leader/set-key
                       "ss" 'swiper
                       "sa" 'swiper-all)))
 
           (use-package counsel
+            :commands (counsel-mode counsel-ag)
             :diminish counsel-mode
             :bind (("C-s" . counsel-ag)))
 
           (use-package wgrep
+            :commands (wgrep-change-to-wgrep-mode)
             :config (progn
                       (evil-leader/set-key-for-mode 'wgrep-mode "w" 'wgrep-save-all-buffers)
 
                       (advice-add #'evil-quit :around
                         (lambda (old-fun &rest args)
                           (if (eq (current-local-map) wgrep-mode-map)
-                            (wgrep-abort-changes)
+                            (wgrep-exit)
                             (apply old-fun args))))
 
                       (advice-add #'evil-save-and-close :around
@@ -295,8 +302,10 @@
                             (apply old-fun args)))))))
 
   :config (progn
-
             (define-key ivy-minibuffer-map (kbd "C-w") 'ivy-occur)
+            (evil-define-key 'normal ivy-occur-grep-mode-map (kbd "C-w") 'ivy-wgrep-change-to-wgrep-mode)
+            (define-key ivy-occur-grep-mode-map (kbd "C-w") 'ivy-wgrep-change-to-wgrep-mode)
+            (define-key ivy-occur-mode-map (kbd "C-w") 'ivy-wgrep-change-to-wgrep-mode)
 
             (define-key ivy-minibuffer-map (kbd "C-q") 'keyboard-escape-quit)
             (define-key ivy-minibuffer-map (kbd "C-p") 'keyboard-escape-quit)
@@ -383,17 +392,17 @@
 
 (use-package shell
   :functions shell-make
-  :init (progn
-          (evil-set-initial-state 'shell-mode 'normal)
-          (add-hook 'shell-mode-hook 'read-only-mode)
-          (add-hook 'shell-mode-hook (lambda () (linum-mode -1)))
-          (add-hook 'shell-mode-hook (lambda () (interactive) (buffer-disable-undo)))
-          (defun shell-make (command)
-            "Call `make *command*` in the projectile root directory under a buffer named '*shell:make*'"
-           (interactive)
-            (projectile-with-default-dir (projectile-project-root)
-              (async-shell-command (format "make %s" command) (format "*shell:make %s*" command)))))
+  :preface (progn
+             (defun shell-make (command)
+               "Call `make *command*` in the projectile root directory under a buffer named '*shell:make*'"
+               (interactive)
+               (projectile-with-default-dir (projectile-project-root)
+                 (async-shell-command (format "make %s" command) (format "*shell:make %s*" command)))))
   :config (progn
+            (evil-set-initial-state 'shell-mode 'normal)
+            (add-hook 'shell-mode-hook 'read-only-mode)
+            (add-hook 'shell-mode-hook (lambda () (linum-mode -1)))
+            (add-hook 'shell-mode-hook (lambda () (interactive) (buffer-disable-undo)))
             (evil-define-key 'normal shell-mode-map (kbd "q") 'delete-window)
             (define-key shell-mode-map (kbd "C-c C-c") (lambda () (interactive) (delete-process (buffer-name))))))
 
@@ -439,6 +448,10 @@
             (evil-leader/set-key "g r" 'git-gutter:revert-hunk)))
 
 (use-package magit
+  :commands ( magit-log magit-commit magit-commit-amend
+              magit-status magit-diff-unstaged magit-diff-staged
+              magit-blame magit-stage-file
+              magit-mode )
   :init (progn
           (setq vc-handled-backends ())
           (setq magit-completing-read-function 'ivy-completing-read)
@@ -463,11 +476,9 @@
               (kbd "r") 'git-rebase-reword
               (kbd "e") 'git-rebase-edit)))
 
-(use-package gist)
-
 (use-package flycheck
   :diminish flycheck-mode
-  :commands global-flycheck-mode
+  :commands (global-flycheck-mode flycheck-mode flycheck-define-checker)
   :init (progn
           (setq flycheck-idle-change-delay 6)
           (setq flycheck-check-syntax-automatically '(mode-enabled idle-change)))
@@ -486,6 +497,7 @@
             (define-key yas-keymap (kbd "C-e") 'yas-next-field-or-maybe-expand)))
 
 (use-package eww
+  :commands (eww eww-open-file)
   :config (progn
             (evil-define-key 'normal eww-mode-map
               (kbd "q")   'quit-window
@@ -493,39 +505,40 @@
               (kbd "C-i") 'eww-forward-url)))
 
 (use-package helm-dash
+  :commands (counsel-dash)
   :functions (counsel-dash-collection counsel-dash)
+  :preface (progn
+             (defvar counsel-dash--results nil)
+
+             (defun counsel-dash-collection (s &rest _)
+               (when (>= (length s) 3)
+                 (let* ( (helm-pattern s)
+                         (results (helm-dash-search)) )
+                   (setq counsel-dash--results results)
+                   (mapcar 'car results))))
+
+             (defun counsel-dash (&optional initial)
+               (interactive)
+               (helm-dash-initialize-debugging-buffer)
+               (helm-dash-create-buffer-connections)
+               (helm-dash-create-common-connections)
+               (ivy-read "Documentation for: "
+                 'counsel-dash-collection
+                 :dynamic-collection t
+                 :history 'helm-dash-history-input
+                 :initial-input initial
+                 :action (lambda (s)
+                           (-when-let (result (-drop 1 (-first (-compose (-partial 'string= s) 'car) counsel-dash--results)))
+                             (helm-dash-browse-url result))))))
+
   :init (progn
           (setq helm-dash-docsets-path "~/.docset")
           (setq helm-dash-browser-func 'eww)
-          (setq helm-dash-common-docsets '("HTML" "CSS")))
+          (setq helm-dash-common-docsets '("HTML" "CSS"))
+          (define-key evil-normal-state-map (kbd "?") (lambda () (interactive) (counsel-dash (thing-at-point 'symbol))))
+          (define-key evil-normal-state-map (kbd "C-f") 'counsel-dash))
 
   :config (progn
-            (defvar counsel-dash--results nil)
-
-            (defun counsel-dash-collection (s &rest _)
-              (when (>= (length s) 3)
-                (let* ( (helm-pattern s)
-                        (results (helm-dash-search)) )
-                  (setq counsel-dash--results results)
-                  (mapcar 'car results))))
-
-            (defun counsel-dash (&optional initial)
-              (interactive)
-              (helm-dash-initialize-debugging-buffer)
-              (helm-dash-create-buffer-connections)
-              (helm-dash-create-common-connections)
-              (ivy-read "Documentation for: "
-                'counsel-dash-collection
-                :dynamic-collection t
-                :history 'helm-dash-history-input
-                :initial-input initial
-                :action (lambda (s)
-                          (-when-let (result (-drop 1 (-first (-compose (-partial 'string= s) 'car) counsel-dash--results)))
-                            (helm-dash-browse-url result)))))
-
-            (define-key evil-normal-state-map (kbd "?") (lambda () (interactive) (counsel-dash (thing-at-point 'symbol))))
-            (define-key evil-normal-state-map (kbd "C-f") 'counsel-dash)
-
             (add-hook 'ruby-mode-hook (lambda () (setq-local helm-dash-docsets '("Ruby"))))
             (add-hook 'dockerfile-mode-hook (lambda () (setq-local helm-dash-docsets '("Docker"))))
             (add-hook 'js2-minor-mode-hook (lambda () (setq-local helm-dash-docsets '("Javascript" "NodeJS"))))
@@ -572,164 +585,154 @@
 
 (use-package js2-mode
   :diminish js2-minor-mode
-  :commands (js2-mode js-mode js2-minor-mode)
-  :init
-  (progn
-    (use-package tern
-      :diminish " T"
-      :commands (tern-mode)
-      :init (progn
-              (add-hook 'js-mode-hook 'tern-mode)))
-    (use-package company-tern
-      :config (progn
-                (add-to-list 'company-backends 'company-tern)))
-    (setq js2-highlight-level 3)
-    (setq js2-mode-show-parse-errors nil)
-    (setq js2-mode-show-strict-warnings nil)
-                                        ; Use js2-mode as a minor mode (preferred way)
-    (add-hook 'js-mode-hook 'js2-minor-mode)
-    (add-to-list 'interpreter-mode-alist '("node" . js-mode)))
-  :config
-  (progn
-    (evil-define-key 'insert js2-minor-mode-map (kbd "RET") 'js2-line-break)))
+  :commands (js2-mode js2-minor-mode)
+  :mode ("\\.js\\'" . js-mode)
+  :interpreter ("node" . js-mode)
+  :init (progn
+          (add-hook 'js-mode-hook 'js2-minor-mode)
+          (setq js2-highlight-level 3)
+          (setq js2-mode-show-parse-errors nil)
+          (setq js2-mode-show-strict-warnings nil)
 
-(use-package coffee-mode)
+          (use-package tern
+            :diminish " T"
+            :commands (tern-mode)
+            :init (progn
+                    (add-hook 'js-mode-hook 'tern-mode)))
+
+          (use-package company-tern
+            :config (progn
+                      (add-to-list 'company-backends 'company-tern))))
+
+  :config
+  (evil-define-key 'insert js2-minor-mode-map (kbd "RET") 'js2-line-break))
+
+(use-package coffee-mode
+  :mode "\\.coffee\\'")
 
 (use-package web-mode
+  :mode "\\.phtml\\'"
+  :mode "\\.tpl\\.php\\'"
+  :mode "\\.[agj]sp\\'"
+  :mode "\\.as[cp]x\\'"
+  :mode "\\.erb\\'"
+  :mode "\\.liquid\\'"
+  :mode "\\.mustache\\'"
+  :mode "\\.tag\\'"
+  :mode "\\.vue\\'"
+  :mode "\\.djhtml\\'"
+  :mode "\\.html?\\'"
+  :mode "\\.html.twig\\'"
+  :mode "\\.html.jsx\\'"
+  :mode "\/\*\*.*@jsx"
   :preface (progn
              (defun jsxhint-predicate ()
                (and (executable-find "jsxhint")
                  (buffer-file-name)
-                 (string-match ".*\.jsx?$" (buffer-file-name)))))
-  :commands web-mode
+                 (string-match ".*\.jsx?$" (buffer-file-name))))
+             (flycheck-define-checker jsxhint
+               "A JSX syntax and style checker based on JSXHint."
+               :command ("jsxhint" source)
+               :error-patterns ((error line-start (1+ nonl) ": line " line ", col " column ", " (message) line-end))
+               :predicate jsxhint-predicate
+               :modes (web-mode)))
   :init (progn
-          (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-          (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-          (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
-          (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-          (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-          (add-to-list 'auto-mode-alist '("\\.liquid\\'" . web-mode))
-          (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-          (add-to-list 'auto-mode-alist '("\\.tag\\'" . web-mode))
-          (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
-          (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-          (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-          (add-to-list 'auto-mode-alist '("\\.html.twig\\'" . web-mode))
-          (add-to-list 'auto-mode-alist '("\\.html.jsx\\'" . web-mode))
-          (add-to-list 'magic-mode-alist '("\/\*\*.*@jsx" . web-mode))
-
           (use-package emmet-mode
-            ;; Can't diminish this, because the logic relies on
-            ;; reading the mode-line.
-            ;; :diminish " e"
             :commands emmet-mode
             :init (progn
                     (add-hook 'sgml-mode-hook 'emmet-mode)
                     (add-hook 'css-mode-hook  'emmet-mode)
                     (add-hook 'web-mode-hook 'emmet-mode))
             :config (progn
-                    (evil-define-key 'insert emmet-mode-keymap
-                      (kbd "M-RET") 'emmet-expand-line))))
+                      (evil-define-key 'insert emmet-mode-keymap
+                        (kbd "M-RET") 'emmet-expand-line))))
   :config (progn
             (add-hook 'web-mode-hook (lambda () (yas-activate-extra-mode 'js-mode)))
             (add-hook 'web-mode-hook 'rainbow-mode)
             (define-key prog-mode-map (kbd "C-x /") 'web-mode-element-close)
-
-            (flycheck-define-checker jsxhint
-              "A JSX syntax and style checker based on JSXHint."
-              :command ("jsxhint" source)
-              :error-patterns ((error line-start (1+ nonl) ": line " line ", col " column ", " (message) line-end))
-              :predicate jsxhint-predicate
-              :modes (web-mode))
-
             (add-to-list 'flycheck-checkers 'jsxhint)))
 
 (use-package fish-mode
-  :commands fish-mode)
+  :mode "\\.fish\\'")
 
 (use-package less-css-mode
-  :commands less-css-mode
-  :init (progn
-          (add-to-list 'auto-mode-alist '("\\.less\\'" . less-css-mode))))
+  :mode "\\.less\\'")
 
 (use-package stylus-mode
-  :commands stylus-mode
-  :init (progn
-          (add-to-list 'auto-mode-alist '("\\.stylus\\'" . stylus-mode))))
+  :mode "\\.stylus\\'")
 
 (use-package scss-mode
-  :init (progn
-          (add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
-          (setq scss-compile-at-save nil)))
+  :mode "\\.scss\\'"
+  :init (setq scss-compile-at-save nil))
 
 (use-package php-mode
-  :commands php-mode)
+  :mode "\\.php\\'")
 
 (use-package markdown-mode
+  :mode "\\.md\\'"
+  :mode "\\.markdown\\'"
+  :mode "^README\\'"
   :commands markdown-mode)
 
 (use-package lua-mode
-  :commands lua-mode)
+  :mode "\\.lua\\'")
 
 (use-package swift-mode
   :load-path "vendor/swift-mode"
-  :commands swift-mode
+  :mode "\\.swift\\'"
   :init (progn
-          (add-to-list 'auto-mode-alist '("\\.swift\\'" . swift-mode))
           (use-package company-sourcekit
             :load-path "vendor/company-sourcekit"
             :config (progn
                       (add-to-list 'company-backends 'company-sourcekit)))))
 
 (use-package dockerfile-mode
-  :commands dockerfile-mode
-  :init (progn
-          (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))))
+  :mode "^Dockerfile\\'"
+  :mode "^Dockerfile.*\\'")
 
 (use-package puppet-mode
-  :commands puppet-mode)
+  :mode "\\.pp\\'")
 
 (use-package yaml-mode
-  :commands yaml-mode)
+  :mode "\\.yaml\\'"
+  :mode "\\.yml\\'")
 
 (use-package ruby-mode
-  :init
-  (use-package robe
-    :init (progn
-            (when (executable-find "pry")
-              (add-hook 'ruby-mode-hook 'robe-mode)))
-    :config (progn
-              (when (executable-find "pry")
-                (add-to-list 'company-backends 'company-robe)))))
+  :mode "\\.rb\\'"
+  :init (use-package robe
+          :init (when (executable-find "pry") (add-hook 'ruby-mode-hook 'robe-mode))
+          :config (when (executable-find "pry") (add-to-list 'company-backends 'company-robe))))
 
 (use-package haskell-mode
-  :commands (haskell-mode haskell-interactive-mode)
-  :init
-  (setq haskell-hoogle-url "https://www.stackage.org/lts/hoogle?q=%s")
-  (setq haskell-process-type 'stack-ghci)
-  (add-hook 'haskell-mode-hook (lambda () (turn-on-haskell-indentation)))
-  (use-package ghc
-    :load-path "vendor/ghc-mod/elisp"
-    :commands (ghc-init ghc-debug ghc-abbrev-init ghc-type-init ghc-comp-init
-                ghc-kill-process ghc-import-module)
+  :mode "\\.hs\\'"
+  :mode "\\.lhs\\'"
+  :mode "config/models\\'"
+  :mode "config/routes\\'"
+  :init (progn
+          (setq haskell-hoogle-url "https://www.stackage.org/lts/hoogle?q=%s")
+          (setq haskell-process-type 'stack-ghci)
+          (add-hook 'haskell-mode-hook (lambda () (turn-on-haskell-indentation)))
+          (use-package ghc
+            :load-path "vendor/ghc-mod/elisp"
+            :commands (ghc-init ghc-debug ghc-abbrev-init ghc-type-init ghc-comp-init
+                        ghc-kill-process ghc-import-module)
 
-    :init
-    (add-hook 'haskell-mode-hook
-      (lambda ()
-        (ghc-abbrev-init)
-        (ghc-type-init)
-        (unless ghc-initialized
-          (ghc-comp-init)
-          (setq ghc-initialized t)
-          (add-hook 'kill-buffer-hook 'ghc-kill-process))
-        (ghc-import-module)))
+            :init (progn
+                    (add-hook 'haskell-mode-hook
+                      (lambda ()
+                        (ghc-abbrev-init)
+                        (ghc-type-init)
+                        (unless ghc-initialized
+                          (ghc-comp-init)
+                          (setq ghc-initialized t)
+                          (add-hook 'kill-buffer-hook 'ghc-kill-process))
+                        (ghc-import-module))))
 
-    :config
-    (evil-define-key 'normal haskell-mode-map (kbd "M-i") 'ghc-show-info)
-    (evil-leader/set-key-for-mode 'haskell-mode "t" 'ghc-show-type))
-
-  :config
-  (evil-define-key 'normal haskell-mode-map (kbd "?") 'hoogle))
+            :config (progn
+                      (evil-define-key 'normal haskell-mode-map (kbd "M-i") 'ghc-show-info)
+                      (evil-leader/set-key-for-mode 'haskell-mode "t" 'ghc-show-type))))
+  :config (progn
+            (evil-define-key 'normal haskell-mode-map (kbd "?") 'hoogle)))
 
 (use-package rainbow-mode
   :diminish rainbow-mode
@@ -744,11 +747,9 @@
          (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)))
 
 (use-package ledger-mode
-  :commands ledger-mode
-  :init (progn
-          (add-to-list 'auto-mode-alist '("\\.ledger\\'" . ledger-mode))
-          (use-package flycheck-ledger))
+  :mode "\\.ledger\\'"
   :config (progn
+            (use-package flycheck-ledger)
             (evil-define-key 'normal ledger-mode-map
               (kbd "Y") 'ledger-copy-transaction-at-point
               (kbd "C") 'ledger-post-edit-amount
@@ -766,87 +767,87 @@
 
 (use-package org
   :ensure nil
-  :init
-  (use-package evil-org)
-  (setq org-directory "~/.org/")
-  (setq orglog-done 'time)
-  (setq org-hide-leading-stars nil)
-  (setq org-alphabetical-lists t)
-  (setq org-src-fontify-natively t)  ;; you want this to activate coloring in blocks
-  (setq org-src-tab-acts-natively t) ;; you want this to have completion in blocks
-  (setq org-hide-emphasis-markers t) ;; to hide the *,=, or / markers
-  (setq org-pretty-entities t)       ;; to have \alpha, \to and others display as utf8 http://orgmode.org/manual/Special-symbols.html
-  (setq org-agenda-files (list "~/.org/tasks.org" "~/.org/notes.org"))
-  (setq org-default-notes-file (concat org-directory "/notes.org"))
-  (setq org-enforce-todo-checkbox-dependencies t)
-  (setq org-enforce-todo-dependencies t)
-  (setq org-todo-keywords '((sequence "TODO" "DOING" "|" "DONE" "CANCELED" "DELEGATED")))
-  (setq org-agenda-files (quote ("~/.org/tasks.org" "~/.org/notes.org")))
-  (setq org-todo-keyword-faces
-    '(("TODO" . org-warning)
-       ("DOING" . "white")
-       ("DONE" . "green")
-       ("DELEGATED" . "purple")
-       ("CANCELED" . "red")))
+  :init (progn
+          (use-package evil-org)
+          (setq org-directory "~/.org/")
+          (setq orglog-done 'time)
+          (setq org-hide-leading-stars nil)
+          (setq org-alphabetical-lists t)
+          (setq org-src-fontify-natively t)  ;; you want this to activate coloring in blocks
+          (setq org-src-tab-acts-natively t) ;; you want this to have completion in blocks
+          (setq org-hide-emphasis-markers t) ;; to hide the *,=, or / markers
+          (setq org-pretty-entities t)       ;; to have \alpha, \to and others display as utf8 http://orgmode.org/manual/Special-symbols.html
+          (setq org-agenda-files (list "~/.org/tasks.org" "~/.org/notes.org"))
+          (setq org-default-notes-file (concat org-directory "/notes.org"))
+          (setq org-enforce-todo-checkbox-dependencies t)
+          (setq org-enforce-todo-dependencies t)
+          (setq org-todo-keywords '((sequence "TODO" "DOING" "|" "DONE" "CANCELED" "DELEGATED")))
+          (setq org-agenda-files (quote ("~/.org/tasks.org" "~/.org/notes.org")))
+          (setq org-todo-keyword-faces
+            '(("TODO" . org-warning)
+               ("DOING" . "white")
+               ("DONE" . "green")
+               ("DELEGATED" . "purple")
+               ("CANCELED" . "red")))
 
-  (add-hook 'org-mode-hook 'org-indent-mode)
-  (add-hook 'org-agenda-mode-hook
-    (lambda ()
-      (local-unset-key (kbd ",")) ;; Don't shadow the <leader>
-      (local-unset-key (kbd "C-k"))
-      ;; Autosave:
-      (add-hook 'auto-save-hook 'org-save-all-org-buffers nil t)
-      (auto-save-mode)))
+          (add-hook 'org-mode-hook 'org-indent-mode)
+          (add-hook 'org-agenda-mode-hook
+            (lambda ()
+              (local-unset-key (kbd ",")) ;; Don't shadow the <leader>
+              (local-unset-key (kbd "C-k"))
+              ;; Autosave:
+              (add-hook 'auto-save-hook 'org-save-all-org-buffers nil t)
+              (auto-save-mode))))
 
-  :config
-  (evil-leader/set-key "o b"
-    (lambda ()
-      (interactive)
-      (let ((persp (gethash "org" perspectives-hash)))
-        (when (null persp) ; When perspective doesn't exist
-          (persp-switch "org")
-          (when (file-exists-p "~/.org/tasks.org")
-            (find-file "~/.org/tasks.org"))
-          (when (file-exists-p "~/.org/notes.org")
-            (split-window-right)
-            (find-file "~/.org/notes.org")) ; Or when it already exists
-          (persp-activate persp)))))
+  :config (progn
+            (evil-leader/set-key "o b"
+              (lambda ()
+                (interactive)
+                (let ((persp (gethash "org" perspectives-hash)))
+                  (when (null persp) ; When perspective doesn't exist
+                    (persp-switch "org")
+                    (when (file-exists-p "~/.org/tasks.org")
+                      (find-file "~/.org/tasks.org"))
+                    (when (file-exists-p "~/.org/notes.org")
+                      (split-window-right)
+                      (find-file "~/.org/notes.org")) ; Or when it already exists
+                    (persp-activate persp)))))
 
-  (evil-leader/set-key
-    "o c" 'org-capture
-    "o a" 'org-agenda-list
-    "o t" 'org-todo-list)
+            (evil-leader/set-key
+              "o c" 'org-capture
+              "o a" 'org-agenda-list
+              "o t" 'org-todo-list)
 
-  (evil-leader/set-key-for-mode 'org-mode
-    "d" 'org-deadline
-    "s" 'org-schedule
-    "c" 'org-toggle-checkbox
-    "o" (lambda ()
-          (interactive)
-          (evil-org-eol-call (quote org-insert-heading-respect-content))))
+            (evil-leader/set-key-for-mode 'org-mode
+              "d" 'org-deadline
+              "s" 'org-schedule
+              "c" 'org-toggle-checkbox
+              "o" (lambda ()
+                    (interactive)
+                    (evil-org-eol-call (quote org-insert-heading-respect-content))))
 
-  (evil-define-key 'normal org-mode-map
-    (kbd "m")   'org-set-tags
-    (kbd "+")   'org-priority-up
-    (kbd "-")   'org-priority-down
-    (kbd "C-i") 'org-cycle)
+            (evil-define-key 'normal org-mode-map
+              (kbd "m")   'org-set-tags
+              (kbd "+")   'org-priority-up
+              (kbd "-")   'org-priority-down
+              (kbd "C-i") 'org-cycle)
 
-  (evil-define-key 'emacs org-agenda-mode-map
-    (kbd "d")   'org-agenda-deadline
-    (kbd "s")   'org-agenda-schedule
-    (kbd "+")   'org-priority-up
-    (kbd "-")   'org-priority-down
-    (kbd "q")   'org-agenda-quit
-    (kbd "w")   'org-save-all-org-buffers)
+            (evil-define-key 'emacs org-agenda-mode-map
+              (kbd "d")   'org-agenda-deadline
+              (kbd "s")   'org-agenda-schedule
+              (kbd "+")   'org-priority-up
+              (kbd "-")   'org-priority-down
+              (kbd "q")   'org-agenda-quit
+              (kbd "w")   'org-save-all-org-buffers)
 
-  (evil-leader/set-key-for-mode 'org-agenda-mode-map
-    (kbd "w") 'org-save-all-org-buffers)
+            (evil-leader/set-key-for-mode 'org-agenda-mode-map
+              (kbd "w") 'org-save-all-org-buffers)
 
-  (if (file-exists-p (expand-file-name "README.org"))
-    (add-to-list 'org-agenda-files (expand-file-name "README.org")))
+            (if (file-exists-p (expand-file-name "README.org"))
+              (add-to-list 'org-agenda-files (expand-file-name "README.org")))
 
-  (if (file-exists-p (expand-file-name "project.org"))
-    (add-to-list 'org-agenda-files (expand-file-name "project.org"))))
+            (if (file-exists-p (expand-file-name "project.org"))
+              (add-to-list 'org-agenda-files (expand-file-name "project.org")))))
 
 (use-package sx
   :commands (sx-tab-newest sx-search sx-authenticate sx-ask
