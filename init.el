@@ -229,7 +229,8 @@
                        (kbd "M") 'evil-window-middle
                        (kbd "H") 'evil-window-top
                        (kbd "L") 'evil-window-bottom
-                       (kbd "gg") 'evil-goto-first-line))
+                       (kbd "gg") 'evil-goto-first-line
+                       (kbd ", SPC") 'evil-search-highlight-persist-remove-all))
                   'after-load-functions t nil
                   (format "evil-define-emacs-defaults-in-%s" (symbol-name keymap-symbol)))))
 
