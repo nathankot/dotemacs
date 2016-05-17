@@ -223,6 +223,8 @@
                        (kbd "C-y") 'evil-scroll-line-up
                        (kbd "C-u") 'evil-scroll-up
                        (kbd "C-d") 'evil-scroll-down
+                       (kbd "{") 'evil-backward-paragraph
+                       (kbd "}") 'evil-forward-paragraph
                        (kbd "SPC") 'evil-search-forward
                        (kbd "/") 'evil-search-forward
                        (kbd "n") 'evil-search-next
