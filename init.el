@@ -246,7 +246,9 @@
 
 (use-package projectile
   :diminish projectile-mode
-  :commands (projectile-global-mode projectile-invalidate-cache)
+  :commands ( projectile-global-mode projectile-invalidate-cache
+              projectile-find-other-file projectile-find-implementation-or-test
+              projectile-invalidate-cache )
   :bind ( ("C-p" . projectile-find-file)
           ("C-b" . projectile-switch-to-buffer) )
   :init (progn
@@ -258,6 +260,7 @@
           (evil-leader/set-key "f t" 'projectile-find-implementation-or-test)
           (with-eval-after-load 'ivy (define-key ivy-minibuffer-map (kbd "C-l") 'projectile-invalidate-cache)))
   :config (progn
+            (projectile-global-mode +1)
             (add-to-list 'projectile-project-root-files ".projectile")
             (add-to-list 'projectile-project-root-files ".git")
             (add-to-list 'projectile-globally-ignored-directories ".cache")
@@ -435,13 +438,14 @@
           (evil-set-initial-state 'profiler-report-mode 'emacs)))
 
 (use-package perspective
-  :commands persp-mode
-  :config (progn
-            (define-key evil-normal-state-map (kbd "C-@") 'persp-switch)
-            (define-key evil-normal-state-map (kbd ")") 'persp-next)
-            (define-key evil-normal-state-map (kbd "(") 'persp-prev)
-            (evil-leader/set-key "p r" 'persp-rename)
-            (evil-leader/set-key "p k" 'persp-kill)))
+  :commands (persp-switch persp-next persp-prev persp-rename persp-kill)
+  :init (progn
+          (define-key evil-normal-state-map (kbd "C-@") 'persp-switch)
+          (define-key evil-normal-state-map (kbd ")") 'persp-next)
+          (define-key evil-normal-state-map (kbd "(") 'persp-prev)
+          (evil-leader/set-key "p r" 'persp-rename)
+          (evil-leader/set-key "p k" 'persp-kill))
+  :config (persp-mode))
 
 (use-package dired
   :init (progn
@@ -475,6 +479,7 @@
               magit-status magit-diff-unstaged magit-diff-staged
               magit-blame magit-stage-file
               magit-mode )
+  :mode ("/\\(\\(\\(COMMIT\\|NOTES\\|PULLREQ\\|TAG\\)_EDIT\\|MERGE_\\|\\)MSG\\|BRANCH_DESCRIPTION\\)\\'" . global-git-commit-mode)
   :init (progn
           (setq vc-handled-backends ())
           (setq magit-completing-read-function 'ivy-completing-read)
@@ -510,13 +515,14 @@
             (define-key evil-normal-state-map (kbd "[ e") 'previous-error)))
 
 (use-package yasnippet
-  :commands yas-global-mode
+  :commands (yas-global-mode yas-minor-mode yas-expand)
   :diminish (yas-minor-mode . " y")
   :init (progn
           (setq yas-snippet-dirs '("~/.emacs.d/.snippets/yasnippet-snippets"
-                                    "~/.emacs.d/.snippets/personal")))
+                                    "~/.emacs.d/.snippets/personal"))
+          (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand))
   :config (progn
-            (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand)
+            (yas-global-mode 1)
             (define-key yas-keymap (kbd "C-e") 'yas-next-field-or-maybe-expand)))
 
 (use-package eww
@@ -889,20 +895,19 @@
 (global-linum-mode)
 (linum-relative-on)
 
-(popwin-mode 1)
+(evil-mode 1)
+
 (smartparens-global-mode t)
 (show-smartparens-global-mode t)
 (global-git-gutter-mode +1)
 (editorconfig-mode 1)
 
-(evil-mode 1)
-(projectile-global-mode +1)
-(persp-mode)
+(popwin-mode 1)
 (ivy-mode 1)
 (counsel-mode 1)
+
 (global-flycheck-mode)
 (global-company-mode)
-(yas-global-mode 1)
 
 (provide 'init)
 ;;; init.el ends here
