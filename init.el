@@ -379,6 +379,11 @@
     (kbd "M-i") 'sp-forward-slurp-sexp
     (kbd "M-o") 'sp-forward-barf-sexp))
 
+(use-package avy
+  :commands (avy-goto-char)
+  :init (progn
+          (evil-leader/set-key "j" 'avy-goto-char)))
+
 (use-package writeroom-mode
   :commands writeroom-mode
   :init (progn
