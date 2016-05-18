@@ -551,7 +551,7 @@
             (define-key evil-normal-state-map (kbd "[ e") 'previous-error)))
 
 (use-package yasnippet
-  :commands (yas-global-mode yas-minor-mode yas-expand)
+  :commands (yas-global-mode yas-minor-mode yas-expand yas-expand-snippet)
   :diminish (yas-minor-mode . " y")
   :init (progn
           (setq yas-snippet-dirs '("~/.emacs.d/.snippets/yasnippet-snippets"
@@ -597,7 +597,7 @@
                              (helm-dash-browse-url result))))))
 
   :init (progn
-          (setq helm-dash-docsets-path "~/.docset")
+          (setq helm-dash-docsets-path "/Volumes/Storage/.docset")
           (setq helm-dash-browser-func 'eww)
           (setq helm-dash-common-docsets '("HTML" "CSS"))
           (evil-leader/set-key "f" (lambda () (interactive) (counsel-dash (thing-at-point 'symbol))))
