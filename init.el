@@ -46,7 +46,11 @@
     (interactive)
     (insert (shell-command-to-string "pbpaste"))))
 
-(defun print-point () (interactive) (message "%d" (point)))
+(defun print-point ()
+  "Print the current point under the cursor.  Useful for debugging."
+  (interactive)
+  (message "%d" (point)))
+
 (setq debug-on-error nil)
 (setq ad-redefinition-action 'accept)
 (setq locale-coding-system 'utf-8)
@@ -506,10 +510,42 @@
 
 (use-package flycheck
   :diminish flycheck-mode
-  :commands (global-flycheck-mode flycheck-mode flycheck-define-checker)
+  :commands ( global-flycheck-mode flycheck-mode
+              counsel-flycheck
+              flycheck-define-checker counsel-flycheck
+              flycheck-error-list-refresh
+              flycheck-error-list-set-source
+              flycheck-error-list-reset-filter )
+  :preface (progn
+             (defvar counsel-flycheck-history nil
+               "History for `counsel-flycheck'")
+
+             (defun counsel-flycheck ()
+               (interactive)
+               (if (not (bound-and-true-p flycheck-mode))
+                 (message "Flycheck mode is not available or enabled")
+                 (ivy-read "Error: "
+                   (let ((source-buffer (current-buffer)))
+                     (with-current-buffer (or (get-buffer flycheck-error-list-buffer)
+                                            (progn
+                                              (with-current-buffer
+                                                (get-buffer-create flycheck-error-list-buffer)
+                                                (flycheck-error-list-mode)
+                                                (current-buffer))))
+                       (flycheck-error-list-set-source source-buffer)
+                       (flycheck-error-list-reset-filter)
+                       (revert-buffer t t t)
+                       (split-string (buffer-string) "\n" t " *")))
+                   :action (lambda (s &rest _)
+                             (-when-let* ( (error (get-text-property 0 'tabulated-list-id s))
+                                           (pos (flycheck-error-pos error)) )
+                               (goto-char (flycheck-error-pos error))))
+                   :history 'counsel-flycheck-history)))
+             )
   :init (progn
           (setq flycheck-idle-change-delay 6)
-          (setq flycheck-check-syntax-automatically '(mode-enabled idle-change)))
+          (setq flycheck-check-syntax-automatically '(mode-enabled idle-change))
+          (evil-leader/set-key "el" 'counsel-flycheck))
   :config (progn
             (define-key evil-normal-state-map (kbd "] e") 'next-error)
             (define-key evil-normal-state-map (kbd "[ e") 'previous-error)))
@@ -738,7 +774,7 @@
   :init (progn
           (setq haskell-hoogle-url "https://www.stackage.org/lts/hoogle?q=%s")
           (setq haskell-process-type 'stack-ghci)
-          (add-hook 'haskell-mode-hook (lambda () (turn-on-haskell-indentation)))
+          (add-hook 'haskell-mode-hook (lambda () (haskell-indentation-mode)))
           (use-package ghc
             :load-path "vendor/ghc-mod/elisp"
             :commands (ghc-init ghc-debug ghc-abbrev-init ghc-type-init ghc-comp-init
@@ -797,9 +833,9 @@
   :init (progn
           (use-package evil-org)
           (setq org-directory "~/.org/")
-          (setq orglog-done 'time)
+          (setq org-log-done 'time)
           (setq org-hide-leading-stars nil)
-          (setq org-alphabetical-lists t)
+          (setq org-list-allow-alphabetical t)
           (setq org-src-fontify-natively t)  ;; you want this to activate coloring in blocks
           (setq org-src-tab-acts-natively t) ;; you want this to have completion in blocks
           (setq org-hide-emphasis-markers t) ;; to hide the *,=, or / markers
