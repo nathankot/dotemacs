@@ -746,8 +746,8 @@
   :init (progn
           (use-package company-sourcekit
             :load-path "vendor/company-sourcekit"
-            :config (progn
-                      (add-to-list 'company-backends 'company-sourcekit)))))
+            :init (setq company-sourcekit-use-yasnippet t)
+            :config (add-to-list 'company-backends 'company-sourcekit))))
 
 (use-package dockerfile-mode
   :mode "^Dockerfile\\'"
