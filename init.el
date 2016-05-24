@@ -1,6 +1,6 @@
-;;; package --- Nathan's Emacs
+;;; package --- Nathan's Emacs -*- lexical-binding: t -*-
+
 ;;; Commentary:
-;;; Extensive use of `use-package`
 
 ;;; Code:
 
