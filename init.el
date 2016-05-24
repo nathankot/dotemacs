@@ -36,7 +36,7 @@
 
 (when (eq system-type 'darwin)
   (setq interprogram-cut-function
-    (lambda (text &optional push)
+    (lambda (text &optional _)
       (let ((process-connection-type nil))
         (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
           (process-send-string proc text)
