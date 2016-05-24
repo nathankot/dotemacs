@@ -252,7 +252,7 @@
   :diminish projectile-mode
   :commands ( projectile-global-mode projectile-invalidate-cache
               projectile-find-other-file projectile-find-implementation-or-test
-              projectile-invalidate-cache )
+              projectile-invalidate-cache projectile-project-root )
   :bind ( ("C-p" . projectile-find-file)
           ("C-b" . projectile-switch-to-buffer) )
   :init (progn
