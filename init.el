@@ -569,45 +569,25 @@
               (kbd "C-o") 'eww-back-url
               (kbd "C-i") 'eww-forward-url)))
 
-(use-package helm-dash
-  :commands (counsel-dash helm-dash-initialize-debugging-buffer helm-dash)
-  :functions (counsel-dash-collection counsel-dash)
-  :preface (progn
-             (defvar counsel-dash--results nil)
-
-             (defun counsel-dash-collection (s &rest _)
-               (when (>= (length s) 3)
-                 (let* ( (helm-pattern s)
-                         (results (helm-dash-search)) )
-                   (setq counsel-dash--results results)
-                   (mapcar 'car results))))
-
-             (defun counsel-dash (&optional initial)
-               (interactive)
-               (helm-dash-initialize-debugging-buffer)
-               (helm-dash-create-buffer-connections)
-               (helm-dash-create-common-connections)
-               (ivy-read "Documentation for: "
-                 'counsel-dash-collection
-                 :dynamic-collection t
-                 :history 'helm-dash-history-input
-                 :initial-input initial
-                 :action (lambda (s)
-                           (-when-let (result (-drop 1 (-first (-compose (-partial 'string= s) 'car) counsel-dash--results)))
-                             (helm-dash-browse-url result))))))
-
+(use-package counsel-dash
+  :commands (counsel-dash
+             counsel-dash-set-local-docsets
+             counsel-dash-activate-local-docset
+             counsel-dash-activate-docset
+             counsel-dash-deactivate-docset)
+  :load-path "vendor/counsel-dash"
   :init (progn
-          (setq helm-dash-docsets-path "/Volumes/Storage/.docset")
-          (setq helm-dash-browser-func 'eww)
-          (setq helm-dash-common-docsets '("HTML" "CSS"))
+          (setq counsel-dash-docsets-path "/Volumes/Storage/.docset")
+          (setq counsel-dash-browser-func 'eww)
+          (setq counsel-dash-common-docsets '("Emacs Lisp" "Swift" "iOS" "Javascript"))
           (evil-leader/set-key "f" (lambda () (interactive) (counsel-dash (thing-at-point 'symbol))))
           (define-key evil-normal-state-map (kbd "C-f") 'counsel-dash)
-          (add-hook 'ruby-mode-hook (lambda () (setq-local helm-dash-docsets '("Ruby"))))
-          (add-hook 'dockerfile-mode-hook (lambda () (setq-local helm-dash-docsets '("Docker"))))
-          (add-hook 'js2-minor-mode-hook (lambda () (setq-local helm-dash-docsets '("Javascript" "NodeJS"))))
-          (add-hook 'web-mode-hook (lambda () (setq-local helm-dash-docsets '("Javascript" "HTML""CSS"))))
-          (add-hook 'swift-mode-hook (lambda () (setq-local helm-dash-docsets '("iOS" "Swift"))))
-          (add-hook 'prog-mode-hook (lambda () (interactive) (setq helm-current-buffer (current-buffer))))))
+          (add-hook 'emacs-lisp-mode-hook (lambda () (setq-local counsel-dash-docsets '("Emacs Lisp"))))
+          (add-hook 'ruby-mode-hook (lambda () (setq-local counsel-dash-docsets '("Ruby"))))
+          (add-hook 'dockerfile-mode-hook (lambda () (setq-local counsel-dash-docsets '("Docker"))))
+          (add-hook 'js2-minor-mode-hook (lambda () (setq-local counsel-dash-docsets '("Javascript" "NodeJS"))))
+          (add-hook 'web-mode-hook (lambda () (setq-local counsel-dash-docsets '("Javascript" "HTML""CSS"))))
+          (add-hook 'swift-mode-hook (lambda () (setq-local counsel-dash-docsets '("iOS" "Swift"))))))
 
 (use-package company
   :diminish " c"
