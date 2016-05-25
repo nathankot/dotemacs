@@ -615,7 +615,7 @@
                    company-keywords
                    company-files
                    company-dabbrev
-                   :with company-yasnippet)))))
+                   :with company-yasnippet )))))
 
 
 ;; LANGUAGE PACKS
