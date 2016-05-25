@@ -698,9 +698,8 @@
             (add-hook 'web-mode-hook (lambda () (yas-activate-extra-mode 'js-mode)))
             (add-hook 'web-mode-hook 'rainbow-mode)
             (add-to-list 'flycheck-checkers 'jsxhint)
-            (define-key prog-mode-map
-              (kbd "C-x /") 'web-mode-element-close
-              (kbd "C-/")   'web-mode-element-close)))
+            (define-key prog-mode-map (kbd "C-x /") 'web-mode-element-close)
+            (define-key prog-mode-map (kbd "C-/")   'web-mode-element-close)))
 
 (use-package fish-mode
   :mode "\\.fish\\'")
