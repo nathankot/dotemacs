@@ -551,7 +551,9 @@
             (define-key evil-normal-state-map (kbd "[ e") 'previous-error)))
 
 (use-package yasnippet
-  :commands (yas-global-mode yas-minor-mode yas-expand yas-expand-snippet)
+  :commands ( yas-global-mode yas-minor-mode
+              yas-expand yas-expand-snippet
+              yas-activate-extra-mode )
   :diminish (yas-minor-mode . " y")
   :init (progn
           (setq yas-snippet-dirs '("~/.emacs.d/.snippets/yasnippet-snippets"
@@ -685,18 +687,20 @@
   :init (progn
           (use-package emmet-mode
             :commands emmet-mode
+            ; emmet-mode still looks for the old expand-snippet function name
+            :preface (defalias 'yas-expand-snippet 'yas/expand-snippet)
             :init (progn
                     (add-hook 'sgml-mode-hook 'emmet-mode)
-                    (add-hook 'css-mode-hook  'emmet-mode)
                     (add-hook 'web-mode-hook 'emmet-mode))
-            :config (progn
-                      (evil-define-key 'insert emmet-mode-keymap
-                        (kbd "M-RET") 'emmet-expand-line))))
+            :config (evil-define-key 'insert emmet-mode-keymap
+                      (kbd "C-e") 'emmet-expand-yas)))
   :config (progn
             (add-hook 'web-mode-hook (lambda () (yas-activate-extra-mode 'js-mode)))
             (add-hook 'web-mode-hook 'rainbow-mode)
-            (define-key prog-mode-map (kbd "C-x /") 'web-mode-element-close)
-            (add-to-list 'flycheck-checkers 'jsxhint)))
+            (add-to-list 'flycheck-checkers 'jsxhint)
+            (define-key prog-mode-map
+              (kbd "C-x /") 'web-mode-element-close
+              (kbd "C-/")   'web-mode-element-close)))
 
 (use-package fish-mode
   :mode "\\.fish\\'")
