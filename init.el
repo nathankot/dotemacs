@@ -692,8 +692,12 @@
             :init (progn
                     (add-hook 'sgml-mode-hook 'emmet-mode)
                     (add-hook 'web-mode-hook 'emmet-mode))
-            :config (evil-define-key 'insert emmet-mode-keymap
-                      (kbd "C-e") 'emmet-expand-yas)))
+            :config
+            (advice-add #'yas--fallback :around
+              (lambda (oldfun &rest args)
+                (if (and (bound-and-true-p emmet-mode) (emmet-expr-on-line))
+                  (emmet-expand-yas)
+                  (apply oldfun args))))))
   :config (progn
             (add-hook 'web-mode-hook (lambda () (yas-activate-extra-mode 'js-mode)))
             (add-hook 'web-mode-hook 'rainbow-mode)
