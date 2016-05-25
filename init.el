@@ -668,17 +668,20 @@
   :mode "\\.html.twig\\'"
   :mode "\\.html.jsx\\'"
   :mode "\/\*\*.*@jsx"
-  :preface (progn
-             (defun jsxhint-predicate ()
-               (and (executable-find "jsxhint")
-                 (buffer-file-name)
-                 (string-match ".*\.jsx?$" (buffer-file-name))))
-             (flycheck-define-checker jsxhint
-               "A JSX syntax and style checker based on JSXHint."
-               :command ("jsxhint" source)
-               :error-patterns ((error line-start (1+ nonl) ": line " line ", col " column ", " (message) line-end))
-               :predicate jsxhint-predicate
-               :modes (web-mode)))
+  :preface (flycheck-define-checker jsxhint
+             "A JSX syntax and style checker based on JSXHint."
+             :command ("jsxhint" source)
+             :error-patterns
+             ((error line-start
+                (1+ nonl)
+                ": line " line
+                ", col " column
+                ", " (message) line-end))
+             :predicate (lambda ()
+                          (and (executable-find "jsxhint")
+                            (buffer-file-name)
+                            (string-match ".*\.jsx?$" (buffer-file-name))))
+             :modes (web-mode))
   :init (progn
           (use-package emmet-mode
             :commands emmet-mode
