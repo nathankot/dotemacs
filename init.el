@@ -589,6 +589,7 @@
           (add-hook 'dockerfile-mode-hook (lambda () (setq-local counsel-dash-docsets '("Docker"))))
           (add-hook 'js2-minor-mode-hook (lambda () (setq-local counsel-dash-docsets '("Javascript" "NodeJS"))))
           (add-hook 'web-mode-hook (lambda () (setq-local counsel-dash-docsets '("Javascript" "HTML""CSS"))))
+          (add-hook 'scss-mode-hook (lambda () (setq-local counsel-dash-docsets '("CSS"))))
           (add-hook 'swift-mode-hook (lambda () (setq-local counsel-dash-docsets '("iOS" "Swift"))))))
 
 (use-package company
@@ -715,6 +716,7 @@
   :mode "\\.stylus\\'")
 
 (use-package scss-mode
+  :mode "\\.sass\\'"
   :mode "\\.scss\\'"
   :init (setq scss-compile-at-save nil))
 
