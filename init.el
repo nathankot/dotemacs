@@ -822,6 +822,11 @@
               "d" 'ledger-delete-current-transaction
               "?" 'ledger-display-balance-at-point)))
 
+(use-package conf-mode
+  :ensure nil
+  :mode "\\.conf\\'"
+  :mode "\\.ini\\'"
+  :mode "\\.toml\\'")
 
 ;; PROGRAMS
 ;; ================================================================================
