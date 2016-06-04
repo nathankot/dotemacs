@@ -759,6 +759,11 @@
           :init (when (executable-find "pry") (add-hook 'ruby-mode-hook 'robe-mode))
           :config (when (executable-find "pry") (add-to-list 'company-backends 'company-robe))))
 
+(use-package rust-mode
+  :mode "\\.rs\\'"
+  :init (use-package racer :commands racer-mode)
+  :config (add-hook 'rust-mode-hook #'racer-mode))
+
 (use-package haskell-mode
   :mode "\\.hs\\'"
   :mode "\\.lhs\\'"

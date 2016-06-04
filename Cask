@@ -65,6 +65,9 @@
 (depends-on "rainbow-delimiters")
 (depends-on "ledger-mode")
 
+(depends-on "rust-mode")
+(depends-on "racer")
+
 (depends-on "evil")
 (depends-on "evil-leader")
 (depends-on "evil-search-highlight-persist")
