@@ -614,13 +614,11 @@
               '( company-css
                  company-elisp
                  company-clang
-                 ( ; company-capf
-                   company-dabbrev-code
-                   company-keywords
-                   company-files
-                   company-dabbrev
-                   :with company-yasnippet )))))
-
+                 company-capf
+                 company-files
+                 company-dabbrev-code
+                 company-keywords
+                 company-yasnippet))))
 
 ;; LANGUAGE PACKS
 ;; ================================================================================
