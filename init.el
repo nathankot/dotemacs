@@ -579,7 +579,10 @@
              counsel-dash-deactivate-docset)
   :load-path "vendor/counsel-dash"
   :init (progn
-          (setq counsel-dash-docsets-path "/Volumes/Storage/.docset")
+          (if (file-accessible-directory-p "/Volumes/Storage/.docset")
+            (setq counsel-dash-docsets-path "/Volumes/Storage/.docset")
+            (setq counsel-dash-docsets-path "~/.docset"))
+
           (setq counsel-dash-browser-func 'eww)
           (setq counsel-dash-common-docsets '("Emacs Lisp" "Swift" "iOS" "Javascript"))
           (evil-leader/set-key "f" (lambda () (interactive) (counsel-dash (thing-at-point 'symbol))))
