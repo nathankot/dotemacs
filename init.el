@@ -506,7 +506,10 @@
               (kbd "s") 'git-rebase-squash
               (kbd "p") 'git-rebase-pick
               (kbd "r") 'git-rebase-reword
-              (kbd "e") 'git-rebase-edit)))
+              (kbd "e") 'git-rebase-edit
+              (kbd "N") 'git-rebase-move-line-down
+              (kbd "P") 'git-rebase-move-line-up
+              (kbd "RET") 'git-rebase-show-commit)))
 
 (use-package flycheck
   :diminish flycheck-mode
