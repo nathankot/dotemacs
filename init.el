@@ -690,7 +690,7 @@
           (use-package emmet-mode
             :commands emmet-mode
             ; emmet-mode still looks for the old expand-snippet function name
-            :preface (defalias 'yas-expand-snippet 'yas/expand-snippet)
+            :preface (defalias 'yas/expand-snippet 'yas-expand-snippet)
             :init (progn
                     (add-hook 'sgml-mode-hook 'emmet-mode)
                     (add-hook 'web-mode-hook 'emmet-mode))
