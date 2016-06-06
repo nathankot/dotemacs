@@ -607,7 +607,7 @@
           (setq company-tooltip-align-annotations t))
   :config (progn
             ; Swap some keybindings
-            (define-key evil-insert-state-map (kbd "TAB") 'company-complete)
+            (define-key evil-insert-state-map (kbd "C-SPC") 'company-complete)
             (define-key company-active-map (kbd "<backtab>") 'company-select-previous)
             (define-key company-active-map (kbd "C-j") 'company-select-next)
             (define-key company-active-map (kbd "C-k") 'company-select-previous)
