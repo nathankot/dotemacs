@@ -676,6 +676,7 @@
   :mode "\\.html.twig\\'"
   :mode "\\.html.jsx\\'"
   :mode "\/\*\*.*@jsx"
+  :mode "\\.jsx\\'"
   :preface (flycheck-define-checker jsxhint
              "A JSX syntax and style checker based on JSXHint."
              :command ("jsxhint" source)
