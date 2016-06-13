@@ -378,8 +378,6 @@
   (evil-define-key 'insert smartparens-mode-map
     (kbd "C-l") 'sp-forward-sexp
     (kbd "C-h") 'sp-backward-sexp
-    (kbd "C-e") 'sp-down-sexp
-    (kbd "C-y") 'sp-up-sexp
     (kbd "C-k") 'sp-splice-sexp-killing-backward
     (kbd "C-j") 'sp-rewrap-sexp
     (kbd "C-c") 'sp-convolute-sexp
