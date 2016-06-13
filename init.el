@@ -393,6 +393,11 @@
   :init (progn
           (evil-leader/set-key "j" 'avy-goto-char)))
 
+(use-package dumb-jump
+  :commands (dumb-jump-go)
+  :init (progn
+          (evil-leader/set-key "d j" 'dumb-jump-go)))
+
 (use-package writeroom-mode
   :commands writeroom-mode
   :init (progn

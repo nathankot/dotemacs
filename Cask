@@ -23,6 +23,7 @@
 (depends-on "tern")
 (depends-on "wgrep")
 (depends-on "avy")
+(depends-on "dumb-jump")
 
 (depends-on "flycheck")
 (depends-on "flycheck-ledger")
