@@ -568,11 +568,11 @@
               yas-activate-extra-mode )
   :diminish (yas-minor-mode . " y")
   :init (progn
-          (setq yas-snippet-dirs '("~/.emacs.d/.snippets/yasnippet-snippets"
-                                    "~/.emacs.d/.snippets/personal"))
-          (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand))
+          (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand)
+          (setq yas-snippet-dirs
+            '("~/.emacs.d/.snippets/yasnippet-snippets"
+              "~/.emacs.d/.snippets/personal")))
   :config (progn
-            (yas-global-mode 1)
             (define-key yas-keymap (kbd "C-e") 'yas-next-field-or-maybe-expand)))
 
 (use-package eww
@@ -954,6 +954,7 @@
 (show-smartparens-global-mode t)
 (global-git-gutter-mode +1)
 (editorconfig-mode 1)
+(yas-global-mode 1)
 
 (popwin-mode 1)
 (ivy-mode 1)
