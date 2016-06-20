@@ -487,7 +487,7 @@
 (use-package magit
   :commands ( magit-log magit-commit magit-commit-amend
               magit-status magit-diff-unstaged magit-diff-staged
-              magit-blame magit-stage-file
+              magit-blame magit-blame-quit magit-stage-file
               magit-mode )
   :mode ("/\\(\\(\\(COMMIT\\|NOTES\\|PULLREQ\\|TAG\\)_EDIT\\|MERGE_\\|\\)MSG\\|BRANCH_DESCRIPTION\\)\\'" . global-git-commit-mode)
   :init (progn
@@ -505,7 +505,10 @@
             "g d" 'magit-diff-unstaged
             "g D" 'magit-diff-staged
             "g b" 'magit-blame
-            "g w" 'magit-stage-file))
+            "g w" 'magit-stage-file)
+
+          (evil-leader/set-key-for-mode 'magit-blame-mode
+            "g b" 'magit-blame-quit))
 
   :config (progn
             (evil-define-key 'emacs git-rebase-mode-map
