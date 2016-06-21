@@ -423,8 +423,10 @@
             (dolist (w '(quit-window evil-window-next evil-window-prev))
               (advice-add w :around
                 (lambda (oldfun &rest args)
-                  (and (bound-and-true-p writeroom-mode) (writeroom-mode -1))
-                  (apply oldfun args))))
+                  (let ((has-writeroom (bound-and-true-p writeroom-mode)))
+                    (and has-writeroom (writeroom-mode -1))
+                    (apply oldfun args)
+                    (and has-writeroom (writeroom-mode t))))))
 
             (add-to-list 'writeroom-global-effects
               (lambda (arg)
