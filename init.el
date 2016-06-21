@@ -285,11 +285,10 @@
             ; Register and support more project types
             (projectile-register-project-type 'xcode '("*.xcodeproj"))
             (advice-add #'projectile-test-suffix :around
-              (lambda (oldfun project-type)
+              (lambda (oldfun &rest args)
                 (or
-                  (cond
-                    ((member project-type '(xcode)) "Spec"))
-                  (oldfun project-type))))))
+                  (cond ((member (car args) '(xcode)) "Spec"))
+                  (apply oldfun args))))))
 
 (use-package ivy
   :diminish ivy-mode
