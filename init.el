@@ -260,8 +260,8 @@
           (setq projectile-enable-caching t)
           (setq projectile-completion-system 'ivy)
           (setq projectile-indexing-method 'alien)
-          (evil-leader/set-key "f o" 'projectile-find-other-file)
-          (evil-leader/set-key "f t" 'projectile-find-implementation-or-test)
+          (evil-leader/set-key "g o" 'projectile-find-other-file)
+          (evil-leader/set-key "g t" 'projectile-find-implementation-or-test)
           (with-eval-after-load 'ivy (define-key ivy-minibuffer-map (kbd "C-l") 'projectile-invalidate-cache)))
   :config (progn
             (projectile-global-mode +1)
