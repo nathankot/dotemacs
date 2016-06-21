@@ -251,7 +251,10 @@
 (use-package projectile
   :diminish projectile-mode
   :commands ( projectile-global-mode projectile-invalidate-cache
-              projectile-find-other-file projectile-find-implementation-or-test
+              projectile-find-other-file
+              projectile-find-implementation-or-test
+              projectile-find-implementation-or-test-other-window
+              projectile-toggle-between-implementation-and-test
               projectile-invalidate-cache projectile-project-root )
   :bind ( ("C-p" . projectile-find-file)
           ("C-b" . projectile-switch-to-buffer) )
@@ -260,8 +263,8 @@
           (setq projectile-enable-caching t)
           (setq projectile-completion-system 'ivy)
           (setq projectile-indexing-method 'alien)
-          (evil-leader/set-key "g o" 'projectile-find-other-file)
-          (evil-leader/set-key "g t" 'projectile-find-implementation-or-test)
+          (evil-leader/set-key "g o" (lambda () (interactive) (projectile-find-other-file t)))
+          (evil-leader/set-key "g t" 'projectile-toggle-between-implementation-and-test)
           (with-eval-after-load 'ivy (define-key ivy-minibuffer-map (kbd "C-l") 'projectile-invalidate-cache)))
   :config (progn
             (projectile-global-mode +1)
@@ -273,7 +276,15 @@
             (add-to-list 'projectile-globally-ignored-directories ".tmp")
             (add-to-list 'projectile-globally-ignored-directories "tmp")
             (add-to-list 'projectile-globally-ignored-directories "node_modules")
-            (add-to-list 'projectile-globally-ignored-directories "bower_components")))
+            (add-to-list 'projectile-globally-ignored-directories "bower_components")
+            ; Register and support more project types
+            (projectile-register-project-type 'xcode '("*.xcodeproj"))
+            (advice-add #'projectile-test-suffix :around
+              (lambda (oldfun project-type)
+                (or
+                  (cond
+                    ((member project-type '(xcode)) "Spec"))
+                  (oldfun project-type))))))
 
 (use-package ivy
   :diminish ivy-mode
