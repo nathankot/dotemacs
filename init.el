@@ -75,6 +75,7 @@
 (setq initial-scratch-message ";; Hello.")
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq large-file-warning-threshold 100000000)
+(setq truncate-lines t)
 
 ;; Theme.
 ;; ================================================================================
