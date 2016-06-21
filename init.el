@@ -214,7 +214,7 @@
                 (evil-delay
                   `(and (boundp ',keymap-symbol) (keymapp (symbol-value ',keymap-symbol)))
                   `(let ((map (symbol-value ',keymap-symbol)))
-                     (dolist (k '("h" "j" "k" "l" "v" "m" "n"))
+                     (dolist (k '("h" "j" "k" "l" "v" "m" "p" "n" "z"))
                        (-when-let (def (lookup-key map k))
                          (define-key map (upcase k) def)
                          (define-key map k nil)))
@@ -237,7 +237,11 @@
                        (kbd "H") 'evil-window-top
                        (kbd "L") 'evil-window-bottom
                        (kbd "gg") 'evil-goto-first-line
-                       (kbd ", SPC") 'evil-search-highlight-persist-remove-all))
+                       (kbd "z L") 'evil-scroll-right
+                       (kbd "z H") 'evil-scroll-left
+                       (kbd ", SPC") 'evil-search-highlight-persist-remove-all
+                       (kbd ", ,") 'writeroom-mode
+                       (kbd "0") 'evil-beginning-of-line))
                   'after-load-functions t nil
                   (format "evil-define-emacs-defaults-in-%s" (symbol-name keymap-symbol)))))
 
@@ -509,6 +513,7 @@
   :init (progn
           (setq vc-handled-backends ())
           (setq magit-completing-read-function 'ivy-completing-read)
+          (evil-set-initial-state 'magit-mode 'emacs)
           (evil-set-initial-state 'git-rebase-mode 'emacs)
           (evil-set-initial-state 'text-mode 'insert)
           (evil-set-initial-state 'git-commit-major-mode 'insert)
