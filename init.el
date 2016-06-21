@@ -419,7 +419,12 @@
           (evil-leader/set-key "," 'writeroom-mode))
   :config (progn
             ; Ensure writeroom is closed before the following list of functions
-            (dolist (w '(quit-window evil-window-next evil-window-prev))
+            (dolist (w '(
+                          quit-window
+                          evil-window-next
+                          evil-window-prev
+                          evil-jump-backward
+                          evil-jump-forward))
               (advice-add w :around
                 (lambda (oldfun &rest args)
                   (let ((has-writeroom (bound-and-true-p writeroom-mode)))
