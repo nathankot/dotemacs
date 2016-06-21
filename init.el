@@ -403,9 +403,11 @@
           (setq writeroom-width 120)
           (evil-leader/set-key "," 'writeroom-mode))
   :config (progn
-            (evil-define-key 'normal writeroom-mode-map
-              (kbd "C-j") (lambda () (interactive) (writeroom-mode -1) (evil-window-next))
-              (kbd "C-k") (lambda () (interactive) (writeroom-mode -1) (evil-window-prev)))
+            (advice-add #'evil-window-next :around
+              (lambda (oldfun &rest args)
+                (and (bound-and-true-p writeroom-mode) (writeroom-mode -1))
+                (apply oldfun args)))
+
             (add-to-list 'writeroom-global-effects
               (lambda (arg)
                 (interactive)
