@@ -461,7 +461,7 @@
             (add-hook 'shell-mode-hook 'read-only-mode)
             (add-hook 'shell-mode-hook 'buffer-disable-undo)
             (add-hook 'shell-mode-hook (lambda () (linum-mode -1)))
-            (evil-define-key 'normal shell-mode-map (kbd "q") 'delete-window)
+            (evil-define-key 'emacs shell-mode-map (kbd "q") 'delete-window)
             (define-key shell-mode-map (kbd "C-c C-c") (lambda () (interactive) (delete-process (buffer-name))))))
 
 (use-package profiler
