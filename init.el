@@ -454,11 +454,13 @@
                (interactive)
                (projectile-with-default-dir (projectile-project-root)
                  (async-shell-command (format "make %s" command) (format "*shell:make %s*" command)))))
+  :init (evil-set-initial-state 'shell-mode 'emacs)
   :config (progn
-            (evil-set-initial-state 'shell-mode 'normal)
+            ;; The assumption here is that I only use shell mode to run processes,
+            ;; I don't use it for actuall shell access (have tmux for that.)
             (add-hook 'shell-mode-hook 'read-only-mode)
+            (add-hook 'shell-mode-hook 'buffer-disable-undo)
             (add-hook 'shell-mode-hook (lambda () (linum-mode -1)))
-            (add-hook 'shell-mode-hook (lambda () (interactive) (buffer-disable-undo)))
             (evil-define-key 'normal shell-mode-map (kbd "q") 'delete-window)
             (define-key shell-mode-map (kbd "C-c C-c") (lambda () (interactive) (delete-process (buffer-name))))))
 
