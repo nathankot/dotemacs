@@ -368,16 +368,10 @@
 
 (use-package popwin
   :commands popwin-mode
-  :init (setq popwin:special-display-config  '(("^\\*magit:.*\\*$" :regexp t :position top :height 20)
-                                                ("^\\*shell:.*\\*$" :regexp t :position bottom :noselect t :tail t :stick t)
-                                                (help-mode :position bottom :noselect t :stick t)
-                                                (completion-list-mode :noselect t)
-                                                (grep-mode :noselect t)
-                                                (occur-mode :noselect t)
+  :init (setq popwin:special-display-config  '( ("^\\*shell:.*\\*$" :regexp t :position bottom :noselect t :height 10 :stick t)
                                                 ("*Warnings*" :noselect t)
                                                 ("*GHC Error*" :noselect t)
-                                                ("*Miniedit Help*" :noselect t)
-                                                ("*undo-tree*" :width 60 :position right)))
+                                                ("*undo-tree*" :width 50 :position left)) )
   :config (progn
             (evil-define-key 'normal popwin:keymap (kbd "q") 'popwin:close-popup-window)))
 
