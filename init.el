@@ -373,7 +373,8 @@
                                                 ("*GHC Error*" :noselect t)
                                                 ("*undo-tree*" :width 50 :position left)) )
   :config (progn
-            (evil-define-key 'normal popwin:keymap (kbd "q") 'popwin:close-popup-window)))
+            (evil-define-key 'normal popwin:keymap (kbd "q") 'popwin:close-popup-window)
+            (evil-define-key 'emacs popwin:keymap (kbd "q") 'popwin:close-popup-window)))
 
 (use-package smartparens
   :commands (smartparens-global-mode show-smartparens-global-mode)
