@@ -419,7 +419,9 @@
                           evil-window-next
                           evil-window-prev
                           evil-jump-backward
-                          evil-jump-forward))
+                          evil-jump-forward
+                          persp-next
+                          persp-prev))
               (advice-add w :around
                 (lambda (oldfun &rest args)
                   (let ((has-writeroom (bound-and-true-p writeroom-mode)))
