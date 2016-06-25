@@ -397,9 +397,9 @@
     (kbd "M-o") 'sp-forward-barf-sexp))
 
 (use-package avy
-  :commands (avy-goto-char)
+  :commands (avy-goto-char-2)
   :init (progn
-          (evil-leader/set-key "j" 'avy-goto-char)))
+          (evil-leader/set-key "j" 'avy-goto-char-2)))
 
 (use-package dumb-jump
   :commands (dumb-jump-go)
