@@ -207,6 +207,7 @@
             (define-key evil-visual-state-map (kbd "SPC") 'evil-search-forward)
             (define-key evil-normal-state-map (kbd "SPC") 'evil-search-forward)
             (define-key evil-visual-state-map (kbd "C-i") 'indent-region)
+            (evil-leader/set-key "k b" 'kill-buffer)
 
             ;; Default keys for emacs state
             (defun apply-emacs-defaults-to-mode (mode)
