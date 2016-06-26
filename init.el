@@ -107,6 +107,17 @@
 ;; ================================================================================
 
 (use-package evil
+  :preface
+  (defun split-window-vertically-and-switch ()
+    (interactive)
+    (split-window-vertically)
+    (other-window 1))
+
+  (defun split-window-horizontally-and-switch ()
+    (interactive)
+    (split-window-horizontally)
+    (other-window 1))
+
   :init (progn
           (setq evil-want-C-u-scroll t
                 evil-overriding-maps nil
@@ -179,17 +190,10 @@
             ;; More fine-grained undo control
             (setq evil-want-fine-undo 'fine)
 
-            (define-key evil-normal-state-map (kbd "-")
-              (lambda ()
-                (interactive)
-                (split-window-vertically)
-                (other-window 1)))
-
-            (define-key evil-normal-state-map (kbd "|")
-              (lambda ()
-                (interactive)
-                (split-window-horizontally)
-                    (other-window 1)))
+            (define-key evil-normal-state-map (kbd "-") 'split-window-vertically-and-switch)
+            (define-key evil-emacs-state-map (kbd "-") 'split-window-vertically-and-switch)
+            (define-key evil-normal-state-map (kbd "|") 'split-window-horizontally-and-switch)
+            (define-key evil-emacs-state-map (kbd "|") 'split-window-horizontally-and-switch)
 
             (evil-leader/set-key "w" 'save-buffer)
             (evil-leader/set-key "i" 'evil-window-move-far-left)
