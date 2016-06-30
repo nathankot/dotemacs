@@ -1,0 +1,9 @@
+#[cfg(test)]
+mod tests {
+    user super::*;
+
+    #[test]
+    fn ${1:it_works}() {
+       $0
+    }
+}
