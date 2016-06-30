@@ -604,6 +604,7 @@
             '("~/.emacs.d/.snippets/yasnippet-snippets"
               "~/.emacs.d/.snippets/personal")))
   :config (progn
+            (define-key yas-keymap (kbd "DEL") 'yas-skip-and-clear-or-delete-char)
             (define-key yas-keymap (kbd "C-e") 'yas-next-field-or-maybe-expand)))
 
 (use-package eww
