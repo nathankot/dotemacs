@@ -583,8 +583,7 @@
                              (-when-let* ( (error (get-text-property 0 'tabulated-list-id s))
                                            (pos (flycheck-error-pos error)) )
                                (goto-char (flycheck-error-pos error))))
-                   :history 'counsel-flycheck-history)))
-             )
+                   :history 'counsel-flycheck-history))))
   :init (progn
           (setq flycheck-idle-change-delay 6)
           (setq flycheck-check-syntax-automatically '(mode-enabled idle-change))
