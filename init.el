@@ -840,6 +840,13 @@
   :config (progn
             (evil-define-key 'normal haskell-mode-map (kbd "?") 'hoogle)))
 
+(use-package go-mode
+  :commands (go-mode)
+  :init (progn
+          (use-package company-go))
+  :config (progn
+            (add-hook 'before-save-hook 'gofmt-before-save)))
+
 (use-package rainbow-mode
   :diminish rainbow-mode
   :commands (rainbow-mode)
