@@ -773,7 +773,8 @@
   :mode "\\.md\\'"
   :mode "\\.markdown\\'"
   :mode "^README\\'"
-  :commands markdown-mode)
+  :commands markdown-mode
+  :config (add-hook 'markdown-mode-hook 'orgtbl-mode))
 
 (use-package lua-mode
   :mode "\\.lua\\'")
