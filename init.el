@@ -843,9 +843,9 @@
 
 (use-package go-mode
   :commands (go-mode)
-  :init (progn
-          (use-package company-go))
+  :init (use-package company-go)
   :config (progn
+            (add-to-list 'company-backends 'company-go)
             (add-hook 'before-save-hook 'gofmt-before-save)))
 
 (use-package rainbow-mode
