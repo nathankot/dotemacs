@@ -843,10 +843,10 @@
 
 (use-package go-mode
   :mode "\\.go\\'"
-  :init (use-package company-go)
-  :config (progn
-            (add-to-list 'company-backends 'company-go)
-            (add-hook 'before-save-hook 'gofmt-before-save)))
+  :init (use-package company-go
+          :init (setq company-go-show-annotation t)
+          :config (add-to-list 'company-backends 'company-go))
+  :config (add-hook 'before-save-hook 'gofmt-before-save))
 
 (use-package rainbow-mode
   :diminish rainbow-mode
