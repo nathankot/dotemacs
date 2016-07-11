@@ -842,7 +842,7 @@
             (evil-define-key 'normal haskell-mode-map (kbd "?") 'hoogle)))
 
 (use-package go-mode
-  :commands (go-mode)
+  :mode "\\.go\\'"
   :init (use-package company-go)
   :config (progn
             (add-to-list 'company-backends 'company-go)
