@@ -1,0 +1,4 @@
+func (suite *`(let ((b (buffer-string))) (string-match "\\w+Suite" b) (or (match-string-no-properties 0 b) "PackageNameSuite"))`) Test$2() {
+	assert := assert.New(suite.T())
+  $0
+}
