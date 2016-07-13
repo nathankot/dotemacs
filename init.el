@@ -596,6 +596,21 @@
   :commands ( yas-global-mode yas-minor-mode
               yas-expand yas-expand-snippet
               yas-activate-extra-mode )
+  :preface (defun yas-skip-and-clear-or-backward-delete-char (&optional field)
+             "Clears unmodified field if at field start, skips to next tab.
+Otherwise deletes a character normally by calling `backward-delete-char'."
+             (interactive)
+             (let ((field (or field
+                            (and yas--active-field-overlay
+                              (overlay-buffer yas--active-field-overlay)
+                              (overlay-get yas--active-field-overlay 'yas--field)))))
+               (cond ((and field
+                        (not (yas--field-modified-p field))
+                        (eq (point) (marker-position (yas--field-start field))))
+                       (yas--skip-and-clear field)
+                       (yas-next-field 1))
+                 (t
+                   (call-interactively 'backward-delete-char)))))
   :diminish (yas-minor-mode . " y")
   :init (progn
           (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand)
@@ -603,7 +618,7 @@
             '("~/.emacs.d/.snippets/yasnippet-snippets"
               "~/.emacs.d/.snippets/personal")))
   :config (progn
-            (define-key yas-keymap (kbd "DEL") 'yas-skip-and-clear-or-delete-char)
+            (define-key yas-keymap (kbd "DEL") 'yas-skip-and-clear-or-backward-delete-char)
             (define-key yas-keymap (kbd "C-e") 'yas-next-field-or-maybe-expand)))
 
 (use-package eww
