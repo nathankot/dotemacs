@@ -3,7 +3,6 @@ package ${1:$(car (last (split-string yas-text "/")))}_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
 	. "${1:github.com/owner/repo/package}"
