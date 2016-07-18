@@ -1,11 +1,11 @@
-	engine := gin.New()
-	engine.${1:GET}("/", ${2:HandlerFunc()})
+engine := gin.New()
+engine.${1:GET}("/", ${2:HandlerFunc()})
 
-	recorder := httptest.NewRecorder()
+recorder := httptest.NewRecorder()
 
-	body := strings.NewReader("")
-	request, err := http.NewRequest("POST", "/", body)
-  suite.Nil(err)
-  request.Header.Set("Content-Type", "application/json")
+body := strings.NewReader("")
+request, err := http.NewRequest("POST", "/", body)
+suite.Nil(err)
+request.Header.Set("Content-Type", "application/json")
 
-	engine.ServeHTTP(recorder, request)
+engine.ServeHTTP(recorder, request)
