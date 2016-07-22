@@ -613,13 +613,11 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
                    (call-interactively 'backward-delete-char)))))
   :diminish (yas-minor-mode . " y")
   :init (progn
+          (evil-define-key 'insert yas-minor-mode-map (kbd "DEL") 'yas-skip-and-clear-or-backward-delete-char)
           (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand)
           (setq yas-snippet-dirs
             '("~/.emacs.d/.snippets/yasnippet-snippets"
-              "~/.emacs.d/.snippets/personal")))
-  :config (progn
-            (define-key yas-keymap (kbd "DEL") 'yas-skip-and-clear-or-backward-delete-char)
-            (define-key yas-keymap (kbd "C-e") 'yas-next-field-or-maybe-expand)))
+              "~/.emacs.d/.snippets/personal"))))
 
 (use-package eww
   :commands (eww eww-open-file)
