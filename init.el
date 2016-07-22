@@ -535,7 +535,7 @@
             "g s" 'magit-status
             "g d" 'magit-diff-unstaged
             "g D" 'magit-diff-staged
-            "g b" 'magit-blame
+            "g b" (lambda () (interactive) (if (bound-and-true-p magit-blame-mode) (magit-blame-quit) (magit-blame)))
             "g w" 'magit-stage-file)
 
           (evil-leader/set-key-for-mode 'magit-blame-mode
