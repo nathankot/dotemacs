@@ -14,9 +14,6 @@ type $2Suite struct {
 	suite.Suite
 }
 
-func (suite *$2Suite) SetupTest() {
-}
-
 func Test$2Suite(t *testing.T) {
 	suite.Run(t, new($2Suite))
 }
