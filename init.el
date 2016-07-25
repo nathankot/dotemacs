@@ -659,6 +659,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
           (setq company-dabbrev-downcase nil)
           (setq company-tooltip-align-annotations t))
   :config (progn
+            (use-package company-emoji)
             ; Swap some keybindings
             (define-key evil-insert-state-map (kbd "C-@") 'company-complete)
             (define-key company-active-map (kbd "<backtab>") 'company-select-previous)
@@ -675,6 +676,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
                  company-files
                  company-dabbrev-code
                  company-keywords
+                 company-emoji
                  company-yasnippet))))
 
 ;; LANGUAGE PACKS
