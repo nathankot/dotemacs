@@ -589,6 +589,9 @@
           (setq flycheck-check-syntax-automatically '(mode-enabled idle-change))
           (evil-leader/set-key "el" 'counsel-flycheck))
   :config (progn
+            (delete 'go-vet flycheck-checkers)
+            (delete 'go-build flycheck-checkers)
+            (delete 'go-test flycheck-checkers)
             (define-key evil-normal-state-map (kbd "] e") 'next-error)
             (define-key evil-normal-state-map (kbd "[ e") 'previous-error)))
 
