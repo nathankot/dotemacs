@@ -915,18 +915,9 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
           (setq org-src-tab-acts-natively t) ;; you want this to have completion in blocks
           (setq org-hide-emphasis-markers t) ;; to hide the *,=, or / markers
           (setq org-pretty-entities t)       ;; to have \alpha, \to and others display as utf8 http://orgmode.org/manual/Special-symbols.html
-          (setq org-agenda-files (list "~/.org/tasks.org" "~/.org/notes.org"))
-          (setq org-default-notes-file (concat org-directory "/notes.org"))
           (setq org-enforce-todo-checkbox-dependencies t)
           (setq org-enforce-todo-dependencies t)
           (setq org-todo-keywords '((sequence "TODO" "DOING" "|" "DONE" "CANCELED" "DELEGATED")))
-          (setq org-agenda-files (quote ("~/.org/tasks.org" "~/.org/notes.org")))
-          (setq org-todo-keyword-faces
-            '(("TODO" . org-warning)
-               ("DOING" . "white")
-               ("DONE" . "green")
-               ("DELEGATED" . "purple")
-               ("CANCELED" . "red")))
 
           (add-hook 'org-mode-hook 'org-indent-mode)
           (add-hook 'org-agenda-mode-hook
@@ -938,24 +929,6 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
               (auto-save-mode))))
 
   :config (progn
-            (evil-leader/set-key "o b"
-              (lambda ()
-                (interactive)
-                (let ((persp (gethash "org" perspectives-hash)))
-                  (when (null persp) ; When perspective doesn't exist
-                    (persp-switch "org")
-                    (when (file-exists-p "~/.org/tasks.org")
-                      (find-file "~/.org/tasks.org"))
-                    (when (file-exists-p "~/.org/notes.org")
-                      (split-window-right)
-                      (find-file "~/.org/notes.org")) ; Or when it already exists
-                    (persp-activate persp)))))
-
-            (evil-leader/set-key
-              "o c" 'org-capture
-              "o a" 'org-agenda-list
-              "o t" 'org-todo-list)
-
             (evil-leader/set-key-for-mode 'org-mode
               "d" 'org-deadline
               "s" 'org-schedule
@@ -979,13 +952,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
               (kbd "w")   'org-save-all-org-buffers)
 
             (evil-leader/set-key-for-mode 'org-agenda-mode-map
-              (kbd "w") 'org-save-all-org-buffers)
-
-            (if (file-exists-p (expand-file-name "README.org"))
-              (add-to-list 'org-agenda-files (expand-file-name "README.org")))
-
-            (if (file-exists-p (expand-file-name "project.org"))
-              (add-to-list 'org-agenda-files (expand-file-name "project.org")))))
+              (kbd "w") 'org-save-all-org-buffers)))
 
 (use-package sx
   :commands (sx-tab-newest sx-search sx-authenticate sx-ask
