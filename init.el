@@ -766,7 +766,6 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
                   (apply oldfun args))))))
   :config (progn
             (add-hook 'web-mode-hook (lambda () (yas-activate-extra-mode 'js-mode)))
-            (add-hook 'web-mode-hook 'rainbow-mode)
             (add-to-list 'flycheck-checkers 'jsxhint)
             (define-key prog-mode-map (kbd "C-x /") 'web-mode-element-close)
             (define-key prog-mode-map (kbd "C-/")   'web-mode-element-close)))
@@ -872,7 +871,8 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :commands (rainbow-mode)
   :init (progn
           (add-hook 'css-mode-hook 'rainbow-mode)
-          (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)))
+          (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
+          (add-hook 'web-mode-hook 'rainbow-mode)))
 
 (use-package rainbow-delimiters
   :commands rainbow-delimiters-mode
