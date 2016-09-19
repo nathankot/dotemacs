@@ -595,6 +595,10 @@
             (define-key evil-normal-state-map (kbd "] e") 'next-error)
             (define-key evil-normal-state-map (kbd "[ e") 'previous-error)))
 
+(use-package flyspell
+  :init (progn
+          (add-hook 'prog-mode-hook 'flyspell-prog-mode)))
+
 (use-package yasnippet
   :commands ( yas-global-mode yas-minor-mode
               yas-expand yas-expand-snippet
