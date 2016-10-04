@@ -478,7 +478,6 @@
           (evil-set-initial-state 'profiler-report-mode 'emacs)))
 
 (use-package perspective
-  :commands (persp-switch persp-next persp-prev persp-rename persp-kill)
   :init (progn
           (define-key evil-normal-state-map (kbd "C-@") 'persp-switch)
           (define-key evil-normal-state-map (kbd ")") 'persp-next)
