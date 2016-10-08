@@ -837,6 +837,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :mode "config/models\\'"
   :mode "config/routes\\'"
   :init (progn
+          (setq haskell-hoogle-command "stack hoogle --")
           (setq haskell-hoogle-url "https://www.stackage.org/lts/hoogle?q=%s")
           (setq haskell-process-type 'stack-ghci)
           (add-hook 'haskell-mode-hook (lambda () (haskell-indentation-mode)))
