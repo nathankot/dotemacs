@@ -450,7 +450,7 @@
             (add-to-list 'editorconfig-indentation-alist '(web-mode js2-basic-offset))
             (add-to-list 'editorconfig-indentation-alist '(js2-minor-mode js2-basic-offset))
             (add-to-list 'editorconfig-indentation-alist '(js2-mode js2-basic-offset))
-            (add-to-list 'editorconfig-indentation-alist '(swift-mode swift-indent-offset))
+            (add-to-list 'editorconfig-indentation-alist '(swift-mode swift-mode:basic-offset))
             (add-to-list 'editorconfig-indentation-alist '(haskell-mode haskell-indent-spaces haskell-indent-offset))
             (add-to-list 'editorconfig-indentation-alist '(evil-mode evil-shift-width))))
 
@@ -801,7 +801,6 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :mode "\\.lua\\'")
 
 (use-package swift-mode
-  :load-path "vendor/swift-mode"
   :mode "\\.swift\\'"
   :init (progn
           (use-package company-sourcekit

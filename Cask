@@ -66,6 +66,7 @@
 (depends-on "rainbow-mode")
 (depends-on "rainbow-delimiters")
 (depends-on "ledger-mode")
+(depends-on "swift-mode")
 
 (depends-on "go-mode")
 (depends-on "company-go")
