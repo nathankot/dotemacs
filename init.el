@@ -418,21 +418,24 @@
           (setq writeroom-width 120)
           (evil-leader/set-key "," 'writeroom-mode))
   :config (progn
-            ; Ensure writeroom is closed before the following list of functions
-            (dolist (w '(
-                          quit-window
+            (dolist (w '(quit-window
                           evil-window-next
-                          evil-window-prev
-                          evil-jump-backward
-                          evil-jump-forward
-                          persp-next
-                          persp-prev))
+                          evil-window-prev))
               (advice-add w :around
                 (lambda (oldfun &rest args)
+                  "Ensure `writeroom-mode' is turned off and on around this function"
                   (let ((has-writeroom (bound-and-true-p writeroom-mode)))
                     (and has-writeroom (writeroom-mode -1))
                     (apply oldfun args)
-                    (and has-writeroom (writeroom-mode t))))))
+                    (writeroom-mode 1)))))
+
+            (dolist (w '(split-window-vertically split-window-horizontally persp-switch))
+              (advice-add w :around
+                (lambda (oldfun &rest args)
+                  "Switch `writeroom-mode' off before calling this function"
+                  (let ((has-writeroom (bound-and-true-p writeroom-mode)))
+                    (and has-writeroom (writeroom-mode -1))
+                    (apply oldfun args)))))
 
             (add-to-list 'writeroom-global-effects
               (lambda (arg)
