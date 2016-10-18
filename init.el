@@ -118,6 +118,42 @@
     (split-window-horizontally)
     (other-window 1))
 
+  (defun apply-emacs-defaults-to-mode (mode)
+    (let ((keymap-symbol (intern (concat (symbol-name mode) "-map"))))
+      (evil-delay
+        `(and (boundp ',keymap-symbol) (keymapp (symbol-value ',keymap-symbol)))
+        `(let ((map (symbol-value ',keymap-symbol)))
+           (dolist (k '("h" "j" "k" "l" "v" "m" "p" "n" "z"))
+             (-when-let (def (lookup-key map k))
+               (define-key map (upcase k) def)
+               (define-key map k nil)))
+
+           (evil-add-hjkl-bindings map 'emacs
+             "v" 'evil-visual-char)
+
+           (evil-define-key 'emacs map
+             (kbd "m") nil
+             (kbd "C-e") 'evil-scroll-line-down
+             (kbd "C-y") 'evil-scroll-line-up
+             (kbd "C-u") 'evil-scroll-up
+             (kbd "C-d") 'evil-scroll-down
+             (kbd "{") 'evil-backward-paragraph
+             (kbd "}") 'evil-forward-paragraph
+             (kbd "SPC") 'evil-search-forward
+             (kbd "/") 'evil-search-forward
+             (kbd "n") 'evil-search-next
+             (kbd "M") 'evil-window-middle
+             (kbd "H") 'evil-window-top
+             (kbd "L") 'evil-window-bottom
+             (kbd "gg") 'evil-goto-first-line
+             (kbd "z L") 'evil-scroll-right
+             (kbd "z H") 'evil-scroll-left
+             (kbd ", SPC") 'evil-search-highlight-persist-remove-all
+             (kbd ", ,") 'writeroom-mode
+             (kbd "0") 'evil-beginning-of-line))
+        'after-load-functions t nil
+        (format "evil-define-emacs-defaults-in-%s" (symbol-name keymap-symbol)))))
+
   :init (progn
           (setq evil-want-C-u-scroll t
                 evil-overriding-maps nil
@@ -213,43 +249,11 @@
             (define-key evil-visual-state-map (kbd "C-i") 'indent-region)
             (evil-leader/set-key "k b" 'kill-buffer)
 
+            ;; Recreate unimpaired
+            (define-key evil-normal-state-map (kbd "[ b") 'previous-buffer)
+            (define-key evil-normal-state-map (kbd "] b") 'next-buffer)
+
             ;; Default keys for emacs state
-            (defun apply-emacs-defaults-to-mode (mode)
-              (let ((keymap-symbol (intern (concat (symbol-name mode) "-map"))))
-                (evil-delay
-                  `(and (boundp ',keymap-symbol) (keymapp (symbol-value ',keymap-symbol)))
-                  `(let ((map (symbol-value ',keymap-symbol)))
-                     (dolist (k '("h" "j" "k" "l" "v" "m" "p" "n" "z"))
-                       (-when-let (def (lookup-key map k))
-                         (define-key map (upcase k) def)
-                         (define-key map k nil)))
-
-                     (evil-add-hjkl-bindings map 'emacs
-                       "v" 'evil-visual-char)
-
-                     (evil-define-key 'emacs map
-                       (kbd "m") nil
-                       (kbd "C-e") 'evil-scroll-line-down
-                       (kbd "C-y") 'evil-scroll-line-up
-                       (kbd "C-u") 'evil-scroll-up
-                       (kbd "C-d") 'evil-scroll-down
-                       (kbd "{") 'evil-backward-paragraph
-                       (kbd "}") 'evil-forward-paragraph
-                       (kbd "SPC") 'evil-search-forward
-                       (kbd "/") 'evil-search-forward
-                       (kbd "n") 'evil-search-next
-                       (kbd "M") 'evil-window-middle
-                       (kbd "H") 'evil-window-top
-                       (kbd "L") 'evil-window-bottom
-                       (kbd "gg") 'evil-goto-first-line
-                       (kbd "z L") 'evil-scroll-right
-                       (kbd "z H") 'evil-scroll-left
-                       (kbd ", SPC") 'evil-search-highlight-persist-remove-all
-                       (kbd ", ,") 'writeroom-mode
-                       (kbd "0") 'evil-beginning-of-line))
-                  'after-load-functions t nil
-                  (format "evil-define-emacs-defaults-in-%s" (symbol-name keymap-symbol)))))
-
             (dolist (mode evil-emacs-state-modes) (apply-emacs-defaults-to-mode mode))
             (add-function :after (symbol-function 'evil-set-initial-state)
               (lambda (mode state) (when (eq state 'emacs) (apply-emacs-defaults-to-mode mode))))))
