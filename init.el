@@ -638,7 +638,8 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
              counsel-dash-set-local-docsets
              counsel-dash-activate-local-docset
              counsel-dash-activate-docset
-             counsel-dash-deactivate-docset)
+             counsel-dash-deactivate-docset
+             counsel-dash-install-docset)
   :load-path "vendor/counsel-dash"
   :init (progn
           (if (file-accessible-directory-p "/Volumes/Storage/.docset")
