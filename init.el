@@ -308,21 +308,14 @@
 
           (use-package swiper
             :commands (swiper swiper-all)
-            :init (progn
-                    (evil-leader/set-key
-                      "ss" 'swiper
-                      "sa" 'swiper-all)))
+            :init (evil-leader/set-key "s" 'swiper))
 
           (use-package counsel
             :commands (counsel-mode counsel-ag)
             :diminish counsel-mode
             :preface (defun counsel-projectile-ag () (interactive) (counsel-ag "" (projectile-project-root)))
             :functions (counsel-projectile-ag)
-            :bind (("C-s" . counsel-projectile-ag))
-            :init (evil-leader/set-key "s"
-                    (lambda ()
-                      (interactive)
-                      (counsel-ag (thing-at-point 'symbol) (projectile-project-root)))))
+            :bind (("C-s" . counsel-projectile-ag)))
 
           (use-package wgrep
             :commands (wgrep-change-to-wgrep-mode)
