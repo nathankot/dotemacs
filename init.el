@@ -610,13 +610,13 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
                             (and yas--active-field-overlay
                               (overlay-buffer yas--active-field-overlay)
                               (overlay-get yas--active-field-overlay 'yas--field)))))
-               (cond ((and field
-                        (not (yas--field-modified-p field))
-                        (eq (point) (marker-position (yas--field-start field))))
-                       (yas--skip-and-clear field)
-                       (yas-next-field 1))
-                 (t
-                   (call-interactively 'backward-delete-char)))))
+               (cond
+                 ((and field
+                    (not (yas--field-modified-p field))
+                    (eq (point) (marker-position (yas--field-start field))))
+                   (yas--skip-and-clear field)
+                   (yas-next-field 1))
+                 (t (call-interactively 'backward-delete-char)))))
   :diminish (yas-minor-mode . " y")
   :init (progn
           (evil-define-key 'insert yas-minor-mode-map (kbd "DEL") 'yas-skip-and-clear-or-backward-delete-char)
