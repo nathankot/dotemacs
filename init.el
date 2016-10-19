@@ -424,7 +424,7 @@
                   (let ((has-writeroom (bound-and-true-p writeroom-mode)))
                     (and has-writeroom (writeroom-mode -1))
                     (apply oldfun args)
-                    (writeroom-mode 1)))))
+                    (and has-writeroom (writeroom-mode 1))))))
 
             (dolist (w '(split-window-vertically split-window-horizontally persp-switch))
               (advice-add w :around
