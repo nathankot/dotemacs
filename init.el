@@ -23,7 +23,7 @@
        ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
   '(package-selected-packages
      (quote
-       (guide-key yasnippet yaml-mode writeroom-mode wgrep web-mode use-package sx stylus-mode smartparens smart-mode-line scss-mode robe rainbow-mode rainbow-delimiters puppet-mode projectile popwin php-mode perspective magit lua-mode less-css-mode ledger-mode js2-mode idle-highlight-mode htmlize helm-dash haskell-mode git-gutter gist flycheck-ledger flycheck-cask fish-mode expand-region exec-path-from-shell evil-surround evil-snipe evil-search-highlight-persist evil-org evil-matchit evil-commentary emmet-mode editorconfig dockerfile-mode counsel company-tern coffee-mode cask))))
+       (guide-key yasnippet yaml-mode writeroom-mode wgrep web-mode use-package sx stylus-mode smartparens smart-mode-line scss-mode robe rainbow-mode rainbow-delimiters puppet-mode projectile popwin php-mode perspective magit lua-mode less-css-mode ledger-mode js2-mode idle-highlight-mode htmlize helm-dash haskell-mode git-gutter gist flycheck-ledger flycheck-cask fish-mode expand-region exec-path-from-shell evil-surround evil-snipe evil-search-highlight-persist evil-visual-mark-mode evil-matchit evil-commentary emmet-mode editorconfig dockerfile-mode counsel company-tern coffee-mode cask))))
 
 (require 'cask (concat (getenv "HOMEBREW_ROOT") "/share/emacs/site-lisp/cask/cask.el"))
 (cask-initialize)
@@ -183,7 +183,10 @@
             :commands (global-evil-surround-mode evil-surround-mode))
 
           (use-package evil-matchit
-            :commands (global-evil-matchit-mode evil-matchit-mode)))
+            :commands (global-evil-matchit-mode evil-matchit-mode))
+
+          (use-package evil-visual-mark-mode
+            :commands evil-visual-mark-mode))
 
   :config (progn
             (global-evil-leader-mode)
@@ -193,6 +196,7 @@
             (evil-snipe-override-mode 1)
             (global-evil-surround-mode 1)
             (global-evil-matchit-mode 1)
+            (evil-visual-mark-mode 1)
 
             ;; Remove pesky combos
             (global-unset-key (kbd "M-u"))
@@ -235,6 +239,7 @@
             (evil-leader/set-key "i" 'evil-window-move-far-left)
             (evil-leader/set-key "a" 'align-regexp)
             (evil-leader/set-key "SPC" 'evil-search-highlight-persist-remove-all)
+            (evil-leader/set-key "`" 'evil-delete-marks)
 
             (evil-leader/set-key "m i" (lambda () (interactive) (shell-make "install")))
             (evil-leader/set-key "m r" (lambda () (interactive) (shell-make "run")))

@@ -81,4 +81,4 @@
 (depends-on "evil-snipe")
 (depends-on "evil-surround")
 (depends-on "evil-matchit")
-(depends-on "evil-org")
+(depends-on "evil-visual-mark-mode")
