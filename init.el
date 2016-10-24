@@ -542,8 +542,7 @@
             "g c" 'magit-commit
             "g C" 'magit-commit-amend
             "g s" 'magit-status
-            "g d" 'magit-diff-unstaged
-            "g D" 'magit-diff-staged
+            "g d" 'magit-diff-buffer-file
             "g b" (lambda () (interactive)
                     (if (bound-and-true-p magit-blame-mode)
                       (magit-blame-quit)
