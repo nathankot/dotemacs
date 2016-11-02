@@ -186,7 +186,12 @@
             :commands (global-evil-matchit-mode evil-matchit-mode))
 
           (use-package evil-visual-mark-mode
-            :commands evil-visual-mark-mode))
+            :commands evil-visual-mark-mode
+            :config
+            ;; Marks aren't cleared after deletion until evil-visual-mark-mode re-renders:
+            (advice-add #'evil-delete-marks :after
+              (lambda (&rest args)
+                (evil-visual-mark-render)))))
 
   :config (progn
             (global-evil-leader-mode)
@@ -239,7 +244,7 @@
             (evil-leader/set-key "i" 'evil-window-move-far-left)
             (evil-leader/set-key "a" 'align-regexp)
             (evil-leader/set-key "SPC" 'evil-search-highlight-persist-remove-all)
-            (evil-leader/set-key "`" 'evil-delete-marks)
+            (evil-leader/set-key "`" (lambda () (interactive) (evil-delete-marks () t)))
 
             (evil-leader/set-key "m i" (lambda () (interactive) (shell-make "install")))
             (evil-leader/set-key "m r" (lambda () (interactive) (shell-make "run")))
