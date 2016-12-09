@@ -900,9 +900,7 @@ INITIAL will be used as the initial input, if given."
                       (evil-define-key 'normal haskell-mode-map (kbd "M-i") 'ghc-show-info)
                       (evil-leader/set-key-for-mode 'haskell-mode "t" 'ghc-show-type))))
   :config (progn
-            (evil-define-key 'normal haskell-mode-map (kbd "?")
-              (lambda () (interactive) (counsel-hoogle (symbol-name (symbol-at-point)))))))
-
+            (evil-define-key 'normal haskell-mode-map (kbd "?") 'counsel-hoogle)))
 (use-package go-mode
   :mode "\\.go\\'"
   :init (use-package company-go
