@@ -895,10 +895,14 @@ INITIAL will be used as the initial input, if given."
                           (setq ghc-initialized t)
                           (add-hook 'kill-buffer-hook 'ghc-kill-process))
                         (ghc-import-module))))
-
             :config (progn
                       (evil-define-key 'normal haskell-mode-map (kbd "M-i") 'ghc-show-info)
-                      (evil-leader/set-key-for-mode 'haskell-mode "t" 'ghc-show-type))))
+                      (evil-leader/set-key-for-mode 'haskell-mode "t" 'ghc-show-type)))
+
+          (use-package company-ghc
+            :init
+            (setq company-ghc-show-info 'oneline)
+            :config (add-to-list 'company-backends 'company-ghc)))
   :config (progn
             (evil-define-key 'normal haskell-mode-map (kbd "?") 'counsel-hoogle)))
 (use-package go-mode

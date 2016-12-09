@@ -45,6 +45,8 @@
 (depends-on "company")
 (depends-on "company-tern")
 (depends-on "company-emoji")
+(depends-on "company-go")
+(depends-on "company-ghc")
 
 (depends-on "web-mode")
 (depends-on "emmet-mode")
@@ -69,7 +71,6 @@
 (depends-on "swift-mode")
 
 (depends-on "go-mode")
-(depends-on "company-go")
 
 (depends-on "rust-mode")
 (depends-on "racer")
