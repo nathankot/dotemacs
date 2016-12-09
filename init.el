@@ -851,6 +851,31 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :mode "\\.lhs\\'"
   :mode "config/models\\'"
   :mode "config/routes\\'"
+  :commands counsel-hoogle
+  :preface
+  (defvar counsel-hoogle-history-input nil
+    "Input history used by `ivy-read'.")
+  (defun counsel-hoogle (&optional initial)
+    "Query hoogle using counsel.
+INITIAL will be used as the initial input, if given."
+    (interactive)
+    (ivy-read "Hoogle: "
+      #'(lambda (s &rest _)
+          (if (eq (length s) 0) nil
+            (split-string
+              (shell-command-to-string
+                (concat
+                  haskell-hoogle-command
+                  " "
+                  (shell-quote-argument s))) "\n")))
+      :dynamic-collection t
+      :history 'counsel-hoogle-history-input
+      :initial-input initial
+      :action (lambda (s)
+                (browse-url
+                  (format haskell-hoogle-url
+                    (url-hexify-string
+                      (replace-regexp-in-string "\\(^module \\|^\\_<[A-Z\\.]*\\_> \\)" "" s)))))))
   :init (progn
           (setq haskell-hoogle-command "stack hoogle --")
           (setq haskell-hoogle-url "https://www.stackage.org/lts/hoogle?q=%s")
@@ -860,7 +885,6 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
             :load-path "vendor/ghc-mod/elisp"
             :commands (ghc-init ghc-debug ghc-abbrev-init ghc-type-init ghc-comp-init
                         ghc-kill-process ghc-import-module)
-
             :init (progn
                     (add-hook 'haskell-mode-hook
                       (lambda ()
@@ -876,7 +900,8 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
                       (evil-define-key 'normal haskell-mode-map (kbd "M-i") 'ghc-show-info)
                       (evil-leader/set-key-for-mode 'haskell-mode "t" 'ghc-show-type))))
   :config (progn
-            (evil-define-key 'normal haskell-mode-map (kbd "?") 'hoogle)))
+            (evil-define-key 'normal haskell-mode-map (kbd "?")
+              (lambda () (interactive) (counsel-hoogle (symbol-name (symbol-at-point)))))))
 
 (use-package go-mode
   :mode "\\.go\\'"
