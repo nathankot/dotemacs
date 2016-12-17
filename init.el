@@ -874,8 +874,7 @@ INITIAL will be used as the initial input, if given."
       :action (lambda (s)
                 (browse-url
                   (format haskell-hoogle-url
-                    (url-hexify-string
-                      (replace-regexp-in-string "\\(^module \\|^\\_<[A-Z\\.]*\\_> \\)" "" s)))))))
+                    (url-hexify-string ivy-text))))))
   :init (progn
           (setq haskell-hoogle-command "stack hoogle --")
           (setq haskell-hoogle-url "https://www.stackage.org/lts/hoogle?q=%s")
