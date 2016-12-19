@@ -879,6 +879,7 @@ INITIAL will be used as the initial input, if given."
           (setq haskell-hoogle-command "stack hoogle --")
           (setq haskell-hoogle-url "https://www.stackage.org/lts/hoogle?q=%s")
           (setq haskell-process-type 'stack-ghci)
+          (and (executable-find "stylish-haskell") (setq haskell-stylish-on-save t))
           (add-hook 'haskell-mode-hook (lambda () (haskell-indentation-mode)))
           (use-package ghc
             :load-path "vendor/ghc-mod/elisp"
