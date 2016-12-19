@@ -397,6 +397,8 @@
   (sp-local-pair 'swift-mode "\\(" nil :actions nil)
   (sp-local-pair 'swift-mode "\\(" ")")
   (sp-local-pair 'swift-mode "<" ">")
+  (add-to-list 'sp-sexp-suffix (list 'js2-mode 'regexp ""))
+  (add-to-list 'sp-sexp-suffix (list 'js2-minor-mode 'regexp ""))
   (evil-define-key 'insert smartparens-mode-map
     (kbd "C-l") 'sp-forward-sexp
     (kbd "C-h") 'sp-backward-sexp
@@ -405,7 +407,7 @@
     (kbd "C-c") 'sp-convolute-sexp
     (kbd "C-w") 'sp-kill-sexp
     (kbd "C-b") 'sp-backward-kill-sexp
-    (kbd "M-i") 'sp-forward-slurp-sexp
+    (kbd "M-i") 'sp-slurp-hybrid-sexp
     (kbd "M-o") 'sp-forward-barf-sexp))
 
 (use-package avy
