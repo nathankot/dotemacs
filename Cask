@@ -46,7 +46,6 @@
 (depends-on "company-tern")
 (depends-on "company-emoji")
 (depends-on "company-go")
-(depends-on "company-ghc")
 
 (depends-on "web-mode")
 (depends-on "emmet-mode")
@@ -65,6 +64,7 @@
 (depends-on "ruby-mode")
 (depends-on "robe")
 (depends-on "haskell-mode")
+(depends-on "intero")
 (depends-on "rainbow-mode")
 (depends-on "rainbow-delimiters")
 (depends-on "ledger-mode")

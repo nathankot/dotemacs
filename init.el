@@ -882,31 +882,17 @@ INITIAL will be used as the initial input, if given."
           (setq haskell-hoogle-url "https://www.stackage.org/lts/hoogle?q=%s")
           (setq haskell-process-type 'stack-ghci)
           (and (executable-find "stylish-haskell") (setq haskell-stylish-on-save t))
-          (add-hook 'haskell-mode-hook (lambda () (haskell-indentation-mode)))
-          (use-package ghc
-            :load-path "vendor/ghc-mod/elisp"
-            :commands (ghc-init ghc-debug ghc-abbrev-init ghc-type-init ghc-comp-init
-                        ghc-kill-process ghc-import-module)
-            :init (progn
-                    (add-hook 'haskell-mode-hook
-                      (lambda ()
-                        (ghc-abbrev-init)
-                        (ghc-type-init)
-                        (unless ghc-initialized
-                          (ghc-comp-init)
-                          (setq ghc-initialized t)
-                          (add-hook 'kill-buffer-hook 'ghc-kill-process))
-                        (ghc-import-module))))
-            :config (progn
-                      (evil-define-key 'normal haskell-mode-map (kbd "M-i") 'ghc-show-info)
-                      (evil-leader/set-key-for-mode 'haskell-mode "t" 'ghc-show-type)))
-
-          (use-package company-ghc
+          (use-package intero
             :init
-            (setq company-ghc-show-info 'oneline)
-            :config (add-to-list 'company-backends 'company-ghc)))
-  :config (progn
-            (evil-define-key 'normal haskell-mode-map (kbd "?") 'counsel-hoogle)))
+            (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
+            (add-hook 'haskell-mode-hook 'intero-mode)
+            (add-hook 'intero-repl-mode-hook (lambda () (evil-mode -1)))
+            :config
+            (evil-define-key 'normal haskell-mode-map (kbd "M-i") 'intero-info)
+            (evil-leader/set-key-for-mode 'haskell-mode "t" 'intero-type-at)
+            (evil-leader/set-key-for-mode 'haskell-mode "g" 'intero-goto-definition)))
+  :config
+  (evil-define-key 'normal haskell-mode-map (kbd "?") 'counsel-hoogle))
 (use-package go-mode
   :mode "\\.go\\'"
   :init (use-package company-go
