@@ -489,12 +489,12 @@
       (async-shell-command (format "make %s" command) (format "*shell:make %s*" command))))
 
   :init
-  (add-to-list 'evil-emacs-vanilla-modes 'shell-mode)
   (evil-set-initial-state 'shell-mode 'emacs)
 
   :config
   ;; The assumption here is that I only use shell mode to run processes,
   ;; I don't use it for actuall shell access (have tmux for that.)
+  (add-hook 'shell-mode-hook 'read-only-mode)
   (add-hook 'shell-mode-hook 'buffer-disable-undo)
   (add-hook 'shell-mode-hook (lambda () (linum-mode -1)))
   (evil-define-key 'emacs shell-mode-map (kbd "q") 'delete-window)
