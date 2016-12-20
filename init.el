@@ -124,10 +124,10 @@
 
   (defun apply-emacs-defaults-to-mode (mode)
     (let ((keymap-symbol (intern (concat (symbol-name mode) "-map"))))
-      (evil-delay
-        `(and (boundp ',keymap-symbol) (keymapp (symbol-value ',keymap-symbol)))
-        `(let ((map (symbol-value ',keymap-symbol)))
-           (and (not (member ',mode evil-emacs-vanilla-modes))
+      (when (not (member mode evil-emacs-vanilla-modes))
+        (evil-delay
+          `(and (boundp ',keymap-symbol) (keymapp (symbol-value ',keymap-symbol)))
+          `(let ((map (symbol-value ',keymap-symbol)))
              (dolist (k '("h" "j" "k" "l" "v" "m" "p" "n" "z"))
                (-when-let (def (lookup-key map k))
                  (define-key map (upcase k) def)
@@ -155,9 +155,9 @@
                (kbd "z H") 'evil-scroll-left
                (kbd ", SPC") 'evil-search-highlight-persist-remove-all
                (kbd ", ,") 'writeroom-mode
-               (kbd "0") 'evil-beginning-of-line)))
-        'after-load-functions t nil
-        (format "evil-define-emacs-defaults-in-%s" (symbol-name keymap-symbol)))))
+               (kbd "0") 'evil-beginning-of-line))
+          'after-load-functions t nil
+          (format "evil-define-emacs-defaults-in-%s" (symbol-name keymap-symbol))))))
 
   :init
   (setq evil-want-C-u-scroll t
