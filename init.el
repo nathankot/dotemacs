@@ -7,17 +7,17 @@
 ;; (package-initialize)
 
 (custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+  )
 
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
   '(custom-safe-themes
      (quote
        ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
@@ -82,25 +82,26 @@
 
 (use-package hc-zenburn-theme
   :load-path "vendor/hc-zenburn-theme"
-  :init (progn
-          (require 'hc-zenburn-theme)
-          (load-theme 'hc-zenburn t)))
+  :init
+  (require 'hc-zenburn-theme)
+  (load-theme 'hc-zenburn t))
 
 (use-package smart-mode-line
-  :init (progn
-          (sml/setup)
-          (sml/apply-theme 'respectful))
-  :config (progn
-          (setq sml/shorten-directory t)
-          (setq sml/shorten-modes t)
-          (setq sml/name-width 30)
-          (setq sml/numbers-separator "")
-          (setq sml/show-trailing-N nil)
-          (setq sml/show-frame-identification nil)
-          (setq sml/mule-info nil)
-          (setq sml/show-client nil)
-          (setq sml/show-remote nil)
-          (setq sml/position-percentage-format nil)))
+  :init
+  (sml/setup)
+  (sml/apply-theme 'respectful)
+
+  :config
+  (setq sml/shorten-directory t)
+  (setq sml/shorten-modes t)
+  (setq sml/name-width 30)
+  (setq sml/numbers-separator "")
+  (setq sml/show-trailing-N nil)
+  (setq sml/show-frame-identification nil)
+  (setq sml/mule-info nil)
+  (setq sml/show-client nil)
+  (setq sml/show-remote nil)
+  (setq sml/position-percentage-format nil))
 
 
 ;; EVIL
@@ -118,155 +119,159 @@
     (split-window-horizontally)
     (other-window 1))
 
+  (defvar evil-emacs-vanilla-modes nil
+    "Evil emacs modes that should not have any normal keys rebound, useful for REPLs.")
+
   (defun apply-emacs-defaults-to-mode (mode)
     (let ((keymap-symbol (intern (concat (symbol-name mode) "-map"))))
       (evil-delay
         `(and (boundp ',keymap-symbol) (keymapp (symbol-value ',keymap-symbol)))
         `(let ((map (symbol-value ',keymap-symbol)))
-           (dolist (k '("h" "j" "k" "l" "v" "m" "p" "n" "z"))
-             (-when-let (def (lookup-key map k))
-               (define-key map (upcase k) def)
-               (define-key map k nil)))
+           (and (not (member ',mode evil-emacs-vanilla-modes))
+             (dolist (k '("h" "j" "k" "l" "v" "m" "p" "n" "z"))
+               (-when-let (def (lookup-key map k))
+                 (define-key map (upcase k) def)
+                 (define-key map k nil)))
 
-           (evil-add-hjkl-bindings map 'emacs
-             "v" 'evil-visual-char)
+             (evil-add-hjkl-bindings map 'emacs
+               "v" 'evil-visual-char)
 
-           (evil-define-key 'emacs map
-             (kbd "m") nil
-             (kbd "C-e") 'evil-scroll-line-down
-             (kbd "C-y") 'evil-scroll-line-up
-             (kbd "C-u") 'evil-scroll-up
-             (kbd "C-d") 'evil-scroll-down
-             (kbd "{") 'evil-backward-paragraph
-             (kbd "}") 'evil-forward-paragraph
-             (kbd "SPC") 'evil-search-forward
-             (kbd "/") 'evil-search-forward
-             (kbd "n") 'evil-search-next
-             (kbd "M") 'evil-window-middle
-             (kbd "H") 'evil-window-top
-             (kbd "L") 'evil-window-bottom
-             (kbd "gg") 'evil-goto-first-line
-             (kbd "z L") 'evil-scroll-right
-             (kbd "z H") 'evil-scroll-left
-             (kbd ", SPC") 'evil-search-highlight-persist-remove-all
-             (kbd ", ,") 'writeroom-mode
-             (kbd "0") 'evil-beginning-of-line))
+             (evil-define-key 'emacs map
+               (kbd "m") nil
+               (kbd "C-e") 'evil-scroll-line-down
+               (kbd "C-y") 'evil-scroll-line-up
+               (kbd "C-u") 'evil-scroll-up
+               (kbd "C-d") 'evil-scroll-down
+               (kbd "{") 'evil-backward-paragraph
+               (kbd "}") 'evil-forward-paragraph
+               (kbd "SPC") 'evil-search-forward
+               (kbd "/") 'evil-search-forward
+               (kbd "n") 'evil-search-next
+               (kbd "M") 'evil-window-middle
+               (kbd "H") 'evil-window-top
+               (kbd "L") 'evil-window-bottom
+               (kbd "gg") 'evil-goto-first-line
+               (kbd "z L") 'evil-scroll-right
+               (kbd "z H") 'evil-scroll-left
+               (kbd ", SPC") 'evil-search-highlight-persist-remove-all
+               (kbd ", ,") 'writeroom-mode
+               (kbd "0") 'evil-beginning-of-line)))
         'after-load-functions t nil
         (format "evil-define-emacs-defaults-in-%s" (symbol-name keymap-symbol)))))
 
-  :init (progn
-          (setq evil-want-C-u-scroll t
-                evil-overriding-maps nil
-                evil-intercept-maps nil
-                evil-esc-delay 0 ; Prevent esc from translating to meta key in terminal mode
-                ; Cursor
-                evil-emacs-state-cursor  '("red" box)
-                evil-normal-state-cursor '("gray" box)
-                evil-visual-state-cursor '("gray" box)
-                evil-insert-state-cursor '("gray" bar)
-                evil-motion-state-cursor '("gray" box))
+  :init
+  (setq evil-want-C-u-scroll t
+    evil-overriding-maps nil
+    evil-intercept-maps nil
+    evil-esc-delay 0 ; Prevent esc from translating to meta key in terminal mode
+                                        ; Cursor
+    evil-emacs-state-cursor  '("red" box)
+    evil-normal-state-cursor '("gray" box)
+    evil-visual-state-cursor '("gray" box)
+    evil-insert-state-cursor '("gray" bar)
+    evil-motion-state-cursor '("gray" box))
 
-          (use-package evil-leader
-            :commands (global-evil-leader-mode)
-            :config (evil-leader/set-leader ","))
+  (use-package evil-leader
+    :commands (global-evil-leader-mode)
+    :config (evil-leader/set-leader ","))
 
-          (use-package evil-search-highlight-persist
-            :commands (global-evil-search-highlight-persist))
+  (use-package evil-search-highlight-persist
+    :commands (global-evil-search-highlight-persist))
 
-          (use-package evil-commentary
-            :commands evil-commentary-mode)
+  (use-package evil-commentary
+    :commands evil-commentary-mode)
 
-          (use-package evil-snipe
-            :commands (evil-snipe-mode evil-snipe-override-mode))
+  (use-package evil-snipe
+    :commands (evil-snipe-mode evil-snipe-override-mode))
 
-          (use-package evil-surround
-            :commands (global-evil-surround-mode evil-surround-mode))
+  (use-package evil-surround
+    :commands (global-evil-surround-mode evil-surround-mode))
 
-          (use-package evil-matchit
-            :commands (global-evil-matchit-mode evil-matchit-mode))
+  (use-package evil-matchit
+    :commands (global-evil-matchit-mode evil-matchit-mode))
 
-          (use-package evil-visual-mark-mode
-            :commands evil-visual-mark-mode
-            :config
-            ;; Marks aren't cleared after deletion until evil-visual-mark-mode re-renders:
-            (advice-add #'evil-delete-marks :after
-              (lambda (&rest args)
-                (evil-visual-mark-render)))))
+  (use-package evil-visual-mark-mode
+    :commands evil-visual-mark-mode
+    :config
+    ;; Marks aren't cleared after deletion until evil-visual-mark-mode re-renders:
+    (advice-add #'evil-delete-marks :after
+      (lambda (&rest args)
+        (evil-visual-mark-render))))
 
-  :config (progn
-            (global-evil-leader-mode)
-            (evil-snipe-mode 1)
-            (global-evil-search-highlight-persist)
-            (evil-commentary-mode)
-            (evil-snipe-override-mode 1)
-            (global-evil-surround-mode 1)
-            (global-evil-matchit-mode 1)
-            (evil-visual-mark-mode 1)
+  :config
+  (global-evil-leader-mode)
+  (evil-snipe-mode 1)
+  (global-evil-search-highlight-persist)
+  (evil-commentary-mode)
+  (evil-snipe-override-mode 1)
+  (global-evil-surround-mode 1)
+  (global-evil-matchit-mode 1)
+  (evil-visual-mark-mode 1)
 
-            ;; Remove pesky combos
-            (global-unset-key (kbd "M-u"))
-            (global-unset-key (kbd "M-h"))
-            (global-unset-key (kbd "M-j"))
-            (global-unset-key (kbd "M-k"))
-            (global-unset-key (kbd "M-l"))
-            (global-unset-key (kbd "C-w"))
+  ;; Remove pesky combos
+  (global-unset-key (kbd "M-u"))
+  (global-unset-key (kbd "M-h"))
+  (global-unset-key (kbd "M-j"))
+  (global-unset-key (kbd "M-k"))
+  (global-unset-key (kbd "M-l"))
+  (global-unset-key (kbd "C-w"))
 
-            ;; Remove keys that we want to use
-            (define-key evil-normal-state-map (kbd "C-p") nil)
-            (define-key evil-motion-state-map (kbd "C-b") nil)
-            (define-key evil-motion-state-map (kbd "C-w") nil)
-            (define-key evil-emacs-state-map (kbd "C-w") nil)
+  ;; Remove keys that we want to use
+  (define-key evil-normal-state-map (kbd "C-p") nil)
+  (define-key evil-motion-state-map (kbd "C-b") nil)
+  (define-key evil-motion-state-map (kbd "C-w") nil)
+  (define-key evil-emacs-state-map (kbd "C-w") nil)
 
-            ;; Window management
-            (global-set-key (kbd "C-q") 'delete-window)
-            (global-set-key (kbd "C-j") 'evil-window-next)
-            (global-set-key (kbd "C-k") 'evil-window-prev)
+  ;; Window management
+  (global-set-key (kbd "C-q") 'delete-window)
+  (global-set-key (kbd "C-j") 'evil-window-next)
+  (global-set-key (kbd "C-k") 'evil-window-prev)
 
-            (define-key evil-normal-state-map (kbd "C-q") 'delete-window)
-            (define-key evil-normal-state-map (kbd "C-j") 'evil-window-next)
-            (define-key evil-normal-state-map (kbd "C-k") 'evil-window-prev)
-            (define-key evil-normal-state-map (kbd "C-l") 'evil-window-increase-width)
-            (define-key evil-normal-state-map (kbd "C-h") 'evil-window-decrease-width)
+  (define-key evil-normal-state-map (kbd "C-q") 'delete-window)
+  (define-key evil-normal-state-map (kbd "C-j") 'evil-window-next)
+  (define-key evil-normal-state-map (kbd "C-k") 'evil-window-prev)
+  (define-key evil-normal-state-map (kbd "C-l") 'evil-window-increase-width)
+  (define-key evil-normal-state-map (kbd "C-h") 'evil-window-decrease-width)
 
-            (define-key evil-insert-state-map (kbd "C-w") 'backward-kill-word)
-            (define-key evil-insert-state-map (kbd "M-RET") 'newline-and-indent)
-            (define-key evil-insert-state-map (kbd "RET") 'comment-indent-new-line)
+  (define-key evil-insert-state-map (kbd "C-w") 'backward-kill-word)
+  (define-key evil-insert-state-map (kbd "M-RET") 'newline-and-indent)
+  (define-key evil-insert-state-map (kbd "RET") 'comment-indent-new-line)
 
-            ;; More fine-grained undo control
-            (setq evil-want-fine-undo 'fine)
+  ;; More fine-grained undo control
+  (setq evil-want-fine-undo 'fine)
 
-            (define-key evil-normal-state-map (kbd "-") 'split-window-vertically-and-switch)
-            (define-key evil-emacs-state-map (kbd "-") 'split-window-vertically-and-switch)
-            (define-key evil-normal-state-map (kbd "|") 'split-window-horizontally-and-switch)
-            (define-key evil-emacs-state-map (kbd "|") 'split-window-horizontally-and-switch)
+  (define-key evil-normal-state-map (kbd "-") 'split-window-vertically-and-switch)
+  (define-key evil-emacs-state-map (kbd "-") 'split-window-vertically-and-switch)
+  (define-key evil-normal-state-map (kbd "|") 'split-window-horizontally-and-switch)
+  (define-key evil-emacs-state-map (kbd "|") 'split-window-horizontally-and-switch)
 
-            (evil-leader/set-key "w" 'save-buffer)
-            (evil-leader/set-key "i" 'evil-window-move-far-left)
-            (evil-leader/set-key "a" 'align-regexp)
-            (evil-leader/set-key "SPC" 'evil-search-highlight-persist-remove-all)
-            (evil-leader/set-key "`" (lambda () (interactive) (evil-delete-marks () t)))
+  (evil-leader/set-key "w" 'save-buffer)
+  (evil-leader/set-key "i" 'evil-window-move-far-left)
+  (evil-leader/set-key "a" 'align-regexp)
+  (evil-leader/set-key "SPC" 'evil-search-highlight-persist-remove-all)
+  (evil-leader/set-key "`" (lambda () (interactive) (evil-delete-marks () t)))
 
-            (evil-leader/set-key "m i" (lambda () (interactive) (shell-make "install")))
-            (evil-leader/set-key "m r" (lambda () (interactive) (shell-make "run")))
-            (evil-leader/set-key "m b" (lambda () (interactive) (shell-make "build")))
-            (evil-leader/set-key "m c" (lambda () (interactive) (shell-make "clean")))
-            (evil-leader/set-key "m s" (lambda () (interactive) (shell-make "setup")))
-            (evil-leader/set-key "m t" (lambda () (interactive) (shell-make "test")))
+  (evil-leader/set-key "m i" (lambda () (interactive) (shell-make "install")))
+  (evil-leader/set-key "m r" (lambda () (interactive) (shell-make "run")))
+  (evil-leader/set-key "m b" (lambda () (interactive) (shell-make "build")))
+  (evil-leader/set-key "m c" (lambda () (interactive) (shell-make "clean")))
+  (evil-leader/set-key "m s" (lambda () (interactive) (shell-make "setup")))
+  (evil-leader/set-key "m t" (lambda () (interactive) (shell-make "test")))
 
-            ;; Buffer Management
-            (define-key evil-visual-state-map (kbd "SPC") 'evil-search-forward)
-            (define-key evil-normal-state-map (kbd "SPC") 'evil-search-forward)
-            (define-key evil-visual-state-map (kbd "C-i") 'indent-region)
-            (evil-leader/set-key "k b" 'kill-buffer)
+  ;; Buffer Management
+  (define-key evil-visual-state-map (kbd "SPC") 'evil-search-forward)
+  (define-key evil-normal-state-map (kbd "SPC") 'evil-search-forward)
+  (define-key evil-visual-state-map (kbd "C-i") 'indent-region)
+  (evil-leader/set-key "k b" 'kill-buffer)
 
-            ;; Recreate unimpaired
-            (define-key evil-normal-state-map (kbd "[ b") 'previous-buffer)
-            (define-key evil-normal-state-map (kbd "] b") 'next-buffer)
+  ;; Recreate unimpaired
+  (define-key evil-normal-state-map (kbd "[ b") 'previous-buffer)
+  (define-key evil-normal-state-map (kbd "] b") 'next-buffer)
 
-            ;; Default keys for emacs state
-            (dolist (mode evil-emacs-state-modes) (apply-emacs-defaults-to-mode mode))
-            (add-function :after (symbol-function 'evil-set-initial-state)
-              (lambda (mode state) (when (eq state 'emacs) (apply-emacs-defaults-to-mode mode))))))
+  ;; Default keys for emacs state
+  (dolist (mode evil-emacs-state-modes) (apply-emacs-defaults-to-mode mode))
+  (add-function :after (symbol-function 'evil-set-initial-state)
+    (lambda (mode state) (when (eq state 'emacs) (apply-emacs-defaults-to-mode mode)))))
 
 
 ;; Utilities
@@ -282,96 +287,97 @@
               projectile-invalidate-cache projectile-project-root )
   :bind ( ("C-p" . projectile-find-file)
           ("C-b" . projectile-switch-to-buffer) )
-  :init (progn
-          (setq projectile-require-project-root nil)
-          (setq projectile-enable-caching t)
-          (setq projectile-completion-system 'ivy)
-          (setq projectile-indexing-method 'alien)
-          (evil-leader/set-key "g o" (lambda () (interactive) (projectile-find-other-file t)))
-          (evil-leader/set-key "g t" 'projectile-toggle-between-implementation-and-test)
-          (with-eval-after-load 'ivy (define-key ivy-minibuffer-map (kbd "C-l") 'projectile-invalidate-cache)))
-  :config (progn
-            (projectile-global-mode +1)
-            (add-to-list 'projectile-project-root-files ".projectile")
-            (add-to-list 'projectile-project-root-files ".git")
-            (add-to-list 'projectile-globally-ignored-directories ".cache")
-            (add-to-list 'projectile-globally-ignored-directories ".cask")
-            (add-to-list 'projectile-globally-ignored-directories ".stack")
-            (add-to-list 'projectile-globally-ignored-directories ".tmp")
-            (add-to-list 'projectile-globally-ignored-directories "tmp")
-            (add-to-list 'projectile-globally-ignored-directories "node_modules")
-            (add-to-list 'projectile-globally-ignored-directories "bower_components")
-            ; Register and support more project types
-            (projectile-register-project-type 'xcode '("*.xcodeproj"))
-            (advice-add #'projectile-test-suffix :around
-              (lambda (oldfun &rest args)
-                (or
-                  (cond ((member (car args) '(xcode)) "Spec"))
-                  (apply oldfun args))))))
+  :init
+  (setq projectile-require-project-root nil)
+  (setq projectile-enable-caching t)
+  (setq projectile-completion-system 'ivy)
+  (setq projectile-indexing-method 'alien)
+  (evil-leader/set-key "g o" (lambda () (interactive) (projectile-find-other-file t)))
+  (evil-leader/set-key "g t" 'projectile-toggle-between-implementation-and-test)
+  (with-eval-after-load 'ivy (define-key ivy-minibuffer-map (kbd "C-l") 'projectile-invalidate-cache))
+
+  :config
+  (projectile-global-mode +1)
+  (add-to-list 'projectile-project-root-files ".projectile")
+  (add-to-list 'projectile-project-root-files ".git")
+  (add-to-list 'projectile-globally-ignored-directories ".cache")
+  (add-to-list 'projectile-globally-ignored-directories ".cask")
+  (add-to-list 'projectile-globally-ignored-directories ".stack")
+  (add-to-list 'projectile-globally-ignored-directories ".tmp")
+  (add-to-list 'projectile-globally-ignored-directories "tmp")
+  (add-to-list 'projectile-globally-ignored-directories "node_modules")
+  (add-to-list 'projectile-globally-ignored-directories "bower_components")
+                                        ; Register and support more project types
+  (projectile-register-project-type 'xcode '("*.xcodeproj"))
+  (advice-add #'projectile-test-suffix :around
+    (lambda (oldfun &rest args)
+      (or
+        (cond ((member (car args) '(xcode)) "Spec"))
+        (apply oldfun args)))))
 
 (use-package ivy
   :diminish ivy-mode
   :commands (ivy-mode ivy-read)
-  :init (progn
-          (setq ivy-display-style 'fancy)
-          (define-key evil-normal-state-map (kbd "DEL") 'ivy-resume)
+  :init
+  (setq ivy-display-style 'fancy)
+  (define-key evil-normal-state-map (kbd "DEL") 'ivy-resume)
 
-          (use-package swiper
-            :commands (swiper swiper-all)
-            :init (evil-leader/set-key "s" 'swiper))
+  (use-package swiper
+    :commands (swiper swiper-all)
+    :init (evil-leader/set-key "s" 'swiper))
 
-          (use-package counsel
-            :commands (counsel-mode counsel-ag)
-            :diminish counsel-mode
-            :preface (defun counsel-projectile-ag () (interactive) (counsel-ag "" (projectile-project-root)))
-            :functions (counsel-projectile-ag)
-            :bind (("C-s" . counsel-projectile-ag)))
+  (use-package counsel
+    :commands (counsel-mode counsel-ag)
+    :diminish counsel-mode
+    :preface (defun counsel-projectile-ag () (interactive) (counsel-ag "" (projectile-project-root)))
+    :functions (counsel-projectile-ag)
+    :bind (("C-s" . counsel-projectile-ag)))
 
-          (use-package wgrep
-            :commands (wgrep-change-to-wgrep-mode)
-            :config (progn
-                      (advice-add #'save-buffer :around
-                        (lambda (old-fun &rest args)
-                          (if (not (eq (current-local-map) wgrep-mode-map))
-                            (apply old-fun args)
-                            (wgrep-finish-edit)
-                            (wgrep-save-all-buffers)
-                            (wgrep-change-to-wgrep-mode))))
+  (use-package wgrep
+    :commands (wgrep-change-to-wgrep-mode)
+    :config
+    (advice-add #'save-buffer :around
+      (lambda (old-fun &rest args)
+        (if (not (eq (current-local-map) wgrep-mode-map))
+          (apply old-fun args)
+          (wgrep-finish-edit)
+          (wgrep-save-all-buffers)
+          (wgrep-change-to-wgrep-mode))))
 
-                      (advice-add #'evil-quit :around
-                        (lambda (old-fun &rest args)
-                          (if (not (eq (current-local-map) wgrep-mode-map))
-                            (apply old-fun args)
-                            (wgrep-abort-changes)
-                            (evil-delete-buffer (current-buffer)))))
+    (advice-add #'evil-quit :around
+      (lambda (old-fun &rest args)
+        (if (not (eq (current-local-map) wgrep-mode-map))
+          (apply old-fun args)
+          (wgrep-abort-changes)
+          (evil-delete-buffer (current-buffer)))))
 
-                      (advice-add #'evil-save-and-close :around
-                        (lambda (old-fun &rest args)
-                          (if (not (eq (current-local-map) wgrep-mode-map))
-                            (apply old-fun args)
-                            (wgrep-finish-edit)
-                            (wgrep-save-all-buffers)
-                            (evil-delete-buffer (current-buffer))))))))
+    (advice-add #'evil-save-and-close :around
+      (lambda (old-fun &rest args)
+        (if (not (eq (current-local-map) wgrep-mode-map))
+          (apply old-fun args)
+          (wgrep-finish-edit)
+          (wgrep-save-all-buffers)
+          (evil-delete-buffer (current-buffer))))))
 
-  :config (progn
-            (define-key ivy-minibuffer-map (kbd "C-w") 'ivy-occur)
-            (evil-define-key 'normal ivy-occur-grep-mode-map (kbd "C-w") 'ivy-wgrep-change-to-wgrep-mode)
-            (define-key ivy-occur-grep-mode-map (kbd "C-w") 'ivy-wgrep-change-to-wgrep-mode)
-            (define-key ivy-occur-mode-map (kbd "C-w") 'ivy-wgrep-change-to-wgrep-mode)
+  :config
+  (define-key ivy-minibuffer-map (kbd "C-w") 'ivy-occur)
+  (evil-define-key 'normal ivy-occur-grep-mode-map (kbd "C-w") 'ivy-wgrep-change-to-wgrep-mode)
+  (define-key ivy-occur-grep-mode-map (kbd "C-w") 'ivy-wgrep-change-to-wgrep-mode)
+  (define-key ivy-occur-mode-map (kbd "C-w") 'ivy-wgrep-change-to-wgrep-mode)
 
-            (define-key ivy-minibuffer-map (kbd "C-q") 'keyboard-escape-quit)
-            (define-key ivy-minibuffer-map (kbd "C-p") 'keyboard-escape-quit)
-            (define-key ivy-minibuffer-map (kbd "C-s") 'keyboard-escape-quit)
-            (define-key ivy-minibuffer-map (kbd "C-b") 'keyboard-escape-quit)
+  (define-key ivy-minibuffer-map (kbd "C-q") 'keyboard-escape-quit)
+  (define-key ivy-minibuffer-map (kbd "C-p") 'keyboard-escape-quit)
+  (define-key ivy-minibuffer-map (kbd "C-s") 'keyboard-escape-quit)
+  (define-key ivy-minibuffer-map (kbd "C-b") 'keyboard-escape-quit)
 
-            (define-key ivy-minibuffer-map (kbd "TAB") 'ivy-dispatching-done)
-            (define-key ivy-minibuffer-map (kbd "M-RET") 'ivy-next-line-and-call)
-            (define-key ivy-minibuffer-map (kbd "C-@") 'ivy-restrict-to-matches)
+  (define-key ivy-minibuffer-map (kbd "TAB") 'ivy-dispatching-done)
+  (define-key ivy-minibuffer-map (kbd "M-RET") 'ivy-next-line-and-call)
+  (define-key ivy-minibuffer-map (kbd "C-@") 'ivy-restrict-to-matches)
 
-            (define-key ivy-minibuffer-map (kbd "C-j") 'ivy-next-line)
-            (define-key ivy-minibuffer-map (kbd "C-k") 'ivy-previous-line)
-            (define-key ivy-minibuffer-map (kbd "C-i") 'ivy-next-history-element)
-            (define-key ivy-minibuffer-map (kbd "C-o") 'ivy-previous-history-element)))
+  (define-key ivy-minibuffer-map (kbd "C-j") 'ivy-next-line)
+  (define-key ivy-minibuffer-map (kbd "C-k") 'ivy-previous-line)
+  (define-key ivy-minibuffer-map (kbd "C-i") 'ivy-next-history-element)
+  (define-key ivy-minibuffer-map (kbd "C-o") 'ivy-previous-history-element))
 
 (use-package linum-relative
   :load-path "vendor/linum-relative"
@@ -384,9 +390,9 @@
                                                 ("*Warnings*" :noselect t)
                                                 ("*GHC Error*" :noselect t)
                                                 ("*undo-tree*" :width 50 :position left)) )
-  :config (progn
-            (evil-define-key 'normal popwin:keymap (kbd "q") 'popwin:close-popup-window)
-            (evil-define-key 'emacs popwin:keymap (kbd "q") 'popwin:close-popup-window)))
+  :config
+  (evil-define-key 'normal popwin:keymap (kbd "q") 'popwin:close-popup-window)
+  (evil-define-key 'emacs popwin:keymap (kbd "q") 'popwin:close-popup-window))
 
 (use-package smartparens
   :commands (smartparens-global-mode show-smartparens-global-mode)
@@ -412,124 +418,130 @@
 
 (use-package avy
   :commands (avy-goto-char-2)
-  :init (progn
-          (evil-leader/set-key "j" 'avy-goto-char-2)))
+  :init
+  (evil-leader/set-key "j" 'avy-goto-char-2))
 
 (use-package dumb-jump
   :commands (dumb-jump-go)
-  :init (progn
-          (evil-leader/set-key "d j" 'dumb-jump-go)))
+  :init
+  (evil-leader/set-key "d j" 'dumb-jump-go))
 
 (use-package writeroom-mode
   :commands writeroom-mode
-  :init (progn
-          (setq writeroom-restore-window-config t)
-          (setq writeroom-width 120)
-          (evil-leader/set-key "," 'writeroom-mode))
-  :config (progn
-            (dolist (w '(quit-window
-                          evil-window-next
-                          evil-window-prev))
-              (advice-add w :around
-                (lambda (oldfun &rest args)
-                  "Ensure `writeroom-mode' is turned off and on around this function"
-                  (let ((has-writeroom (bound-and-true-p writeroom-mode)))
-                    (and has-writeroom (writeroom-mode -1))
-                    (apply oldfun args)
-                    (and has-writeroom (writeroom-mode 1))))))
+  :init
+  (setq writeroom-restore-window-config t)
+  (setq writeroom-width 120)
+  (evil-leader/set-key "," 'writeroom-mode)
 
-            (dolist (w '(split-window-vertically split-window-horizontally persp-switch))
-              (advice-add w :around
-                (lambda (oldfun &rest args)
-                  "Switch `writeroom-mode' off before calling this function"
-                  (let ((has-writeroom (bound-and-true-p writeroom-mode)))
-                    (and has-writeroom (writeroom-mode -1))
-                    (apply oldfun args)))))
+  :config
+  (dolist (w '(quit-window
+                evil-window-next
+                evil-window-prev))
+    (advice-add w :around
+      (lambda (oldfun &rest args)
+        "Ensure `writeroom-mode' is turned off and on around this function"
+        (let ((has-writeroom (bound-and-true-p writeroom-mode)))
+          (and has-writeroom (writeroom-mode -1))
+          (apply oldfun args)
+          (and has-writeroom (writeroom-mode 1))))))
 
-            (add-to-list 'writeroom-global-effects
-              (lambda (arg)
-                (interactive)
-                (linum-mode (* -1 arg))
-                (flycheck-mode (* -1 arg))))))
+  (dolist (w '(split-window-vertically split-window-horizontally persp-switch))
+    (advice-add w :around
+      (lambda (oldfun &rest args)
+        "Switch `writeroom-mode' off before calling this function"
+        (let ((has-writeroom (bound-and-true-p writeroom-mode)))
+          (and has-writeroom (writeroom-mode -1))
+          (apply oldfun args)))))
+
+  (add-to-list 'writeroom-global-effects
+    (lambda (arg)
+      (interactive)
+      (linum-mode (* -1 arg))
+      (flycheck-mode (* -1 arg)))))
 
 (use-package undo-tree
   :diminish undo-tree-mode)
 
 (use-package editorconfig
   :commands editorconfig-mode
-  :config (progn
-            (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-attr-indent-offset))
-            (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-attr-value-indent-offset))
-            (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-code-indent-offset))
-            (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-css-indent-offset))
-            (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-markup-indent-offset))
-            (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-sql-indent-offset))
-            (add-to-list 'editorconfig-indentation-alist '(web-mode js2-basic-offset))
-            (add-to-list 'editorconfig-indentation-alist '(js-mode js2-basic-offset))
-            (add-to-list 'editorconfig-indentation-alist '(js2-mode js2-basic-offset))
-            (add-to-list 'editorconfig-indentation-alist '(js2-minor-mode js2-basic-offset))
-            (add-to-list 'editorconfig-indentation-alist '(swift-mode swift-mode:basic-offset))
-            (add-to-list 'editorconfig-indentation-alist '(haskell-mode haskell-indent-spaces haskell-indent-offset))
-            (add-to-list 'editorconfig-indentation-alist '(evil-mode evil-shift-width))))
+  :config
+  (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-attr-indent-offset))
+  (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-attr-value-indent-offset))
+  (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-code-indent-offset))
+  (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-css-indent-offset))
+  (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-markup-indent-offset))
+  (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-sql-indent-offset))
+  (add-to-list 'editorconfig-indentation-alist '(web-mode js2-basic-offset))
+  (add-to-list 'editorconfig-indentation-alist '(js-mode js2-basic-offset))
+  (add-to-list 'editorconfig-indentation-alist '(js2-mode js2-basic-offset))
+  (add-to-list 'editorconfig-indentation-alist '(js2-minor-mode js2-basic-offset))
+  (add-to-list 'editorconfig-indentation-alist '(swift-mode swift-mode:basic-offset))
+  (add-to-list 'editorconfig-indentation-alist '(haskell-mode haskell-indent-spaces haskell-indent-offset))
+  (add-to-list 'editorconfig-indentation-alist '(evil-mode evil-shift-width)))
 
 (use-package shell
   :functions shell-make
-  :preface (progn
-             (defun shell-make (command)
-               "Call `make *command*` in the projectile root directory under a buffer named '*shell:make*'"
-               (interactive)
-               (projectile-with-default-dir (projectile-project-root)
-                 (async-shell-command (format "make %s" command) (format "*shell:make %s*" command)))))
-  :init (evil-set-initial-state 'shell-mode 'emacs)
-  :config (progn
-            ;; The assumption here is that I only use shell mode to run processes,
-            ;; I don't use it for actuall shell access (have tmux for that.)
-            (add-hook 'shell-mode-hook 'read-only-mode)
-            (add-hook 'shell-mode-hook 'buffer-disable-undo)
-            (add-hook 'shell-mode-hook (lambda () (linum-mode -1)))
-            (evil-define-key 'emacs shell-mode-map (kbd "q") 'delete-window)
-            (define-key shell-mode-map (kbd "C-c C-c") (lambda () (interactive) (delete-process (buffer-name))))))
+  :preface
+  (defun shell-make (command)
+    "Call `make *command*` in the projectile root directory under a buffer named '*shell:make*'"
+    (interactive)
+    (projectile-with-default-dir (projectile-project-root)
+      (async-shell-command (format "make %s" command) (format "*shell:make %s*" command))))
+
+  :init
+  (add-to-list 'evil-emacs-vanilla-modes 'shell-mode)
+  (evil-set-initial-state 'shell-mode 'emacs)
+
+  :config
+  ;; The assumption here is that I only use shell mode to run processes,
+  ;; I don't use it for actuall shell access (have tmux for that.)
+  (add-hook 'shell-mode-hook 'buffer-disable-undo)
+  (add-hook 'shell-mode-hook (lambda () (linum-mode -1)))
+  (evil-define-key 'emacs shell-mode-map (kbd "q") 'delete-window)
+  (define-key shell-mode-map (kbd "C-c C-c") (lambda () (interactive) (delete-process (buffer-name)))))
 
 (use-package profiler
   :ensure nil
-  :init (progn
-          (evil-set-initial-state 'profiler-report-mode 'emacs)))
+  :init
+  (evil-set-initial-state 'profiler-report-mode 'emacs))
 
 (use-package perspective
-  :init (progn
-          (define-key evil-normal-state-map (kbd "C-@") 'persp-switch)
-          (define-key evil-normal-state-map (kbd ")") 'persp-next)
-          (define-key evil-normal-state-map (kbd "(") 'persp-prev)
-          (evil-leader/set-key "p r" 'persp-rename)
-          (evil-leader/set-key "p k" 'persp-kill))
-  :config (persp-mode))
+  :init
+  (define-key evil-normal-state-map (kbd "C-@") 'persp-switch)
+  (define-key evil-normal-state-map (kbd ")") 'persp-next)
+  (define-key evil-normal-state-map (kbd "(") 'persp-prev)
+  (evil-leader/set-key "p r" 'persp-rename)
+  (evil-leader/set-key "p k" 'persp-kill)
+  :config
+  (persp-mode))
 
 (use-package dired
-  :init (progn
-          (setq dired-use-ls-dired nil)
-          (evil-leader/set-key "kr" 'dired)
-          (evil-set-initial-state 'dired-mode 'emacs))
-  :config (progn
-            (define-key dired-mode-map (kbd "(") nil)
-            (evil-define-key 'emacs dired-mode-map
-              (kbd "m") nil
-              (kbd "TAB") 'dired-hide-details-mode
-              (kbd "r") 'revert-buffer
-              (kbd "md") 'dired-do-delete
-              (kbd "mc") 'dired-do-copy
-              (kbd "mm") 'dired-do-rename
-              (kbd "mad") 'dired-create-directory
-              (kbd "maf") 'find-file)))
+  :init
+  (setq dired-use-ls-dired nil)
+  (evil-leader/set-key "kr" 'dired)
+  (evil-set-initial-state 'dired-mode 'emacs)
+
+  :config
+  (define-key dired-mode-map (kbd "(") nil)
+  (evil-define-key 'emacs dired-mode-map
+    (kbd "m") nil
+    (kbd "TAB") 'dired-hide-details-mode
+    (kbd "r") 'revert-buffer
+    (kbd "md") 'dired-do-delete
+    (kbd "mc") 'dired-do-copy
+    (kbd "mm") 'dired-do-rename
+    (kbd "mad") 'dired-create-directory
+    (kbd "maf") 'find-file))
 
 (use-package git-gutter
   :diminish git-gutter-mode
   :commands global-git-gutter-mode
-  :config (progn
-            (git-gutter:linum-setup)
-            (define-key evil-normal-state-map (kbd "] c") 'git-gutter:next-hunk)
-            (define-key evil-normal-state-map (kbd "[ c") 'git-gutter:previous-hunk)
-            (evil-leader/set-key "g a" 'git-gutter:stage-hunk)
-            (evil-leader/set-key "g r" 'git-gutter:revert-hunk)))
+  :config
+  (git-gutter:linum-setup)
+  (define-key evil-normal-state-map (kbd "] c") 'git-gutter:next-hunk)
+  (define-key evil-normal-state-map (kbd "[ c") 'git-gutter:previous-hunk)
+  (evil-leader/set-key "g a" 'git-gutter:stage-hunk)
+  (evil-leader/set-key "g r" 'git-gutter:revert-hunk))
 
 (use-package magit
   :commands ( magit-log magit-commit magit-commit-amend
@@ -537,35 +549,35 @@
               magit-blame magit-blame-quit magit-stage-file
               magit-mode )
   :mode ("/\\(\\(\\(COMMIT\\|NOTES\\|PULLREQ\\|TAG\\)_EDIT\\|MERGE_\\|\\)MSG\\|BRANCH_DESCRIPTION\\)\\'" . global-git-commit-mode)
-  :init (progn
-          (setq vc-handled-backends ())
-          (setq magit-completing-read-function 'ivy-completing-read)
-          (evil-set-initial-state 'magit-mode 'emacs)
-          (evil-set-initial-state 'git-rebase-mode 'emacs)
-          (evil-set-initial-state 'text-mode 'insert)
-          (evil-set-initial-state 'git-commit-major-mode 'insert)
+  :init
+  (setq vc-handled-backends ())
+  (setq magit-completing-read-function 'ivy-completing-read)
+  (evil-set-initial-state 'magit-mode 'emacs)
+  (evil-set-initial-state 'git-rebase-mode 'emacs)
+  (evil-set-initial-state 'text-mode 'insert)
+  (evil-set-initial-state 'git-commit-major-mode 'insert)
 
-          (evil-leader/set-key
-            "g l" 'magit-log
-            "g c" 'magit-commit
-            "g C" 'magit-commit-amend
-            "g s" 'magit-status
-            "g d" 'magit-diff-buffer-file
-            "g b" (lambda () (interactive)
-                    (if (bound-and-true-p magit-blame-mode)
-                      (magit-blame-quit)
-                      (call-interactively 'magit-blame)))
-            "g w" 'magit-stage-file))
+  (evil-leader/set-key
+    "g l" 'magit-log
+    "g c" 'magit-commit
+    "g C" 'magit-commit-amend
+    "g s" 'magit-status
+    "g d" 'magit-diff-buffer-file
+    "g b" (lambda () (interactive)
+            (if (bound-and-true-p magit-blame-mode)
+              (magit-blame-quit)
+              (call-interactively 'magit-blame)))
+    "g w" 'magit-stage-file)
 
-  :config (progn
-            (evil-define-key 'emacs git-rebase-mode-map
-              (kbd "s") 'git-rebase-squash
-              (kbd "p") 'git-rebase-pick
-              (kbd "r") 'git-rebase-reword
-              (kbd "e") 'git-rebase-edit
-              (kbd "N") 'git-rebase-move-line-down
-              (kbd "P") 'git-rebase-move-line-up
-              (kbd "RET") 'git-rebase-show-commit)))
+  :config
+  (evil-define-key 'emacs git-rebase-mode-map
+    (kbd "s") 'git-rebase-squash
+    (kbd "p") 'git-rebase-pick
+    (kbd "r") 'git-rebase-reword
+    (kbd "e") 'git-rebase-edit
+    (kbd "N") 'git-rebase-move-line-down
+    (kbd "P") 'git-rebase-move-line-up
+    (kbd "RET") 'git-rebase-show-commit))
 
 (use-package flycheck
   :diminish flycheck-mode
@@ -575,45 +587,48 @@
               flycheck-error-list-refresh
               flycheck-error-list-set-source
               flycheck-error-list-reset-filter )
-  :preface (progn
-             (defvar counsel-flycheck-history nil
-               "History for `counsel-flycheck'")
+  :preface
 
-             (defun counsel-flycheck ()
-               (interactive)
-               (if (not (bound-and-true-p flycheck-mode))
-                 (message "Flycheck mode is not available or enabled")
-                 (ivy-read "Error: "
-                   (let ((source-buffer (current-buffer)))
-                     (with-current-buffer (or (get-buffer flycheck-error-list-buffer)
-                                            (progn
-                                              (with-current-buffer
-                                                (get-buffer-create flycheck-error-list-buffer)
-                                                (flycheck-error-list-mode)
-                                                (current-buffer))))
-                       (flycheck-error-list-set-source source-buffer)
-                       (flycheck-error-list-reset-filter)
-                       (revert-buffer t t t)
-                       (split-string (buffer-string) "\n" t " *")))
-                   :action (lambda (s &rest _)
-                             (-when-let* ( (error (get-text-property 0 'tabulated-list-id s))
-                                           (pos (flycheck-error-pos error)) )
-                               (goto-char (flycheck-error-pos error))))
-                   :history 'counsel-flycheck-history))))
-  :init (progn
-          (setq flycheck-idle-change-delay 6)
-          (setq flycheck-check-syntax-automatically '(mode-enabled idle-change))
-          (evil-leader/set-key "el" 'counsel-flycheck))
-  :config (progn
-            (delete 'go-vet flycheck-checkers)
-            (delete 'go-build flycheck-checkers)
-            (delete 'go-test flycheck-checkers)
-            (define-key evil-normal-state-map (kbd "] e") 'next-error)
-            (define-key evil-normal-state-map (kbd "[ e") 'previous-error)))
+  (defvar counsel-flycheck-history nil
+    "History for `counsel-flycheck'")
+
+  (defun counsel-flycheck ()
+    (interactive)
+    (if (not (bound-and-true-p flycheck-mode))
+      (message "Flycheck mode is not available or enabled")
+      (ivy-read "Error: "
+        (let ((source-buffer (current-buffer)))
+          (with-current-buffer (or (get-buffer flycheck-error-list-buffer)
+                                 (progn
+                                   (with-current-buffer
+                                     (get-buffer-create flycheck-error-list-buffer)
+                                     (flycheck-error-list-mode)
+                                     (current-buffer))))
+            (flycheck-error-list-set-source source-buffer)
+            (flycheck-error-list-reset-filter)
+            (revert-buffer t t t)
+            (split-string (buffer-string) "\n" t " *")))
+        :action (lambda (s &rest _)
+                  (-when-let* ( (error (get-text-property 0 'tabulated-list-id s))
+                                (pos (flycheck-error-pos error)) )
+                    (goto-char (flycheck-error-pos error))))
+        :history 'counsel-flycheck-history)))
+
+  :init
+  (setq flycheck-idle-change-delay 6)
+  (setq flycheck-check-syntax-automatically '(mode-enabled idle-change))
+  (evil-leader/set-key "el" 'counsel-flycheck)
+
+  :config
+  (delete 'go-vet flycheck-checkers)
+  (delete 'go-build flycheck-checkers)
+  (delete 'go-test flycheck-checkers)
+  (define-key evil-normal-state-map (kbd "] e") 'next-error)
+  (define-key evil-normal-state-map (kbd "[ e") 'previous-error))
 
 (use-package flyspell
-  :init (progn
-          (add-hook 'prog-mode-hook 'flyspell-prog-mode)))
+  :init
+  (add-hook 'prog-mode-hook 'flyspell-prog-mode))
 
 (use-package yasnippet
   :commands ( yas-global-mode yas-minor-mode
@@ -635,73 +650,74 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
                    (yas-next-field 1))
                  (t (call-interactively 'backward-delete-char)))))
   :diminish (yas-minor-mode . " y")
-  :init (progn
-          (evil-define-key 'insert yas-minor-mode-map (kbd "DEL") 'yas-skip-and-clear-or-backward-delete-char)
-          (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand)
-          (setq yas-snippet-dirs
-            '("~/.emacs.d/.snippets/yasnippet-snippets"
-              "~/.emacs.d/.snippets/personal"))))
+  :init
+  (evil-define-key 'insert yas-minor-mode-map (kbd "DEL") 'yas-skip-and-clear-or-backward-delete-char)
+  (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand)
+  (setq yas-snippet-dirs
+    '("~/.emacs.d/.snippets/yasnippet-snippets"
+       "~/.emacs.d/.snippets/personal")))
 
 (use-package eww
   :commands (eww eww-open-file)
-  :config (progn
-            (evil-define-key 'normal eww-mode-map
-              (kbd "q")   'quit-window
-              (kbd "C-o") 'eww-back-url
-              (kbd "C-i") 'eww-forward-url)))
+  :config
+  (evil-define-key 'normal eww-mode-map
+    (kbd "q")   'quit-window
+    (kbd "C-o") 'eww-back-url
+    (kbd "C-i") 'eww-forward-url))
 
 (use-package counsel-dash
   :commands (counsel-dash
-             counsel-dash-set-local-docsets
-             counsel-dash-activate-local-docset
-             counsel-dash-activate-docset
-             counsel-dash-deactivate-docset
-             counsel-dash-install-docset)
+              counsel-dash-set-local-docsets
+              counsel-dash-activate-local-docset
+              counsel-dash-activate-docset
+              counsel-dash-deactivate-docset
+              counsel-dash-install-docset)
   :load-path "vendor/counsel-dash"
-  :init (progn
-          (if (file-accessible-directory-p "/Volumes/Storage/.docset")
-            (setq counsel-dash-docsets-path "/Volumes/Storage/.docset")
-            (setq counsel-dash-docsets-path "~/.docset"))
+  :init
+  (if (file-accessible-directory-p "/Volumes/Storage/.docset")
+    (setq counsel-dash-docsets-path "/Volumes/Storage/.docset")
+    (setq counsel-dash-docsets-path "~/.docset"))
 
-          (setq counsel-dash-browser-func 'eww)
-          (setq counsel-dash-common-docsets '("Emacs Lisp" "Swift" "iOS" "Javascript"))
-          (evil-leader/set-key "f" (lambda () (interactive) (counsel-dash (thing-at-point 'symbol))))
-          (define-key evil-normal-state-map (kbd "C-f") 'counsel-dash)
-          (add-hook 'emacs-lisp-mode-hook (lambda () (setq-local counsel-dash-docsets '("Emacs Lisp"))))
-          (add-hook 'ruby-mode-hook (lambda () (setq-local counsel-dash-docsets '("Ruby"))))
-          (add-hook 'dockerfile-mode-hook (lambda () (setq-local counsel-dash-docsets '("Docker"))))
-          (add-hook 'js2-minor-mode-hook (lambda () (setq-local counsel-dash-docsets '("Javascript" "NodeJS"))))
-          (add-hook 'web-mode-hook (lambda () (setq-local counsel-dash-docsets '("Javascript" "HTML""CSS"))))
-          (add-hook 'scss-mode-hook (lambda () (setq-local counsel-dash-docsets '("CSS"))))
-          (add-hook 'swift-mode-hook (lambda () (setq-local counsel-dash-docsets '("iOS" "Swift"))))))
+  (setq counsel-dash-browser-func 'eww)
+  (setq counsel-dash-common-docsets '("Emacs Lisp" "Swift" "iOS" "Javascript"))
+  (evil-leader/set-key "f" (lambda () (interactive) (counsel-dash (thing-at-point 'symbol))))
+  (define-key evil-normal-state-map (kbd "C-f") 'counsel-dash)
+  (add-hook 'emacs-lisp-mode-hook (lambda () (setq-local counsel-dash-docsets '("Emacs Lisp"))))
+  (add-hook 'ruby-mode-hook (lambda () (setq-local counsel-dash-docsets '("Ruby"))))
+  (add-hook 'dockerfile-mode-hook (lambda () (setq-local counsel-dash-docsets '("Docker"))))
+  (add-hook 'js2-minor-mode-hook (lambda () (setq-local counsel-dash-docsets '("Javascript" "NodeJS"))))
+  (add-hook 'web-mode-hook (lambda () (setq-local counsel-dash-docsets '("Javascript" "HTML""CSS"))))
+  (add-hook 'scss-mode-hook (lambda () (setq-local counsel-dash-docsets '("CSS"))))
+  (add-hook 'swift-mode-hook (lambda () (setq-local counsel-dash-docsets '("iOS" "Swift")))))
 
 (use-package company
   :diminish " c"
   :commands global-company-mode
   :defines company-dabbrev-downcase
-  :init (progn
-          (setq company-dabbrev-downcase nil)
-          (setq company-tooltip-align-annotations t))
-  :config (progn
-            (use-package company-emoji)
-            ; Swap some keybindings
-            (define-key evil-insert-state-map (kbd "C-@") 'company-complete)
-            (define-key company-active-map (kbd "<backtab>") 'company-select-previous)
-            (define-key company-active-map (kbd "C-j") 'company-select-next)
-            (define-key company-active-map (kbd "C-k") 'company-select-previous)
-            (define-key company-active-map (kbd "C-i") 'company-select-next)
-            (define-key company-active-map (kbd "C-o") 'company-select-previous)
-            ; Okay lets setup company backends the way we want it, in a single place.
-            (setq company-backends
-              '( company-css
-                 company-elisp
-                 company-clang
-                 company-capf
-                 company-files
-                 company-dabbrev-code
-                 company-keywords
-                 company-emoji
-                 company-yasnippet))))
+  :init
+  (setq company-dabbrev-downcase nil)
+  (setq company-tooltip-align-annotations t)
+
+  :config
+  (use-package company-emoji)
+                                        ; Swap some keybindings
+  (define-key evil-insert-state-map (kbd "C-@") 'company-complete)
+  (define-key company-active-map (kbd "<backtab>") 'company-select-previous)
+  (define-key company-active-map (kbd "C-j") 'company-select-next)
+  (define-key company-active-map (kbd "C-k") 'company-select-previous)
+  (define-key company-active-map (kbd "C-i") 'company-select-next)
+  (define-key company-active-map (kbd "C-o") 'company-select-previous)
+                                        ; Okay lets setup company backends the way we want it, in a single place.
+  (setq company-backends
+    '( company-css
+       company-elisp
+       company-clang
+       company-capf
+       company-files
+       company-dabbrev-code
+       company-keywords
+       company-emoji
+       company-yasnippet)))
 
 ;; LANGUAGE PACKS
 ;; ================================================================================
@@ -709,30 +725,30 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 (use-package text-mode
   :preface (provide 'text-mode)
   :no-require t
-  :init (progn
-          (add-hook 'text-mode-hook 'turn-on-auto-fill)
-          (setq-default fill-column 80)))
+  :init
+  (add-hook 'text-mode-hook 'turn-on-auto-fill)
+  (setq-default fill-column 80))
 
 (use-package js2-mode
   :diminish js2-minor-mode
   :commands (js2-mode js2-minor-mode)
   :mode ("\\.js\\'" . js-mode)
   :interpreter ("node" . js-mode)
-  :init (progn
-          (add-hook 'js-mode-hook 'js2-minor-mode)
-          (setq js2-highlight-level 3)
-          (setq js2-mode-show-parse-errors nil)
-          (setq js2-mode-show-strict-warnings nil)
+  :init
+  (add-hook 'js-mode-hook 'js2-minor-mode)
+  (setq js2-highlight-level 3)
+  (setq js2-mode-show-parse-errors nil)
+  (setq js2-mode-show-strict-warnings nil)
 
-          (use-package tern
-            :diminish " T"
-            :commands (tern-mode)
-            :init (progn
-                    (add-hook 'js-mode-hook 'tern-mode)))
+  (use-package tern
+    :diminish " T"
+    :commands (tern-mode)
+    :init
+    (add-hook 'js-mode-hook 'tern-mode))
 
-          (use-package company-tern
-            :config (progn
-                      (add-to-list 'company-backends 'company-tern))))
+  (use-package company-tern
+    :config
+    (add-to-list 'company-backends 'company-tern))
 
   :config
   (evil-define-key 'insert js2-minor-mode-map (kbd "RET") 'js2-line-break))
@@ -771,25 +787,27 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
                             (buffer-file-name)
                             (string-match ".*\.jsx?$" (buffer-file-name))))
              :modes (web-mode))
-  :init (progn
-          (use-package emmet-mode
-            :commands emmet-mode
-            ; emmet-mode still looks for the old expand-snippet function name
-            :preface (defalias 'yas/expand-snippet 'yas-expand-snippet)
-            :init (progn
-                    (add-hook 'sgml-mode-hook 'emmet-mode)
-                    (add-hook 'web-mode-hook 'emmet-mode))
-            :config
-            (advice-add #'yas--fallback :around
-              (lambda (oldfun &rest args)
-                (if (and (bound-and-true-p emmet-mode) (emmet-expr-on-line))
-                  (emmet-expand-yas)
-                  (apply oldfun args))))))
-  :config (progn
-            (add-hook 'web-mode-hook (lambda () (yas-activate-extra-mode 'js-mode)))
-            (add-to-list 'flycheck-checkers 'jsxhint)
-            (define-key prog-mode-map (kbd "C-x /") 'web-mode-element-close)
-            (define-key prog-mode-map (kbd "C-/")   'web-mode-element-close)))
+  :init
+  (use-package emmet-mode
+    :commands emmet-mode
+                                        ; emmet-mode still looks for the old expand-snippet function name
+    :preface (defalias 'yas/expand-snippet 'yas-expand-snippet)
+    :init
+    (add-hook 'sgml-mode-hook 'emmet-mode)
+    (add-hook 'web-mode-hook 'emmet-mode)
+
+    :config
+    (advice-add #'yas--fallback :around
+      (lambda (oldfun &rest args)
+        (if (and (bound-and-true-p emmet-mode) (emmet-expr-on-line))
+          (emmet-expand-yas)
+          (apply oldfun args)))))
+
+  :config
+  (add-hook 'web-mode-hook (lambda () (yas-activate-extra-mode 'js-mode)))
+  (add-to-list 'flycheck-checkers 'jsxhint)
+  (define-key prog-mode-map (kbd "C-x /") 'web-mode-element-close)
+  (define-key prog-mode-map (kbd "C-/")   'web-mode-element-close))
 
 (use-package fish-mode
   :mode "\\.fish\\'")
@@ -820,11 +838,11 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 
 (use-package swift-mode
   :mode "\\.swift\\'"
-  :init (progn
-          (use-package company-sourcekit
-            :load-path "vendor/company-sourcekit"
-            :init (setq company-sourcekit-use-yasnippet t)
-            :config (add-to-list 'company-backends 'company-sourcekit))))
+  :init
+  (use-package company-sourcekit
+    :load-path "vendor/company-sourcekit"
+    :init (setq company-sourcekit-use-yasnippet t)
+    :config (add-to-list 'company-backends 'company-sourcekit)))
 
 (use-package dockerfile-mode
   :mode "^Dockerfile\\'"
@@ -877,22 +895,26 @@ INITIAL will be used as the initial input, if given."
                 (browse-url
                   (format haskell-hoogle-url
                     (url-hexify-string ivy-text))))))
-  :init (progn
-          (setq haskell-hoogle-command "stack hoogle --")
-          (setq haskell-hoogle-url "https://www.stackage.org/lts/hoogle?q=%s")
-          (setq haskell-process-type 'stack-ghci)
-          (and (executable-find "stylish-haskell") (setq haskell-stylish-on-save t))
-          (use-package intero
-            :init
-            (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
-            (add-hook 'haskell-mode-hook 'intero-mode)
-            (add-hook 'intero-repl-mode-hook (lambda () (evil-mode -1)))
-            :config
-            (evil-define-key 'normal haskell-mode-map (kbd "M-i") 'intero-info)
-            (evil-leader/set-key-for-mode 'haskell-mode "t" 'intero-type-at)
-            (evil-leader/set-key-for-mode 'haskell-mode "g" 'intero-goto-definition)))
+  :init
+  (setq haskell-hoogle-command "stack hoogle --")
+  (setq haskell-hoogle-url "https://www.stackage.org/lts/hoogle?q=%s")
+  (setq haskell-process-type 'stack-ghci)
+  (and (executable-find "stylish-haskell") (setq haskell-stylish-on-save t))
+  (use-package intero
+    :init
+    (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
+    (add-hook 'haskell-mode-hook 'intero-mode)
+    (add-to-list 'evil-emacs-vanilla-modes 'intero-repl-mode)
+    (evil-set-initial-state 'intero-repl-mode 'emacs)
+
+    :config
+    (evil-define-key 'normal haskell-mode-map (kbd "M-i") 'intero-info)
+    (evil-leader/set-key-for-mode 'haskell-mode "t" 'intero-type-at)
+    (evil-leader/set-key-for-mode 'haskell-mode "g" 'intero-goto-definition))
+
   :config
   (evil-define-key 'normal haskell-mode-map (kbd "?") 'counsel-hoogle))
+
 (use-package go-mode
   :mode "\\.go\\'"
   :init (use-package company-go
@@ -903,30 +925,30 @@ INITIAL will be used as the initial input, if given."
 (use-package rainbow-mode
   :diminish rainbow-mode
   :commands (rainbow-mode)
-  :init (progn
-          (add-hook 'css-mode-hook 'rainbow-mode)
-          (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
-          (add-hook 'web-mode-hook 'rainbow-mode)))
+  :init
+  (add-hook 'css-mode-hook 'rainbow-mode)
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
+  (add-hook 'web-mode-hook 'rainbow-mode))
 
 (use-package rainbow-delimiters
   :commands rainbow-delimiters-mode
-  :init (progn
-         (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)))
+  :init
+  (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
 
 (use-package ledger-mode
   :mode "\\.ledger\\'"
-  :config (progn
-            (use-package flycheck-ledger)
-            (evil-define-key 'normal ledger-mode-map
-              (kbd "Y") 'ledger-copy-transaction-at-point
-              (kbd "C") 'ledger-post-edit-amount
-              (kbd "!") 'ledger-post-align-postings)
+  :config
+  (use-package flycheck-ledger)
+  (evil-define-key 'normal ledger-mode-map
+    (kbd "Y") 'ledger-copy-transaction-at-point
+    (kbd "C") 'ledger-post-edit-amount
+    (kbd "!") 'ledger-post-align-postings)
 
-            (evil-leader/set-key-for-mode 'ledger-mode
-              "n" 'ledger-add-transaction
-              "r" 'ledger-reconcile
-              "d" 'ledger-delete-current-transaction
-              "?" 'ledger-display-balance-at-point)))
+  (evil-leader/set-key-for-mode 'ledger-mode
+    "n" 'ledger-add-transaction
+    "r" 'ledger-reconcile
+    "d" 'ledger-delete-current-transaction
+    "?" 'ledger-display-balance-at-point))
 
 (use-package conf-mode
   :ensure nil
