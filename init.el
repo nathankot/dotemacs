@@ -910,7 +910,7 @@ INITIAL will be used as the initial input, if given."
     :config
     (evil-define-key 'normal haskell-mode-map (kbd "M-i") 'intero-info)
     (evil-leader/set-key-for-mode 'haskell-mode "t" 'intero-type-at)
-    (evil-leader/set-key-for-mode 'haskell-mode "g" 'intero-goto-definition))
+    (evil-leader/set-key-for-mode 'haskell-mode "f" 'intero-goto-definition))
 
   :config
   (evil-define-key 'normal haskell-mode-map (kbd "?") 'counsel-hoogle))
