@@ -896,7 +896,7 @@ INITIAL will be used as the initial input, if given."
                   (format haskell-hoogle-url
                     (url-hexify-string ivy-text))))))
   :init
-  (setq haskell-hoogle-command "stack hoogle -- --count=30")
+  (setq haskell-hoogle-command "stack hoogle --no-docker -- --count=30")
   (setq haskell-hoogle-url "https://www.stackage.org/lts/hoogle?q=%s")
   (setq haskell-process-type 'stack-ghci)
   (and (executable-find "stylish-haskell") (setq haskell-stylish-on-save t))
