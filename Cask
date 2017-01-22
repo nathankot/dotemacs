@@ -83,3 +83,5 @@
 (depends-on "evil-surround")
 (depends-on "evil-matchit")
 (depends-on "evil-visual-mark-mode")
+
+(depends-on "request-deferred")
