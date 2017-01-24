@@ -579,6 +579,10 @@
     (kbd "P") 'git-rebase-move-line-up
     (kbd "RET") 'git-rebase-show-commit))
 
+(use-package gist
+  :init
+  (evil-set-initial-state 'gist-list-mode 'emacs))
+
 (use-package flycheck
   :diminish flycheck-mode
   :commands ( global-flycheck-mode flycheck-mode
