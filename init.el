@@ -800,6 +800,17 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :config
   (evil-define-key 'insert js2-minor-mode-map (kbd "RET") 'js2-line-break))
 
+(use-package tide
+  :commands (tide-mode tide-setup)
+  :preface (defun setup-tide-mode ()
+             (interactive)
+             (message "Setting up tide mode")
+             (tide-setup)
+             (tide-hl-identifier-mode +1))
+  :init
+  (add-hook 'js2-mode-hook 'setup-tide-mode)
+  (add-hook 'js2-minor-mode-hook 'setup-tide-mode))
+
 (use-package coffee-mode
   :mode "\\.coffee\\'")
 
