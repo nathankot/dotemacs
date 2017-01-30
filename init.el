@@ -779,6 +779,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :diminish js2-minor-mode
   :commands (js2-mode js2-minor-mode)
   :mode ("\\.js\\'" . js-mode)
+  :mode ("\\.ts\\'" . js-mode)
   :interpreter ("node" . js-mode)
   :init
   (add-hook 'js-mode-hook 'js2-minor-mode)
