@@ -86,6 +86,11 @@
   (require 'hc-zenburn-theme)
   (load-theme 'hc-zenburn t))
 
+(use-package randomize-region
+  :load-path "vendor/randomize-region"
+  :init
+  (require 'randomize-region))
+
 (use-package smart-mode-line
   :init
   (sml/setup)
