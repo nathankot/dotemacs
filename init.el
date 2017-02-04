@@ -627,6 +627,7 @@
   (setq flycheck-idle-change-delay 6)
   (setq flycheck-check-syntax-automatically '(mode-enabled idle-change))
   (evil-leader/set-key "el" 'counsel-flycheck)
+  (setq-default flycheck-disabled-checkers '(haskell-stack-ghc))
 
   :config
   (delete 'go-vet flycheck-checkers)
