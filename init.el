@@ -584,6 +584,16 @@
     (kbd "P") 'git-rebase-move-line-up
     (kbd "RET") 'git-rebase-show-commit))
 
+(use-package magithub
+  :after magit
+  :config
+  (magithub-feature-autoinject t)
+  (evil-define-key 'emacs magit-mode-map
+    (kbd "H") 'magithub-dispatch-popup)
+  (evil-define-key 'emacs magit-popup-mode-map
+    (kbd "H") 'magithub-browse
+    (kbd "g") 'magithub-refresh))
+
 (use-package gist
   :init
   (evil-set-initial-state 'gist-list-mode 'emacs))
