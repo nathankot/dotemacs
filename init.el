@@ -895,7 +895,11 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :mode "\\.markdown\\'"
   :mode "^README\\'"
   :commands markdown-mode
-  :config (add-hook 'markdown-mode-hook 'orgtbl-mode))
+  :config
+  (add-hook 'markdown-mode-hook
+    (lambda ()
+      (turn-on-orgtbl)
+      (add-hook 'before-save-hook 'convert-orgtbl-to-gfm nil t))))
 
 (use-package lua-mode
   :mode "\\.lua\\'")
@@ -1028,6 +1032,22 @@ INITIAL will be used as the initial input, if given."
               sx-inbox sx-tab-month sx-tab-starred sx-tab-featured
               sx-tab-topvoted sx-tab-frontpage sx-tab-unanswered
               sx-tab-unanswered-my-tags))
+
+(use-package org
+  :commands (turn-on-orgtbl org-mode)
+  :preface
+  (defun convert-orgtbl-to-gfm ()
+    "Convert an org-mode table into GH flavored markdown"
+    (interactive)
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward
+               (rx bol (* (syntax whitespace)) "|"
+                 (+ (+ "-") (group "+"))
+                 (+ "-") "|"
+                 (* "\s") eol)
+               nil t)
+        (replace-match (replace-regexp-in-string (rx "+") "|" (match-string-no-properties 0)))))))
 
 ;; Bootloader
 ;; ================================================================================
