@@ -575,6 +575,10 @@
     "g w" 'magit-stage-file)
 
   :config
+
+  (evil-define-key 'emacs magit-mode-map
+    (kbd "p") 'magit-push-popup)
+
   (evil-define-key 'emacs git-rebase-mode-map
     (kbd "s") 'git-rebase-squash
     (kbd "p") 'git-rebase-pick
