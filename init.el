@@ -577,7 +577,8 @@
   :config
 
   (evil-define-key 'emacs magit-mode-map
-    (kbd "p") 'magit-push-popup)
+    (kbd "p") 'magit-push-popup
+    (kbd "l") 'magit-log-popup)
 
   (evil-define-key 'emacs git-rebase-mode-map
     (kbd "s") 'git-rebase-squash
