@@ -165,7 +165,8 @@
           (format "evil-define-emacs-defaults-in-%s" (symbol-name keymap-symbol))))))
 
   :init
-  (setq evil-want-C-u-scroll t
+  (setq
+    evil-want-C-u-scroll t
     evil-overriding-maps nil
     evil-intercept-maps nil
     evil-esc-delay 0 ; Prevent esc from translating to meta key in terminal mode
@@ -231,7 +232,6 @@
   (global-set-key (kbd "C-q") 'delete-window)
   (global-set-key (kbd "C-j") 'evil-window-next)
   (global-set-key (kbd "C-k") 'evil-window-prev)
-
   (define-key evil-normal-state-map (kbd "C-q") 'delete-window)
   (define-key evil-normal-state-map (kbd "C-j") 'evil-window-next)
   (define-key evil-normal-state-map (kbd "C-k") 'evil-window-prev)
@@ -262,6 +262,8 @@
   (evil-leader/set-key "m c" (lambda () (interactive) (shell-make "clean")))
   (evil-leader/set-key "m s" (lambda () (interactive) (shell-make "setup")))
   (evil-leader/set-key "m t" (lambda () (interactive) (shell-make "test")))
+
+  (evil-leader/set-key "u" 'universal-argument)
 
   ;; Buffer Management
   (define-key evil-visual-state-map (kbd "SPC") 'evil-search-forward)
