@@ -1,0 +1,14 @@
+'use strict';
+
+const React = require('react');
+
+
+const $1 = props => (
+  $0
+);
+
+$1.displayName = '$1';
+$1.propTypes = {
+};
+
+module.exports = $1;
