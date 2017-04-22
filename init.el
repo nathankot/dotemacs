@@ -991,7 +991,7 @@ INITIAL will be used as the initial input, if given."
     (add-hook 'haskell-mode-hook 'intero-mode)
     (add-to-list 'evil-emacs-vanilla-modes 'intero-repl-mode)
     (evil-set-initial-state 'intero-repl-mode 'emacs)
-    (setq intero-stack-executable "stack --no-docker")
+    (setq intero-stack-executable "stack")
 
     :config
     (evil-define-key 'normal haskell-mode-map (kbd "M-i") 'intero-info)
