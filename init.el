@@ -878,6 +878,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
     (add-hook 'web-mode-hook 'emmet-mode)
 
     :config
+    (setq emmet-expand-jsx-className? t)
     (advice-add #'yas--fallback :around
       (lambda (oldfun &rest args)
         (if (and (bound-and-true-p emmet-mode) (emmet-expr-on-line))
