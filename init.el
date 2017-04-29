@@ -1034,6 +1034,7 @@ INITIAL will be used as the initial input, if given."
   (evil-leader/set-key-for-mode 'ledger-mode
     "n" 'ledger-add-transaction
     "r" 'ledger-reconcile
+    "c" 'ledger-toggle-current-transaction
     "d" 'ledger-delete-current-transaction
     "?" 'ledger-display-balance-at-point))
 
