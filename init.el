@@ -479,6 +479,7 @@
   (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-markup-indent-offset))
   (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-sql-indent-offset))
   (add-to-list 'editorconfig-indentation-alist '(web-mode js2-basic-offset))
+  (add-to-list 'editorconfig-indentation-alist '(js-mode js-indent-level))
   (add-to-list 'editorconfig-indentation-alist '(js-mode js2-basic-offset))
   (add-to-list 'editorconfig-indentation-alist '(js2-mode js2-basic-offset))
   (add-to-list 'editorconfig-indentation-alist '(js2-minor-mode js2-basic-offset))
