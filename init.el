@@ -579,6 +579,8 @@
 
   :config
 
+  (add-hook 'git-commit-mode-hook (lambda () (auto-fill-mode 0)))
+
   (evil-define-key 'emacs magit-mode-map
     (kbd "p") 'magit-push-popup
     (kbd "l") 'magit-log-popup)
