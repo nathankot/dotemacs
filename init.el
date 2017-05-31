@@ -316,10 +316,12 @@
   (add-to-list 'projectile-globally-ignored-directories "bower_components")
                                         ; Register and support more project types
   (projectile-register-project-type 'xcode '("*.xcodeproj"))
+  (projectile-register-project-type 'go '("*.go"))
   (advice-add #'projectile-test-suffix :around
     (lambda (oldfun &rest args)
       (or
         (cond ((member (car args) '(xcode)) "Spec"))
+        (cond ((member (car args) '(go)) "_test"))
         (apply oldfun args)))))
 
 (use-package ivy
