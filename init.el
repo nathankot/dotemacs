@@ -316,7 +316,7 @@
   (add-to-list 'projectile-globally-ignored-directories "bower_components")
                                         ; Register and support more project types
   (projectile-register-project-type 'xcode '("*.xcodeproj"))
-  (projectile-register-project-type 'go '("*.go"))
+  (projectile-register-project-type 'go '("glide.yaml"))
   (advice-add #'projectile-test-suffix :around
     (lambda (oldfun &rest args)
       (or
@@ -1012,7 +1012,9 @@ INITIAL will be used as the initial input, if given."
   :init (use-package company-go
           :init (setq company-go-show-annotation t)
           :config (add-to-list 'company-backends 'company-go))
-  :config (add-hook 'before-save-hook 'gofmt-before-save))
+  :config
+  (setq gofmt-command "goimports")
+  (add-hook 'before-save-hook 'gofmt-before-save))
 
 (use-package rainbow-mode
   :diminish rainbow-mode
