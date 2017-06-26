@@ -317,11 +317,13 @@
                                         ; Register and support more project types
   (projectile-register-project-type 'xcode '("*.xcodeproj"))
   (projectile-register-project-type 'go '("glide.yaml"))
+  (projectile-register-project-type 'haskell '("stack.yaml"))
   (advice-add #'projectile-test-suffix :around
     (lambda (oldfun &rest args)
       (or
         (cond ((member (car args) '(xcode)) "Spec"))
         (cond ((member (car args) '(go)) "_test"))
+        (cond ((member (car args) '(haskell)) "Spec"))
         (apply oldfun args)))))
 
 (use-package ivy
