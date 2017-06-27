@@ -648,8 +648,9 @@
         :history 'counsel-flycheck-history)))
 
   :init
-  (setq flycheck-idle-change-delay 6)
-  (setq flycheck-check-syntax-automatically '(mode-enabled idle-change))
+  (setq flycheck-idle-change-delay 0.5)
+  (setq flycheck-check-syntax-automatically '(save))
+  (setq flycheck-highlighting-mode nil)
   (evil-leader/set-key "el" 'counsel-flycheck)
   (setq-default flycheck-disabled-checkers '(haskell-stack-ghc))
 
