@@ -226,6 +226,7 @@
   (define-key evil-normal-state-map (kbd "C-p") nil)
   (define-key evil-motion-state-map (kbd "C-b") nil)
   (define-key evil-motion-state-map (kbd "C-w") nil)
+  (define-key evil-motion-state-map (kbd "TAB") nil)
   (define-key evil-emacs-state-map (kbd "C-w") nil)
 
   ;; Window management
@@ -435,7 +436,7 @@
 (use-package dumb-jump
   :commands (dumb-jump-go)
   :init
-  (evil-leader/set-key "d j" 'dumb-jump-go))
+  (evil-leader/set-key-for-mode 'prog-mode "d j" 'dumb-jump-go))
 
 (use-package writeroom-mode
   :commands writeroom-mode
@@ -1077,7 +1078,39 @@ INITIAL will be used as the initial input, if given."
                  (+ "-") "|"
                  (* "\s") eol)
                nil t)
-        (replace-match (replace-regexp-in-string (rx "+") "|" (match-string-no-properties 0)))))))
+        (replace-match (replace-regexp-in-string (rx "+") "|" (match-string-no-properties 0))))))
+
+  :init
+  (setq-default major-mode 'org-mode)
+  (setq initial-major-mode 'org-mode)
+
+  :config
+  (evil-define-key 'normal org-mode-map
+    "TAB"       'org-cycle
+    ">>"        'org-do-demote
+    "<<"        'org-do-promote
+    "p"   'org-move-item-up
+    "n"   'org-move-item-down
+    (kbd "RET") 'org-open-at-point)
+
+  (evil-define-key 'insert org-mode-map
+    (kbd "M-RET") 'org-insert-heading))
+
+(use-package org-capture
+  :init
+  (setq org-default-notes-file "~/Google Drive/notes.org")
+  (evil-leader/set-key "c c" 'org-capture)
+  (evil-leader/set-key "c r" (lambda () (interactive) (find-file org-default-notes-file)))
+  (evil-leader/set-key "c n" (lambda () (interactive) (find-file org-default-notes-file)))
+  (evil-leader/set-key-for-mode 'org-mode "r" 'org-capture-refile)
+  (evil-leader/set-key-for-mode 'org-capture-mode "c" 'org-capture-finalize)
+  (evil-leader/set-key-for-mode 'org-capture-mode "w" 'org-capture-finalize)
+  (evil-leader/set-key-for-mode 'org-capture-mode "k" 'org-capture-kill)
+
+  (setq org-capture-templates '( ("t" "todo" entry (file+headline org-default-notes-file "Tasks")
+                                   "* TODO %? %U %a")
+                                 ("n" "note" entry (file+datetree org-default-notes-file)
+                                   "* %? :NOTE:\n%U\n%a\n"))))
 
 ;; Bootloader
 ;; ================================================================================
