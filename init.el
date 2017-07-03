@@ -1086,12 +1086,13 @@ INITIAL will be used as the initial input, if given."
 
   :config
   (evil-define-key 'normal org-mode-map
-    "TAB"       'org-cycle
-    ">>"        'org-do-demote
-    "<<"        'org-do-promote
-    "p"   'org-move-item-up
-    "n"   'org-move-item-down
-    (kbd "RET") 'org-open-at-point)
+    "TAB"          'org-cycle
+    ">>"           'org-do-demote
+    "<<"           'org-do-promote
+    "p"            'org-move-item-up
+    "n"            'org-move-item-down
+    "t"            'org-todo
+    (kbd "RET")    'org-open-at-point)
 
   (evil-define-key 'insert org-mode-map
     (kbd "M-RET") 'org-insert-heading))
