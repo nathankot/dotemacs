@@ -98,7 +98,7 @@
 
   :config
   (setq sml/shorten-directory t)
-  (setq sml/shorten-modes t)
+  (setq sml/shorten-modes nil)
   (setq sml/name-width 30)
   (setq sml/numbers-separator "")
   (setq sml/show-trailing-N nil)
