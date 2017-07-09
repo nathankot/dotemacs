@@ -521,10 +521,12 @@
 (use-package perspective
   :init
   (define-key evil-normal-state-map (kbd "C-@") 'persp-switch)
-  (define-key evil-normal-state-map (kbd ")") 'persp-next)
-  (define-key evil-normal-state-map (kbd "(") 'persp-prev)
   (evil-leader/set-key "p r" 'persp-rename)
   (evil-leader/set-key "p k" 'persp-kill)
+  (evil-leader/set-key "p n" 'persp-next)
+  (evil-leader/set-key "p p" 'persp-prev)
+  (evil-leader/set-key (kbd ")") 'persp-next)
+  (evil-leader/set-key (kbd "(") 'persp-prev)
   :config
   (persp-mode))
 
