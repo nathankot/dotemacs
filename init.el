@@ -1085,10 +1085,6 @@ INITIAL will be used as the initial input, if given."
                nil t)
         (replace-match (replace-regexp-in-string (rx "+") "|" (match-string-no-properties 0))))))
 
-  :init
-  (setq-default major-mode 'org-mode)
-  (setq initial-major-mode 'org-mode)
-
   :config
   (evil-define-key 'normal org-mode-map
     "TAB"          'org-cycle
