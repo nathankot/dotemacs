@@ -868,6 +868,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :mode "\\.html.jsx\\'"
   :mode "\/\*\*.*@jsx"
   :mode "\\.jsx\\'"
+  :mode "\\.tsx\\'"
   :preface (flycheck-define-checker jsxhint
              "A JSX syntax and style checker based on JSXHint."
              :command ("jsxhint" source)
