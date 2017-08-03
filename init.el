@@ -845,8 +845,14 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
              (tide-setup)
              (tide-hl-identifier-mode +1))
   :init
-  (add-hook 'js2-mode-hook 'setup-tide-mode)
-  (add-hook 'js2-minor-mode-hook 'setup-tide-mode))
+  (add-hook 'js2-mode-hook
+    (lambda ()
+      (when (string-equal "ts" (file-name-extension buffer-file-name))
+        (setup-tide-mode))))
+  (add-hook 'js2-minor-mode-hook
+    (lambda ()
+      (when (string-equal "tsx" (file-name-extension buffer-file-name))
+        (setup-tide-mode)))))
 
 (use-package coffee-mode
   :mode "\\.coffee\\'")
