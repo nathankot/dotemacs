@@ -826,9 +826,14 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 
   (use-package tern
     :diminish " T"
-    :commands (tern-mode)
+    :commands (tern-mode tern-mode-enable)
     :init
-    (add-hook 'js-mode-hook 'tern-mode))
+    (add-hook 'js2-minor-mode-hook 'tern-mode-enable)
+    (add-hook 'js-mode-hook 'tern-mode-enable)
+    (add-hook 'web-mode-hook
+      (lambda ()
+        (when (string-equal "jsx" (file-name-extension buffer-file-name))
+          (tern-mode-enable)))))
 
   (use-package company-tern
     :config
