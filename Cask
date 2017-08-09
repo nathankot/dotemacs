@@ -51,6 +51,7 @@
 (depends-on "web-mode")
 (depends-on "emmet-mode")
 (depends-on "js2-mode")
+(depends-on "typescript-mode")
 (depends-on "tide")
 (depends-on "coffee-mode")
 (depends-on "fish-mode")

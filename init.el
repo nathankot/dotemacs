@@ -837,6 +837,9 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :config
   (evil-define-key 'insert js2-minor-mode-map (kbd "RET") 'js2-line-break))
 
+(use-package typescript-mode
+  :mode "\\.ts\\'")
+
 (use-package tide
   :commands (tide-mode tide-setup)
   :preface (defun setup-tide-mode ()
@@ -845,11 +848,8 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
              (tide-setup)
              (tide-hl-identifier-mode +1))
   :init
-  (add-hook 'js2-mode-hook
-    (lambda ()
-      (when (string-equal "ts" (file-name-extension buffer-file-name))
-        (setup-tide-mode))))
-  (add-hook 'js2-minor-mode-hook
+  (add-hook 'typescript-mode-hook #'setup-tide-mode)
+  (add-hook 'web-mode-hook
     (lambda ()
       (when (string-equal "tsx" (file-name-extension buffer-file-name))
         (setup-tide-mode)))))
