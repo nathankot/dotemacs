@@ -37,6 +37,7 @@
 (depends-on "magithub")
 (depends-on "gist")
 (depends-on "git-gutter")
+(depends-on "git-link")
 
 (depends-on "projectile")
 (depends-on "perspective")

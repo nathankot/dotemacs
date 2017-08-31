@@ -618,6 +618,8 @@
   :init
   (evil-set-initial-state 'gist-list-mode 'emacs))
 
+(use-package git-link)
+
 (use-package flycheck
   :diminish flycheck-mode
   :commands ( global-flycheck-mode flycheck-mode
