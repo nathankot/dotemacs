@@ -436,7 +436,7 @@
 (use-package dumb-jump
   :commands (dumb-jump-go)
   :init
-  (evil-leader/set-key-for-mode 'prog-mode "d j" 'dumb-jump-go))
+  (evil-leader/set-key "dj" 'dumb-jump-go))
 
 (use-package writeroom-mode
   :commands writeroom-mode
