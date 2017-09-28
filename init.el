@@ -1131,6 +1131,11 @@ INITIAL will be used as the initial input, if given."
 ;; Bootloader
 ;; ================================================================================
 
+;; TODO : remove when upgrade to 25.3 which addresses this vulnerability
+(eval-after-load "enriched"
+    '(defun enriched-decode-display-prop (start end &optional param)
+       (list start end)))
+
 (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (menu-bar-mode -1) ;; Disable menu bar
 (auto-save-mode nil) ;; Disable autosaving
