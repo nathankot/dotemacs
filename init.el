@@ -1061,6 +1061,15 @@ INITIAL will be used as the initial input, if given."
     (kbd "C") 'ledger-post-edit-amount
     (kbd "!") 'ledger-post-align-postings)
 
+  (evil-define-key 'emacs ledger-reconcile-mode-map
+    (kbd "c") 'ledger-reconcile-toggle
+    (kbd "SPC") 'ledger-reconcile-toggle)
+
+  (evil-leader/set-key-for-mode 'ledger-reconcile-mode
+    "w" 'ledger-reconcile-save)
+
+  (evil-set-initial-state 'ledger-reconcile-mode 'emacs)
+
   (evil-leader/set-key-for-mode 'ledger-mode
     "n" 'ledger-add-transaction
     "r" 'ledger-reconcile
