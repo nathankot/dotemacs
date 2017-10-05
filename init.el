@@ -1056,6 +1056,10 @@ INITIAL will be used as the initial input, if given."
   :mode "\\.ledger\\'"
   :config
   (use-package flycheck-ledger)
+
+  (setq ledger-reconcile-sort-key "(date)")
+  (setq ledger-clear-whole-transactions t)
+
   (evil-define-key 'normal ledger-mode-map
     (kbd "Y") 'ledger-copy-transaction-at-point
     (kbd "C") 'ledger-post-edit-amount
