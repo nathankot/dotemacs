@@ -73,6 +73,7 @@
 (depends-on "rainbow-delimiters")
 (depends-on "ledger-mode")
 (depends-on "swift-mode")
+(depends-on "protobuf-mode")
 
 (depends-on "go-mode")
 

@@ -1087,6 +1087,9 @@ INITIAL will be used as the initial input, if given."
   :mode "\\.ini\\'"
   :mode "\\.toml\\'")
 
+(use-package protobuf-mode
+  :mode "\\.proto\\'")
+
 ;; PROGRAMS
 ;; ================================================================================
 
