@@ -428,6 +428,13 @@
     (kbd "M-i") 'sp-slurp-hybrid-sexp
     (kbd "M-o") 'sp-forward-barf-sexp))
 
+(use-package string-inflection
+  :commands (string-inflection-all-cycle string-inflection-underscore string-inflection-camelcase)
+  :init
+  (evil-leader/set-key "qs" 'string-inflection-underscore)
+  (evil-leader/set-key "qc" 'string-inflection-camelcase)
+  (evil-leader/set-key "qq" 'string-inflection-all-cycle))
+
 (use-package avy
   :commands (avy-goto-char-2)
   :init

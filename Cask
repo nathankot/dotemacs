@@ -24,6 +24,7 @@
 (depends-on "wgrep")
 (depends-on "avy")
 (depends-on "dumb-jump")
+(depends-on "string-inflection")
 
 (depends-on "flycheck")
 (depends-on "flycheck-ledger")
