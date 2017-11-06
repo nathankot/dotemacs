@@ -673,6 +673,11 @@
   (delete 'go-vet flycheck-checkers)
   (delete 'go-build flycheck-checkers)
   (delete 'go-test flycheck-checkers)
+  (delete 'go-gofmt flycheck-checkers)
+  (delete 'go-golint flycheck-checkers)
+  (delete 'go-errcheck flycheck-checkers)
+  (delete 'go-unconvert flycheck-checkers)
+  (delete 'go-megacheck flycheck-checkers)
   (define-key evil-normal-state-map (kbd "] e") 'next-error)
   (define-key evil-normal-state-map (kbd "[ e") 'previous-error))
 
