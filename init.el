@@ -46,11 +46,6 @@
     (interactive)
     (insert (shell-command-to-string "pbpaste"))))
 
-(defun print-point ()
-  "Print the current point under the cursor.  Useful for debugging."
-  (interactive)
-  (message "%d" (point)))
-
 (setq debug-on-error nil)
 (setq ad-redefinition-action 'accept)
 (setq locale-coding-system 'utf-8)
@@ -76,6 +71,23 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq large-file-warning-threshold 100000000)
 (setq truncate-lines t)
+
+;; Interactive helper functions.
+;; ================================================================================
+
+(defun print-point ()
+  "Print the current point under the cursor.  Useful for debugging."
+  (interactive)
+  (message "%d" (point)))
+
+(defun align-keycodes ()
+  "Used to align keycodes in qmk_keyboard"
+  (interactive)
+  (align-regexp
+   (region-beginning)
+   (region-end)
+   ",\\([ \t]+\\)" 1 1 t))
+
 
 ;; Theme.
 ;; ================================================================================
