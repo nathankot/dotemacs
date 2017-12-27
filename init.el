@@ -7,23 +7,23 @@
 ;; (package-initialize)
 
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
-  )
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
-  '(custom-safe-themes
-     (quote
-       ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
-  '(package-selected-packages
-     (quote
-       (guide-key yasnippet yaml-mode writeroom-mode wgrep web-mode use-package sx stylus-mode smartparens smart-mode-line scss-mode robe rainbow-mode rainbow-delimiters puppet-mode projectile popwin php-mode perspective magit lua-mode less-css-mode ledger-mode js2-mode idle-highlight-mode htmlize helm-dash haskell-mode git-gutter gist flycheck-ledger flycheck-cask fish-mode expand-region exec-path-from-shell evil-surround evil-snipe evil-search-highlight-persist evil-visual-mark-mode evil-matchit evil-commentary emmet-mode editorconfig dockerfile-mode counsel company-tern coffee-mode cask))))
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
+ '(package-selected-packages
+   (quote
+    (guide-key yasnippet yaml-mode writeroom-mode wgrep web-mode use-package sx stylus-mode smartparens smart-mode-line scss-mode robe rainbow-mode rainbow-delimiters puppet-mode projectile popwin php-mode perspective magit lua-mode less-css-mode ledger-mode js2-mode idle-highlight-mode htmlize helm-dash haskell-mode git-gutter gist flycheck-ledger flycheck-cask fish-mode expand-region exec-path-from-shell evil-surround evil-snipe evil-search-highlight-persist evil-visual-mark-mode evil-matchit evil-commentary emmet-mode editorconfig dockerfile-mode counsel company-tern coffee-mode cask))))
 
 (require 'cask (concat (getenv "HOMEBREW_ROOT") "/share/emacs/site-lisp/cask/cask.el"))
 (cask-initialize)
@@ -88,15 +88,14 @@
    (region-end)
    ",\\([ \t]+\\)" 1 1 t))
 
-
 ;; Theme.
 ;; ================================================================================
 
-(use-package hc-zenburn-theme
-  :load-path "vendor/hc-zenburn-theme"
+(use-package hyperfuse-theme
+  :load-path "vendor/hyperfuse-theme"
   :init
-  (require 'hc-zenburn-theme)
-  (load-theme 'hc-zenburn t))
+  (require 'hyperfuse-theme)
+  (load-theme 'hyperfuse t))
 
 (use-package randomize-region
   :load-path "vendor/randomize-region"
@@ -495,6 +494,7 @@
 
 (use-package editorconfig
   :commands editorconfig-mode
+  :diminish editorconfig-mode
   :config
   (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-attr-indent-offset))
   (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-attr-value-indent-offset))
