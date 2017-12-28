@@ -464,9 +464,7 @@
   (evil-leader/set-key "," 'writeroom-mode)
 
   :config
-  (dolist (w '(quit-window
-                evil-window-next
-                evil-window-prev))
+  (dolist (w '(evil-window-next evil-window-prev switch-to-buffer))
     (advice-add w :around
       (lambda (oldfun &rest args)
         "Ensure `writeroom-mode' is turned off and on around this function"
@@ -475,13 +473,12 @@
           (apply oldfun args)
           (and has-writeroom (writeroom-mode 1))))))
 
-  (dolist (w '(split-window-vertically split-window-horizontally persp-switch))
+  (dolist (w '(split-window-vertically split-window-horizontally persp-switch quit-window))
     (advice-add w :around
       (lambda (oldfun &rest args)
-        "Switch `writeroom-mode' off before calling this function"
+        "Ensure `writeroom-mode' is off, otherwise no-op"
         (let ((has-writeroom (bound-and-true-p writeroom-mode)))
-          (and has-writeroom (writeroom-mode -1))
-          (apply oldfun args)))))
+          (and (not has-writeroom) (apply oldfun args))))))
 
   (add-to-list 'writeroom-global-effects
     (lambda (arg)
