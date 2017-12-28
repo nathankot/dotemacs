@@ -807,11 +807,6 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
        company-emoji
        company-yasnippet)))
 
-(use-package which-function
-  :commands which-function-mode
-  :init
-  (add-hook 'prog-mode-hook (lambda () (which-function-mode 1))))
-
 ;; LANGUAGE PACKS
 ;; ================================================================================
 
