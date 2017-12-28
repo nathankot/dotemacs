@@ -35,7 +35,6 @@
 (depends-on "helm-dash")
 
 (depends-on "magit")
-(depends-on "magithub")
 (depends-on "gist")
 (depends-on "git-gutter")
 (depends-on "git-link")

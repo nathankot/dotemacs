@@ -620,16 +620,6 @@
     (kbd "P") 'git-rebase-move-line-up
     (kbd "RET") 'git-rebase-show-commit))
 
-(use-package magithub
-  :after magit
-  :config
-  (magithub-feature-autoinject t)
-  (evil-define-key 'emacs magit-mode-map
-    (kbd "H") 'magithub-dispatch-popup)
-  (evil-define-key 'emacs magit-popup-mode-map
-    (kbd "H") 'magithub-browse
-    (kbd "g") 'magithub-refresh))
-
 (use-package gist
   :init
   (evil-set-initial-state 'gist-list-mode 'emacs))
@@ -763,14 +753,6 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
     '("~/.emacs.d/.snippets/yasnippet-snippets"
        "~/.emacs.d/.snippets/personal")))
 
-(use-package eww
-  :commands (eww eww-open-file)
-  :config
-  (evil-define-key 'normal eww-mode-map
-    (kbd "q")   'quit-window
-    (kbd "C-o") 'eww-back-url
-    (kbd "C-i") 'eww-forward-url))
-
 (use-package counsel-dash
   :commands (counsel-dash
               counsel-dash-set-local-docsets
@@ -824,6 +806,11 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
        company-keywords
        company-emoji
        company-yasnippet)))
+
+(use-package which-function
+  :commands which-function-mode
+  :init
+  (add-hook 'prog-mode-hook (lambda () (which-function-mode 1))))
 
 ;; LANGUAGE PACKS
 ;; ================================================================================
