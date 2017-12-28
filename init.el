@@ -980,7 +980,8 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (use-package company-sourcekit
     :load-path "vendor/company-sourcekit"
     :init (setq company-sourcekit-use-yasnippet t)
-    :config (add-to-list 'company-backends 'company-sourcekit)))
+    :config (add-to-list 'company-backends 'company-sourcekit))
+  (add-to-list 'flycheck-checkers 'swift))
 
 (use-package dockerfile-mode
   :mode "^Dockerfile\\'"
