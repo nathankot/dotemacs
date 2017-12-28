@@ -449,9 +449,9 @@ Also bind `class' to ((class color) (min-colors 89))."
 ;;;;; ivy-mode
    `(ivy-current-match ((t (:foreground ,hyperfuse-fg-1 :background ,hyperfuse-bg+3 :unfg+1ine nil))))
    `(ivy-minibuffer-match-face-1 ((t (:foreground ,hyperfuse-bg+3 :weight bold :background ,hyperfuse-blue))))
-   `(ivy-minibuffer-match-face-2 ((t (:foreground ,hyperfuse-fg :weight bold :background ,hyperfuse-blue-1))))
-   `(ivy-minibuffer-match-face-3 ((t (:foreground ,hyperfuse-fg :weight bold :background ,hyperfuse-blue-2))))
-   `(ivy-minibuffer-match-face-4 ((t (:foreground ,hyperfuse-fg :weight bold :background ,hyperfuse-blue-3))))
+   `(ivy-minibuffer-match-face-2 ((t (:foreground ,hyperfuse-bg+3 :weight bold :background ,hyperfuse-blue-1))))
+   `(ivy-minibuffer-match-face-3 ((t (:foreground ,hyperfuse-bg+3 :weight bold :background ,hyperfuse-blue-2))))
+   `(ivy-minibuffer-match-face-4 ((t (:foreground ,hyperfuse-bg+3 :weight bold :background ,hyperfuse-blue-3))))
 ;;;;; hl-line-mode
    `(hl-line-face ((,class (:foreground ,hyperfuse-bg-2 :background ,hyperfuse-bg+1)) (t :weight bold)))
    `(hl-line ((,class (:foreground ,hyperfuse-bg-2 :background ,hyperfuse-bg+1)) (t :weight bold)))
