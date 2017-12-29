@@ -135,47 +135,45 @@
     (split-window-horizontally)
     (other-window 1))
 
-  (defvar evil-emacs-vanilla-modes nil
-    "Evil emacs modes that should not have any normal keys rebound, useful for REPLs.")
-
   (defun apply-emacs-defaults-to-mode (mode)
     (let ((keymap-symbol (intern (concat (symbol-name mode) "-map"))))
-      (when (not (member mode evil-emacs-vanilla-modes))
-        (evil-delay
-          `(and (boundp ',keymap-symbol) (keymapp (symbol-value ',keymap-symbol)))
-          `(let ((map (symbol-value ',keymap-symbol)))
-             (dolist (k '("h" "j" "k" "l" "v" "m" "p" "n" "z"))
-               (-when-let (def (lookup-key map k))
-                 (define-key map (upcase k) def)
-                 (define-key map k nil)))
+      (evil-delay
+        `(and (boundp ',keymap-symbol) (keymapp (symbol-value ',keymap-symbol)))
+        `(let ((map (symbol-value ',keymap-symbol)))
+           (dolist (k '("h" "j" "k" "l" "v" "m" "p" "n" "z"))
+             (-when-let (def (lookup-key map k))
+               (define-key map (upcase k) def)
+               (define-key map k nil)))
 
-             (evil-add-hjkl-bindings map 'emacs
-               "v" 'evil-visual-char)
+           (evil-add-hjkl-bindings map 'emacs
+             "v" 'evil-visual-char)
 
-             (evil-define-key 'emacs map
-               (kbd "m") nil
-               (kbd "C-e") 'evil-scroll-line-down
-               (kbd "C-y") 'evil-scroll-line-up
-               (kbd "C-u") 'evil-scroll-up
-               (kbd "C-d") 'evil-scroll-down
-               (kbd "{") 'evil-backward-paragraph
-               (kbd "}") 'evil-forward-paragraph
-               (kbd "SPC") 'evil-search-forward
-               (kbd "/") 'evil-search-forward
-               (kbd "n") 'evil-search-next
-               (kbd "M") 'evil-window-middle
-               (kbd "H") 'evil-window-top
-               (kbd "L") 'evil-window-bottom
-               (kbd "gg") 'evil-goto-first-line
-               (kbd "z L") 'evil-scroll-right
-               (kbd "z H") 'evil-scroll-left
-               (kbd ", SPC") 'evil-search-highlight-persist-remove-all
-               (kbd ", ,") 'writeroom-mode
-               (kbd "0") 'evil-beginning-of-line))
-          'after-load-functions t nil
-          (format "evil-define-emacs-defaults-in-%s" (symbol-name keymap-symbol))))))
+           (evil-define-key 'emacs map
+             (kbd "m") nil
+             (kbd "C-e") 'evil-scroll-line-down
+             (kbd "C-y") 'evil-scroll-line-up
+             (kbd "C-u") 'evil-scroll-up
+             (kbd "C-d") 'evil-scroll-down
+             (kbd "{") 'evil-backward-paragraph
+             (kbd "}") 'evil-forward-paragraph
+             (kbd "SPC") 'evil-search-forward
+             (kbd "/") 'evil-search-forward
+             (kbd "n") 'evil-search-next
+             (kbd "M") 'evil-window-middle
+             (kbd "H") 'evil-window-top
+             (kbd "L") 'evil-window-bottom
+             (kbd "gg") 'evil-goto-first-line
+             (kbd "z L") 'evil-scroll-right
+             (kbd "z H") 'evil-scroll-left
+             (kbd ", SPC") 'evil-search-highlight-persist-remove-all
+             (kbd ", ,") 'writeroom-mode
+             (kbd "0") 'evil-beginning-of-line))
+        'after-load-functions t nil
+        (format "evil-define-emacs-defaults-in-%s" (symbol-name keymap-symbol)))))
 
   :init
+  (setq evil-emacs-state-modes nil)
+
   (setq
     evil-want-C-u-scroll t
     evil-overriding-maps nil
@@ -288,7 +286,6 @@
   (define-key evil-normal-state-map (kbd "] b") 'next-buffer)
 
   ;; Default keys for emacs state
-  (dolist (mode evil-emacs-state-modes) (apply-emacs-defaults-to-mode mode))
   (add-function :after (symbol-function 'evil-set-initial-state)
     (lambda (mode state) (when (eq state 'emacs) (apply-emacs-defaults-to-mode mode)))))
 
@@ -577,16 +574,33 @@
 (use-package magit
   :commands ( magit-log magit-commit magit-commit-amend
               magit-status magit-diff-unstaged magit-diff-staged
-              magit-blame magit-blame-quit magit-stage-file
-              magit-mode )
-  :mode ("/\\(\\(\\(COMMIT\\|NOTES\\|PULLREQ\\|TAG\\)_EDIT\\|MERGE_\\|\\)MSG\\|BRANCH_DESCRIPTION\\)\\'" . global-git-commit-mode)
+              magit-blame magit-blame-quit magit-stage-file )
   :init
+  (global-git-commit-mode)
   (setq vc-handled-backends ())
   (setq magit-completing-read-function 'ivy-completing-read)
-  (evil-set-initial-state 'magit-mode 'emacs)
   (evil-set-initial-state 'git-rebase-mode 'emacs)
   (evil-set-initial-state 'text-mode 'insert)
   (evil-set-initial-state 'git-commit-major-mode 'insert)
+
+  (evil-set-initial-state 'magit-branch-manager-mode 'emacs)
+  (evil-set-initial-state 'magit-cherry-mode 'emacs)
+  (evil-set-initial-state 'magit-diff-mode 'emacs)
+  (evil-set-initial-state 'magit-key-mode 'emacs)
+  (evil-set-initial-state 'magit-log-mode 'emacs)
+  (evil-set-initial-state 'magit-log-select-mode 'emacs)
+  (evil-set-initial-state 'magit-mode 'emacs)
+  (evil-set-initial-state 'magit-popup-mode 'emacs)
+  (evil-set-initial-state 'magit-popup-sequence-mode 'emacs)
+  (evil-set-initial-state 'magit-process-mode 'emacs)
+  (evil-set-initial-state 'magit-rebase-mode 'emacs)
+  (evil-set-initial-state 'magit-reflog-mode 'emacs)
+  (evil-set-initial-state 'magit-refs-mode 'emacs)
+  (evil-set-initial-state 'magit-revision-mode 'emacs)
+  (evil-set-initial-state 'magit-stash-mode 'emacs)
+  (evil-set-initial-state 'magit-stashes-mode 'emacs)
+  (evil-set-initial-state 'magit-status-mode 'emacs)
+  (evil-set-initial-state 'magit-wazzup-mode 'emacs)
 
   (evil-leader/set-key
     "g l" 'magit-log
@@ -604,10 +618,18 @@
 
   (add-hook 'git-commit-mode-hook (lambda () (auto-fill-mode 0)))
 
-  (evil-define-key 'normal magit-blame-mode-map
+  (evil-define-key 'emacs magit-file-section-map
+    (kbd "RET") 'magit-diff-visit-file-other-window
+    (kbd "C-j") nil)
+
+  (evil-define-key 'emacs magit-hunk-section-map
+    (kbd "RET") 'magit-diff-visit-file-other-window
+    (kbd "C-j") nil)
+
+  (evil-define-key 'emacs magit-blame-mode-map
     (kbd "RET") 'magit-show-commit)
 
-  (evil-define-key 'emacs magit-mode-map
+  (evil-define-key 'emacs magit-status-mode-map
     (kbd "p") 'magit-push-popup
     (kbd "l") 'magit-log-popup)
 
@@ -1022,7 +1044,6 @@ INITIAL will be used as the initial input, if given."
     :init
     (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
     (add-hook 'haskell-mode-hook 'intero-mode)
-    (add-to-list 'evil-emacs-vanilla-modes 'intero-repl-mode)
     (evil-set-initial-state 'intero-repl-mode 'emacs)
     (setq intero-stack-executable "stack")
 

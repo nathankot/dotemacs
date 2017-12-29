@@ -200,7 +200,7 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(magit-diff-hunk-heading           ((t (:foreground ,hyperfuse-yellow-1 :background nil))))
    `(magit-diff-hunk-heading-highlight ((t (:foreground ,hyperfuse-yellow :background nil))))
    `(magit-diff-context                ((t (:foreground ,hyperfuse-fg :background ,hyperfuse-bg-05))))
-   `(magit-diff-context-highlight      ((t (:foreground ,hyperfuse-fg-1 :background ,hyperfuse-bg-05))))
+   `(magit-diff-context-highlight      ((t (:foreground ,hyperfuse-fg-1 :background ,hyperfuse-bg+05))))
    `(magit-diff-removed                ((t (:foreground ,hyperfuse-red :background nil))))
    `(magit-diff-removed-highlight      ((t (:foreground ,hyperfuse-red :background nil))))
    `(magit-diff-added                  ((t (:foreground ,hyperfuse-green :background nil))))
