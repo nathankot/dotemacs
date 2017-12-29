@@ -618,13 +618,14 @@
 
   (add-hook 'git-commit-mode-hook (lambda () (auto-fill-mode 0)))
 
+  (define-key magit-file-section-map (kbd "C-j") nil)
+  (define-key magit-hunk-section-map (kbd "C-j") nil)
+
   (evil-define-key 'emacs magit-file-section-map
-    (kbd "RET") 'magit-diff-visit-file-other-window
-    (kbd "C-j") nil)
+    (kbd "RET") 'magit-diff-visit-file-other-window)
 
   (evil-define-key 'emacs magit-hunk-section-map
-    (kbd "RET") 'magit-diff-visit-file-other-window
-    (kbd "C-j") nil)
+    (kbd "RET") 'magit-diff-visit-file-other-window)
 
   (evil-define-key 'emacs magit-blame-mode-map
     (kbd "RET") 'magit-show-commit)
