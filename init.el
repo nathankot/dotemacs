@@ -552,6 +552,7 @@
   :config
   (define-key dired-mode-map (kbd "(") nil)
   (evil-define-key 'emacs dired-mode-map
+    (kbd "..") 'dired-up-directory
     (kbd "m") nil
     (kbd "TAB") 'dired-hide-details-mode
     (kbd "r") 'revert-buffer
