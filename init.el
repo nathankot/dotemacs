@@ -584,8 +584,8 @@
   (setq vc-handled-backends ())
   (setq magit-completing-read-function 'ivy-completing-read)
   (evil-set-initial-state 'git-rebase-mode 'emacs)
-  (setq git-commit-major-mode 'markdown-mode)
-  (evil-set-initial-state 'git-commit-major-mode 'insert)
+  (setq git-commit-major-mode 'text-mode)
+  (evil-set-initial-state 'text-mode 'insert)
 
   (evil-set-initial-state 'magit-branch-manager-mode 'emacs)
   (evil-set-initial-state 'magit-cherry-mode 'emacs)
@@ -620,7 +620,8 @@
 
   :config
 
-  (add-hook 'git-commit-mode-hook (lambda () (auto-fill-mode 0)))
+  (add-hook 'git-commit-mode-hook
+    (lambda () (auto-fill-mode 0)))
 
   (define-key magit-file-section-map (kbd "C-j") nil)
   (define-key magit-hunk-section-map (kbd "C-j") nil)
