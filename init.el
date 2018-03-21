@@ -316,6 +316,7 @@
   (projectile-global-mode +1)
   (add-to-list 'projectile-project-root-files ".projectile")
   (add-to-list 'projectile-project-root-files ".git")
+  (add-to-list 'projectile-project-root-files "glide.yaml")
   (add-to-list 'projectile-globally-ignored-directories ".cache")
   (add-to-list 'projectile-globally-ignored-directories ".cask")
   (add-to-list 'projectile-globally-ignored-directories ".stack")
