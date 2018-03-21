@@ -325,18 +325,18 @@
   (add-to-list 'projectile-globally-ignored-directories "node_modules")
   (add-to-list 'projectile-globally-ignored-directories "bower_components")
                                         ; Register and support more project types
-  (projectile-register-project-type 'xcode '("*.xcodeproj"))
-  (projectile-register-project-type 'go '("*.go"))
-  (projectile-register-project-type 'haskell '("stack.yaml"))
-  (projectile-register-project-type 'go '("glide.yaml"))
 
-  (advice-add #'projectile-test-suffix :around
-    (lambda (oldfun &rest args)
-      (or
-        (cond ((member (car args) '(xcode)) "Spec"))
-        (cond ((member (car args) '(go)) "_test"))
-        (cond ((member (car args) '(haskell)) "Spec"))
-        (apply oldfun args)))))
+  ; Reset projectile project types
+  (setq projectile-project-types (make-hash-table))
+  (projectile-register-project-type 'xcode '("*.xcodeproj"))
+  (projectile-register-project-type 'haskell '("stack.yaml"))
+  (projectile-register-project-type 'js-make '("package.json" "Makefile")
+    :test "make test")
+  (projectile-register-project-type 'go-make '("glide.yaml" "Makefile")
+    :test "make test"
+    :test-suffix "_test")
+  (projectile-register-project-type 'go '("glide.yaml")
+    :test-suffix "_test"))
 
 (use-package ivy
   :diminish ivy-mode
