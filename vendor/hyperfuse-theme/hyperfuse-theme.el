@@ -36,9 +36,9 @@
 (defvar hyperfuse-colors-alist
   '(("hyperfuse-fg+1"      . "#6e3f6c")
     ("hyperfuse-fg"        . nil)
-    ("hyperfuse-fg-1"      . "brightmagenta")
+    ("hyperfuse-fg-1"      . "magenta")
     ("hyperfuse-bg-2"      . "#9C9C9C")
-    ("hyperfuse-bg-1"      . "brightwhite")
+    ("hyperfuse-bg-1"      . "white")
     ("hyperfuse-bg-05"     . "white")
     ("hyperfuse-bg"        . nil)
     ("hyperfuse-bg+05"     . "#FFFEFF")

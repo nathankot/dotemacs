@@ -582,7 +582,7 @@
   (setq vc-handled-backends ())
   (setq magit-completing-read-function 'ivy-completing-read)
   (evil-set-initial-state 'git-rebase-mode 'emacs)
-  (evil-set-initial-state 'text-mode 'insert)
+  (setq git-commit-major-mode 'markdown-mode)
   (evil-set-initial-state 'git-commit-major-mode 'insert)
 
   (evil-set-initial-state 'magit-branch-manager-mode 'emacs)
