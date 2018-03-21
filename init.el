@@ -326,16 +326,16 @@
   (add-to-list 'projectile-globally-ignored-directories "bower_components")
                                         ; Register and support more project types
 
-  ; Reset projectile project types
+  ; Reset projectile project types (later has priority)
   (setq projectile-project-types (make-hash-table))
   (projectile-register-project-type 'xcode '("*.xcodeproj"))
   (projectile-register-project-type 'haskell '("stack.yaml"))
   (projectile-register-project-type 'js-make '("package.json" "Makefile")
     :test "make test")
+  (projectile-register-project-type 'go '("glide.yaml")
+    :test-suffix "_test")
   (projectile-register-project-type 'go-make '("glide.yaml" "Makefile")
     :test "make test"
-    :test-suffix "_test")
-  (projectile-register-project-type 'go '("glide.yaml")
     :test-suffix "_test"))
 
 (use-package ivy
