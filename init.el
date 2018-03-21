@@ -326,8 +326,10 @@
   (add-to-list 'projectile-globally-ignored-directories "bower_components")
                                         ; Register and support more project types
   (projectile-register-project-type 'xcode '("*.xcodeproj"))
-  (projectile-register-project-type 'go '("glide.yaml"))
+  (projectile-register-project-type 'go '("*.go"))
   (projectile-register-project-type 'haskell '("stack.yaml"))
+  (projectile-register-project-type 'go '("glide.yaml"))
+
   (advice-add #'projectile-test-suffix :around
     (lambda (oldfun &rest args)
       (or
