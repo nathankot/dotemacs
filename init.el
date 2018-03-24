@@ -328,12 +328,24 @@
 
   ; Reset projectile project types (later has priority)
   (setq projectile-project-types (make-hash-table))
-  (projectile-register-project-type 'xcode '("*.xcodeproj"))
-  (projectile-register-project-type 'haskell '("stack.yaml"))
-  (projectile-register-project-type 'js-make '("package.json" "Makefile")
+  (projectile-register-project-type 'xcode
+    '("*.xcodeproj"))
+
+  (projectile-register-project-type 'xcode-make
+    '("Cartfile" "Makefile")
+    :test "make test"
+    :test-suffix "Spec")
+
+  (projectile-register-project-type 'haskell
+    '("stack.yaml"))
+
+  (projectile-register-project-type 'js-make
+    '("package.json" "Makefile")
     :test "make test")
+
   (projectile-register-project-type 'go '("glide.yaml")
     :test-suffix "_test")
+
   (projectile-register-project-type 'go-make '("glide.yaml" "Makefile")
     :test "make test"
     :test-suffix "_test"))
