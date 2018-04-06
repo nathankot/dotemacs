@@ -857,20 +857,22 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (setq js2-mode-show-parse-errors nil)
   (setq js2-mode-show-strict-warnings nil)
 
-  (use-package tern
-    :diminish " T"
-    :commands (tern-mode tern-mode-enable)
-    :init
-    (add-hook 'js2-minor-mode-hook 'tern-mode-enable)
-    (add-hook 'js-mode-hook 'tern-mode-enable)
-    (add-hook 'web-mode-hook
-      (lambda ()
-        (when (string-equal "jsx" (file-name-extension buffer-file-name))
-          (tern-mode-enable)))))
+  (and (executable-find "tern")
+    (progn
+      (use-package tern
+        :diminish " T"
+        :commands (tern-mode tern-mode-enable)
+        :init
+        (add-hook 'js2-minor-mode-hook 'tern-mode-enable)
+        (add-hook 'js-mode-hook 'tern-mode-enable)
+        (add-hook 'web-mode-hook
+          (lambda ()
+            (when (string-equal "jsx" (file-name-extension buffer-file-name))
+              (tern-mode-enable)))))
 
-  (use-package company-tern
-    :config
-    (add-to-list 'company-backends 'company-tern))
+      (use-package company-tern
+        :config
+        (add-to-list 'company-backends 'company-tern))))
 
   :config
   (evil-define-key 'insert js2-minor-mode-map (kbd "RET") 'js2-line-break))
