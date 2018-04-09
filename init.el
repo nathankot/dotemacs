@@ -252,9 +252,6 @@
   (define-key evil-insert-state-map (kbd "M-RET") 'newline-and-indent)
   (define-key evil-insert-state-map (kbd "RET") 'comment-indent-new-line)
 
-  ;; More fine-grained undo control
-  (setq evil-want-fine-undo 'fine)
-
   (define-key evil-normal-state-map (kbd "-") 'split-window-vertically-and-switch)
   (define-key evil-emacs-state-map (kbd "-") 'split-window-vertically-and-switch)
   (define-key evil-normal-state-map (kbd "|") 'split-window-horizontally-and-switch)
