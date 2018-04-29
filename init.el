@@ -1104,7 +1104,6 @@ INITIAL will be used as the initial input, if given."
 
   (evil-define-key 'normal ledger-mode-map
     (kbd "Y") 'ledger-copy-transaction-at-point
-    (kbd "C") 'ledger-post-edit-amount
     (kbd "!") 'ledger-post-align-postings)
 
   (evil-define-key 'emacs ledger-reconcile-mode-map
