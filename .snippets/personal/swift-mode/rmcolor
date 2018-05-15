@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: New color rumuki
+# key: rmcolor
+# --
+public static var $1 : UIColor = {
+  return makeColor(red: $2, green: $3, blue: $4, alpha: 100)
+}()
