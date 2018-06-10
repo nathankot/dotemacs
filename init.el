@@ -415,10 +415,11 @@
   (define-key ivy-minibuffer-map (kbd "C-i") 'ivy-next-history-element)
   (define-key ivy-minibuffer-map (kbd "C-o") 'ivy-previous-history-element))
 
-(use-package linum-relative
-  :load-path "vendor/linum-relative"
-  :commands linum-relative-on
-  :init (setq linum-relative-format "%3s   "))
+(use-package display-line-numbers
+  :init
+  (setq display-line-numbers-type 'relative)
+  (setq display-line-numbers-width-start t)
+  (global-display-line-numbers-mode t))
 
 (use-package popwin
   :commands popwin-mode
@@ -496,7 +497,7 @@
   (add-to-list 'writeroom-global-effects
     (lambda (arg)
       (interactive)
-      (linum-mode (* -1 arg))
+      (display-line-numbers-mode (* -1 arg))
       (flycheck-mode (* -1 arg)))))
 
 (use-package undo-tree
@@ -538,7 +539,7 @@
   ;; I don't use it for actuall shell access (have tmux for that.)
   (add-hook 'shell-mode-hook 'read-only-mode)
   (add-hook 'shell-mode-hook 'buffer-disable-undo)
-  (add-hook 'shell-mode-hook (lambda () (linum-mode -1)))
+  (add-hook 'shell-mode-hook (lambda () (display-line-numbers-mode -1)))
   (evil-define-key 'emacs shell-mode-map (kbd "q") 'delete-window)
   (define-key shell-mode-map (kbd "C-c C-c") (lambda () (interactive) (delete-process (buffer-name)))))
 
@@ -582,7 +583,6 @@
   :diminish git-gutter-mode
   :commands global-git-gutter-mode
   :config
-  (git-gutter:linum-setup)
   (define-key evil-normal-state-map (kbd "] c") 'git-gutter:next-hunk)
   (define-key evil-normal-state-map (kbd "[ c") 'git-gutter:previous-hunk)
   (evil-leader/set-key "g a" 'git-gutter:stage-hunk)
@@ -1204,8 +1204,6 @@ INITIAL will be used as the initial input, if given."
 (global-auto-revert-mode 1)
 (column-number-mode 1)
 (global-undo-tree-mode 1)
-(global-linum-mode)
-(linum-relative-on)
 
 (evil-mode 1)
 
