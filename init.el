@@ -1067,7 +1067,6 @@ INITIAL will be used as the initial input, if given."
     (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
     (add-hook 'haskell-mode-hook 'intero-mode)
     (evil-set-initial-state 'intero-repl-mode 'emacs)
-    (setq intero-stack-executable "stack")
 
     :config
     (evil-define-key 'normal haskell-mode-map (kbd "M-i") 'intero-info)
