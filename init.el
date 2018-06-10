@@ -497,6 +497,7 @@
   (add-to-list 'writeroom-global-effects
     (lambda (arg)
       (interactive)
+      (git-gutter-mode (* -1 arg))
       (display-line-numbers-mode (* -1 arg))
       (flycheck-mode (* -1 arg)))))
 
