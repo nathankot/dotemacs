@@ -515,10 +515,9 @@
   (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-markup-indent-offset))
   (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-sql-indent-offset))
   (add-to-list 'editorconfig-indentation-alist '(web-mode js2-basic-offset))
-  (add-to-list 'editorconfig-indentation-alist '(js-mode js-indent-level))
-  (add-to-list 'editorconfig-indentation-alist '(js-mode js2-basic-offset))
-  (add-to-list 'editorconfig-indentation-alist '(js2-mode js2-basic-offset))
-  (add-to-list 'editorconfig-indentation-alist '(js2-minor-mode js2-basic-offset))
+  (add-to-list 'editorconfig-indentation-alist '(js-mode js-indent-level js2-basic-offset))
+  (add-to-list 'editorconfig-indentation-alist '(js2-mode js-indent-level js2-basic-offset))
+  (add-to-list 'editorconfig-indentation-alist '(js2-minor-mode js-indent-level js2-basic-offset))
   (add-to-list 'editorconfig-indentation-alist '(swift-mode swift-mode:basic-offset))
   (add-to-list 'editorconfig-indentation-alist '(haskell-mode haskell-indent-spaces haskell-indent-offset))
   (add-to-list 'editorconfig-indentation-alist '(evil-mode evil-shift-width)))
@@ -872,6 +871,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (setq js2-highlight-level 3)
   (setq js2-mode-show-parse-errors nil)
   (setq js2-mode-show-strict-warnings nil)
+  (setq js-indent-level 2)
 
   (and (executable-find "tern")
     (progn
