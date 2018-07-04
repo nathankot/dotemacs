@@ -569,6 +569,7 @@
 
   :config
   (define-key dired-mode-map (kbd "(") nil)
+  (define-key dired-mode-map (kbd "C-w") 'dired-toggle-read-only)
   (evil-define-key 'emacs dired-mode-map
     (kbd ".") nil
     (kbd "m") nil
