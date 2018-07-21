@@ -335,7 +335,8 @@
     :test-suffix "Spec")
 
   (projectile-register-project-type 'haskell
-    '("stack.yaml"))
+    '("stack.yaml")
+    :test-suffix "Spec")
 
   (projectile-register-project-type 'js-make
     '("package.json" "Makefile")
