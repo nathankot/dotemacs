@@ -724,6 +724,10 @@
   (define-key evil-normal-state-map (kbd "] e") 'next-error)
   (define-key evil-normal-state-map (kbd "[ e") 'previous-error))
 
+(use-package turnip
+  :config
+  (evil-leader/set-key "ts" 'turnip-send-region))
+
 (use-package flyspell
   :init
   (add-hook 'prog-mode-hook 'flyspell-prog-mode)

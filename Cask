@@ -25,6 +25,7 @@
 (depends-on "avy")
 (depends-on "dumb-jump")
 (depends-on "string-inflection")
+(depends-on "turnip")
 
 (depends-on "flycheck")
 (depends-on "flycheck-ledger")
