@@ -13,3 +13,6 @@
 [submodule "vendor/counsel-dash"]
 	path = vendor/counsel-dash
 	url = https://github.com/nathankot/counsel-dash.git
+[submodule "vendor/gocode"]
+	path = vendor/gocode
+	url = https://github.com/mdempsky/gocode.git

@@ -48,7 +48,6 @@
 (depends-on "company")
 (depends-on "company-tern")
 (depends-on "company-emoji")
-(depends-on "company-go")
 
 (depends-on "web-mode")
 (depends-on "emmet-mode")

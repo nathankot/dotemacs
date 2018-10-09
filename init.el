@@ -1086,6 +1086,7 @@ INITIAL will be used as the initial input, if given."
 (use-package go-mode
   :mode "\\.go\\'"
   :init (use-package company-go
+          :load-path "vendor/gocode/emacs-company"
           :init (setq company-go-show-annotation t)
           :config (add-to-list 'company-backends 'company-go))
   :config
