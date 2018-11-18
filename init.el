@@ -325,7 +325,7 @@
                                         ; Register and support more project types
 
   ; Reset projectile project types (later has priority)
-  (setq projectile-project-types (make-hash-table))
+
   (projectile-register-project-type 'xcode
     '("*.xcodeproj"))
 
