@@ -960,7 +960,11 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
     (add-hook 'web-mode-hook 'emmet-mode)
 
     :config
-    (setq emmet-expand-jsx-className? t)
+    (add-hook 'emmet-mode-hook
+      (lambda ()
+        (if (string-match ".*\.[jt]sx$" (buffer-file-name))
+          (setq emmet-expand-jsx-className? t)
+          (setq emmet-expand-jsx-className? nil))))
     (advice-add #'yas--fallback :around
       (lambda (oldfun &rest args)
         (if (and (bound-and-true-p emmet-mode) (emmet-expr-on-line))
