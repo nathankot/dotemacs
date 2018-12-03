@@ -173,6 +173,7 @@
 
   :init
   (setq evil-emacs-state-modes nil)
+  (setq evil-motion-state-modes nil)
 
   (setq
     evil-want-C-u-scroll t
@@ -284,7 +285,9 @@
 
   ;; Default keys for emacs state
   (add-function :after (symbol-function 'evil-set-initial-state)
-    (lambda (mode state) (when (eq state 'emacs) (apply-emacs-defaults-to-mode mode)))))
+    (lambda (mode state)
+      (when (or (eq state 'emacs) (eq state 'motion))
+        (apply-emacs-defaults-to-mode mode)))))
 
 
 ;; Utilities
@@ -358,6 +361,9 @@
   :init
   (setq ivy-display-style 'fancy)
   (define-key evil-normal-state-map (kbd "DEL") 'ivy-resume)
+  (evil-set-initial-state 'ivy-occur-mode 'normal)
+  (evil-define-key 'normal ivy-occur-mode-map (kbd "RET") 'ivy-occur-press)
+  (evil-define-key 'normal ivy-mode-map (kbd "RET") 'ivy-occur-press)
 
   (use-package swiper
     :commands (swiper swiper-all)
@@ -366,12 +372,15 @@
   (use-package counsel
     :commands (counsel-mode counsel-ag)
     :diminish counsel-mode
-    :preface (defun counsel-projectile-ag () (interactive) (counsel-ag "" (projectile-project-root)))
+    :preface
+    (defun counsel-projectile-ag ()
+      (interactive)
+      (counsel-ag "" (projectile-project-root)))
     :functions (counsel-projectile-ag)
     :bind (("C-s" . counsel-projectile-ag)))
 
   (use-package wgrep
-    :commands (wgrep-change-to-wgrep-mode)
+    :commands (wgrep-change-to-wgrep-mode ivy-wgrep-change-to-wgrep-mode)
     :config
     (advice-add #'save-buffer :around
       (lambda (old-fun &rest args)
@@ -398,9 +407,7 @@
 
   :config
   (define-key ivy-minibuffer-map (kbd "C-w") 'ivy-occur)
-  (evil-define-key 'normal ivy-occur-grep-mode-map (kbd "C-w") 'ivy-wgrep-change-to-wgrep-mode)
   (define-key ivy-occur-grep-mode-map (kbd "C-w") 'ivy-wgrep-change-to-wgrep-mode)
-  (define-key ivy-occur-mode-map (kbd "C-w") 'ivy-wgrep-change-to-wgrep-mode)
 
   (define-key ivy-minibuffer-map (kbd "C-q") 'keyboard-escape-quit)
   (define-key ivy-minibuffer-map (kbd "C-p") 'keyboard-escape-quit)
