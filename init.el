@@ -318,6 +318,7 @@
   (add-to-list 'projectile-project-root-files ".git")
   (add-to-list 'projectile-project-root-files "glide.yaml")
   (add-to-list 'projectile-project-root-files "Gopkg.toml")
+  (add-to-list 'projectile-project-root-files "go.mod")
   (add-to-list 'projectile-globally-ignored-directories ".cache")
   (add-to-list 'projectile-globally-ignored-directories ".cask")
   (add-to-list 'projectile-globally-ignored-directories ".stack")
@@ -349,6 +350,9 @@
     :test-suffix "_test")
 
   (projectile-register-project-type 'go '("Gopkg.toml")
+    :test-suffix "_test")
+
+  (projectile-register-project-type 'go '("go.mod")
     :test-suffix "_test")
 
   (projectile-register-project-type 'go-make '("glide.yaml" "Makefile")
