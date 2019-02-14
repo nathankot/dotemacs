@@ -659,8 +659,9 @@
   (evil-define-key 'emacs magit-hunk-section-map
     (kbd "RET") 'magit-diff-visit-file-other-window)
 
-  (evil-define-key 'emacs magit-blame-mode-map
-    (kbd "RET") 'magit-show-commit)
+  (evil-define-key 'normal magit-blame-mode-map
+    (kbd "RET") 'magit-show-commit
+    (kbd "y y") 'magit-blame-copy-hash)
 
   (evil-define-key 'emacs magit-status-mode-map
     (kbd "p") 'magit-push-popup
