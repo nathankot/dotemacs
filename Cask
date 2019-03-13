@@ -90,3 +90,4 @@
 (depends-on "evil-visual-mark-mode")
 
 (depends-on "request")
+(depends-on "fill-column-indicator")

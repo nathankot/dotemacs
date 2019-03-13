@@ -119,6 +119,14 @@
   (setq sml/show-remote nil)
   (setq sml/position-percentage-format nil))
 
+(use-package fill-column-indicator
+  :init
+  (define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
+  (global-fci-mode 1)
+  :config
+  (setq fci-rule-width 1)
+  (setq fci-rule-color "#F8F8F8")
+  (setq fci-rule-column 80))
 
 ;; EVIL
 ;; ================================================================================
