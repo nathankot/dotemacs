@@ -856,14 +856,14 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 
   :config
   (use-package company-emoji)
-                                        ; Swap some keybindings
+  ; Swap some keybindings
   (define-key evil-insert-state-map (kbd "C-@") 'company-complete)
   (define-key company-active-map (kbd "<backtab>") 'company-select-previous)
   (define-key company-active-map (kbd "C-j") 'company-select-next)
   (define-key company-active-map (kbd "C-k") 'company-select-previous)
   (define-key company-active-map (kbd "C-i") 'company-select-next)
   (define-key company-active-map (kbd "C-o") 'company-select-previous)
-                                        ; Okay lets setup company backends the way we want it, in a single place.
+  ; Okay lets setup company backends the way we want it, in a single place.
   (setq company-backends
     '( company-css
        company-elisp
@@ -873,7 +873,18 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
        company-dabbrev-code
        company-keywords
        company-emoji
-       company-yasnippet)))
+       company-yasnippet))
+  ; Fix fci-mode with company-mode
+  (defvar-local company-fci-mode-on-p nil)
+  (defun company-turn-off-fci (&rest ignore)
+    (when (boundp 'fci-mode)
+      (setq company-fci-mode-on-p fci-mode)
+      (when fci-mode (fci-mode -1))))
+  (defun company-maybe-turn-on-fci (&rest ignore)
+    (when company-fci-mode-on-p (fci-mode 1)))
+  (add-hook 'company-completion-started-hook 'company-turn-off-fci)
+  (add-hook 'company-completion-finished-hook 'company-maybe-turn-on-fci)
+  (add-hook 'company-completion-cancelled-hook 'company-maybe-turn-on-fci))
 
 ;; LANGUAGE PACKS
 ;; ================================================================================
