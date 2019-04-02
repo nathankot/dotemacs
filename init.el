@@ -896,6 +896,9 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (add-hook 'text-mode-hook 'turn-on-auto-fill)
   (setq-default fill-column 80))
 
+(use-package csv-mode
+  :mode ("\\.csv\\'" . csv-mode))
+
 (use-package js2-mode
   :diminish js2-minor-mode
   :commands (js2-mode js2-minor-mode)
