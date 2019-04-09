@@ -613,7 +613,7 @@
 (use-package magit
   :commands ( magit-log magit-commit magit-commit-amend
               magit-status magit-diff-unstaged magit-diff-staged
-              magit-blame magit-blame-quit magit-stage-file )
+              magit-blame magit-blame-addition magit-blame-quit magit-stage-file )
   :init
   (global-git-commit-mode)
   (setq vc-handled-backends ())
@@ -650,7 +650,7 @@
     "g b" (lambda () (interactive)
             (if (bound-and-true-p magit-blame-mode)
               (magit-blame-quit)
-              (call-interactively 'magit-blame)))
+              (call-interactively 'magit-blame-addition)))
     "g w" 'magit-stage-file)
 
   :config
