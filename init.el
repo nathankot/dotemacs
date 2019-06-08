@@ -1155,6 +1155,7 @@ INITIAL will be used as the initial input, if given."
   :config
   (use-package flycheck-ledger)
 
+  (setq ledger-reconcile-default-commodity "NZD")
   (setq ledger-reconcile-sort-key "(date)")
   (setq ledger-clear-whole-transactions t)
 
