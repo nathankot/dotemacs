@@ -897,7 +897,14 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 
 
 (use-package pine-script-mode
-  :mode ("\\.pine\\'" . pine-script-mode))
+  :mode ("\\.pine\\'" . pine-script-mode)
+  :init
+  (add-hook 'pine-script-mode-hook
+    (lambda ()
+      (make-local-variable 'indent-tabs-mode)
+      (make-local-variable 'tab-width)
+      (setq indent-tabs-mode t)
+      (setq tab-width 2))))
 
 (use-package text-mode
   :preface (provide 'text-mode)
