@@ -895,6 +895,10 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 ;; LANGUAGE PACKS
 ;; ================================================================================
 
+
+(use-package pine-script-mode
+  :mode ("\\.pine\\'" . pine-script-mode))
+
 (use-package text-mode
   :preface (provide 'text-mode)
   :no-require t
