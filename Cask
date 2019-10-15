@@ -48,7 +48,9 @@
 (depends-on "company")
 (depends-on "company-tern")
 (depends-on "company-emoji")
+(depends-on "company-lsp")
 
+(depends-on "lsp-mode")
 (depends-on "web-mode")
 (depends-on "emmet-mode")
 (depends-on "js2-mode")

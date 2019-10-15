@@ -1028,6 +1028,12 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (define-key prog-mode-map (kbd "C-x /") 'web-mode-element-close)
   (define-key prog-mode-map (kbd "C-/")   'web-mode-element-close))
 
+(use-package lsp-mode
+  :commands (lsp-deferred)
+  :init
+  (use-package company-lsp
+    :commands company-lsp))
+
 (use-package fish-mode
   :mode "\\.fish\\'")
 
@@ -1140,10 +1146,12 @@ INITIAL will be used as the initial input, if given."
 
 (use-package go-mode
   :mode "\\.go\\'"
-  :init (use-package company-go
-          :load-path "vendor/gocode/emacs-company"
-          :init (setq company-go-show-annotation t)
-          :config (add-to-list 'company-backends 'company-go))
+  :init
+  ;; (use-package company-go
+  ;;   :load-path "vendor/gocode/emacs-company"
+  ;;   :init (setq company-go-show-annotation t)
+  ;;   :config (add-to-list 'company-backends 'company-go))
+  (add-hook 'go-mode-hook #'lsp-deferred)
   :config
   (setq gofmt-command "goimports")
   (add-hook 'before-save-hook 'gofmt-before-save))
