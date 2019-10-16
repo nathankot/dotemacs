@@ -6,24 +6,17 @@
 
 ;; (package-initialize)
 
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
- '(package-selected-packages
-   (quote
-    (guide-key yasnippet yaml-mode writeroom-mode wgrep web-mode use-package sx stylus-mode smartparens smart-mode-line scss-mode robe rainbow-mode rainbow-delimiters puppet-mode projectile popwin php-mode magit lua-mode less-css-mode ledger-mode js2-mode idle-highlight-mode htmlize helm-dash haskell-mode git-gutter gist flycheck-ledger flycheck-cask fish-mode expand-region exec-path-from-shell evil-surround evil-snipe evil-search-highlight-persist evil-visual-mark-mode evil-matchit evil-commentary emmet-mode editorconfig dockerfile-mode counsel company-tern coffee-mode cask))))
+  '(custom-safe-themes
+     (quote
+       ("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
+  '(package-selected-packages
+     (quote
+       (guide-key yasnippet yaml-mode writeroom-mode wgrep web-mode use-package sx stylus-mode smartparens smart-mode-line scss-mode robe rainbow-mode rainbow-delimiters puppet-mode projectile popwin php-mode magit lua-mode less-css-mode ledger-mode js2-mode idle-highlight-mode htmlize helm-dash haskell-mode git-gutter gist flycheck-ledger flycheck-cask fish-mode expand-region exec-path-from-shell evil-surround evil-snipe evil-search-highlight-persist evil-visual-mark-mode evil-matchit evil-commentary emmet-mode editorconfig dockerfile-mode counsel company-tern coffee-mode cask))))
 
 (require 'cask (concat (getenv "HOMEBREW_ROOT") "/share/emacs/site-lisp/cask/cask.el"))
 (cask-initialize)
@@ -119,14 +112,15 @@
   (setq sml/show-remote nil)
   (setq sml/position-percentage-format nil))
 
-(use-package fill-column-indicator
-  :init
-  (define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
-  (global-fci-mode 1)
-  :config
-  (setq fci-rule-width 1)
-  (setq fci-rule-color "#F8F8F8")
-  (setq fci-rule-column 80))
+;; Breaks lsp-ui tooltips
+;; (use-package fill-column-indicator
+;;   :init
+;;   (define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
+;;   (global-fci-mode 1)
+;;   :config
+;;   (setq fci-rule-width 1)
+;;   (setq fci-rule-color "#F8F8F8")
+;;   (setq fci-rule-column 80))
 
 ;; EVIL
 ;; ================================================================================
@@ -1022,7 +1016,16 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (evil-leader/set-key "jr" 'lsp-find-references))
 
 (use-package lsp-ui
+  :commands (lsp-ui-mode)
   :init
+  (setq lsp-ui-doc-use-childframe nil)
+  (setq lsp-ui-doc-enable t)
+  (setq lsp-ui-doc-alignment (quote window))
+  (setq lsp-ui-doc-delay 0.3)
+  (setq lsp-ui-doc-include-signature nil)
+  (setq lsp-ui-doc-max-height 30)
+  (setq lsp-ui-doc-max-width 80)
+  (setq lsp-ui-doc-position (quote at-point))
   (add-hook 'lsp-mode-hook 'lsp-ui-mode))
 
 (use-package fish-mode

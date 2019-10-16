@@ -180,6 +180,9 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(company-preview ((t (:background ,hyperfuse-green))))
    `(company-preview-common ((t (:background ,hyperfuse-bg+1))))
 
+;;;;; lsp-ui
+   `(lsp-ui-doc-background ((t (:foreground ,hyperfuse-fg :background ,hyperfuse-bg+1))))
+
 ;;;;; magit
    `(magit-item-highlight    ((t (:background ,hyperfuse-bg+2))))
    `(magit-process-ok        ((t (:foreground ,hyperfuse-green))))
