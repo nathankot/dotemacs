@@ -50,6 +50,7 @@
 (depends-on "company-lsp")
 
 (depends-on "lsp-mode")
+(depends-on "lsp-ui")
 (depends-on "web-mode")
 (depends-on "emmet-mode")
 (depends-on "js2-mode")

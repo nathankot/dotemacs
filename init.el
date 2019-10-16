@@ -1014,11 +1014,16 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 (use-package lsp-mode
   :commands (lsp-deferred lsp-goto-type-definition lsp-goto-implementation)
   :init
+  (setq lsp-prefer-flymake nil)
   (use-package company-lsp :commands company-lsp)
   (evil-leader/set-key "jt" 'lsp-goto-type-definition)
   (evil-leader/set-key "ji" 'lsp-goto-implementation)
   (evil-leader/set-key "jd" 'lsp-find-definition)
   (evil-leader/set-key "jr" 'lsp-find-references))
+
+(use-package lsp-ui
+  :init
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
 
 (use-package fish-mode
   :mode "\\.fish\\'")
