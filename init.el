@@ -316,8 +316,8 @@
   (setq projectile-enable-caching t)
   (setq projectile-completion-system 'ivy)
   (setq projectile-indexing-method 'alien)
-  (evil-leader/set-key "g o" (lambda () (interactive) (projectile-find-other-file t)))
-  (evil-leader/set-key "g t" 'projectile-toggle-between-implementation-and-test)
+  (evil-leader/set-key "go" (lambda () (interactive) (projectile-find-other-file t)))
+  (evil-leader/set-key "gt" 'projectile-toggle-between-implementation-and-test)
   (with-eval-after-load 'ivy (define-key ivy-minibuffer-map (kbd "C-l") 'projectile-invalidate-cache))
 
   :config
@@ -480,15 +480,10 @@
   (evil-leader/set-key "qc" 'string-inflection-camelcase)
   (evil-leader/set-key "qq" 'string-inflection-all-cycle))
 
-(use-package avy
-  :commands (avy-goto-char-2)
-  :init
-  (evil-leader/set-key "j" 'avy-goto-char-2))
-
 (use-package dumb-jump
   :commands (dumb-jump-go)
   :init
-  (evil-leader/set-key "dj" 'dumb-jump-go))
+  (evil-leader/set-key "jd" 'dumb-jump-go))
 
 (use-package writeroom-mode
   :commands writeroom-mode
@@ -842,7 +837,6 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 
   (setq counsel-dash-browser-func 'eww)
   (setq counsel-dash-common-docsets '("Emacs Lisp" "Swift" "iOS" "Javascript"))
-  (evil-leader/set-key "f" (lambda () (interactive) (counsel-dash (thing-at-point 'symbol))))
   (define-key evil-normal-state-map (kbd "C-f") 'counsel-dash)
   (add-hook 'emacs-lisp-mode-hook (lambda () (setq-local counsel-dash-docsets '("Emacs Lisp"))))
   (add-hook 'ruby-mode-hook (lambda () (setq-local counsel-dash-docsets '("Ruby"))))
@@ -950,21 +944,9 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (evil-define-key 'insert js2-minor-mode-map (kbd "RET") 'js2-line-break))
 
 (use-package typescript-mode
-  :mode "\\.ts\\'")
-
-(use-package tide
-  :commands (tide-mode tide-setup)
-  :preface (defun setup-tide-mode ()
-             (interactive)
-             (message "Setting up tide mode")
-             (tide-setup)
-             (tide-hl-identifier-mode +1))
   :init
-  (add-hook 'typescript-mode-hook #'setup-tide-mode)
-  (add-hook 'web-mode-hook
-    (lambda ()
-      (when (string-equal "tsx" (file-name-extension buffer-file-name))
-        (setup-tide-mode)))))
+  (add-hook 'typescript-mode-hook #'lsp-deferred)
+  :mode "\\.ts\\'")
 
 (use-package coffee-mode
   :mode "\\.coffee\\'")
@@ -1002,6 +984,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
                             (string-match ".*\.jsx?$" (buffer-file-name))))
              :modes (web-mode))
   :init
+  (add-hook 'web-mode-hook #'lsp-deferred)
   (use-package emmet-mode
     :commands emmet-mode
                                         ; emmet-mode still looks for the old expand-snippet function name
@@ -1029,10 +1012,13 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (define-key prog-mode-map (kbd "C-/")   'web-mode-element-close))
 
 (use-package lsp-mode
-  :commands (lsp-deferred)
+  :commands (lsp-deferred lsp-goto-type-definition lsp-goto-implementation)
   :init
-  (use-package company-lsp
-    :commands company-lsp))
+  (use-package company-lsp :commands company-lsp)
+  (evil-leader/set-key "jt" 'lsp-goto-type-definition)
+  (evil-leader/set-key "ji" 'lsp-goto-implementation)
+  (evil-leader/set-key "jd" 'lsp-find-definition)
+  (evil-leader/set-key "jr" 'lsp-find-references))
 
 (use-package fish-mode
   :mode "\\.fish\\'")
