@@ -11,3 +11,6 @@ url/cache
 var
 magithub
 transient
+.lsp-session*
+go.mod
+go.sum
