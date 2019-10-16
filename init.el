@@ -1013,19 +1013,25 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (evil-leader/set-key "jt" 'lsp-goto-type-definition)
   (evil-leader/set-key "ji" 'lsp-goto-implementation)
   (evil-leader/set-key "jd" 'lsp-find-definition)
-  (evil-leader/set-key "jr" 'lsp-find-references))
+  (evil-leader/set-key "jr" 'lsp-find-references)
+  (evil-leader/set-key "?" 'lsp-describe-thing-at-point))
 
 (use-package lsp-ui
   :commands (lsp-ui-mode)
+  :custom
+  ; Unfortunately we can't use these because all of the positioning
+  ; logic in lsp-ui is defined in pixels:
+  (lsp-ui-sideline-enable nil)
+  (lsp-ui-doc-enable nil)
+  ;; (lsp-ui-doc-delay 0.3)
+  ;; (lsp-ui-doc-include-signature nil)
+  ;; (lsp-ui-doc-max-width 99999)
+  ;; (lsp-ui-doc-max-height 4)
+  ;; (lsp-ui-doc-use-childframe t)
+  ;; (lsp-ui-doc-use-webkit nil)
+  ;; (lsp-ui-doc-alignment 'window)
+  ;; (lsp-ui-doc-position 'top)
   :init
-  (setq lsp-ui-doc-use-childframe nil)
-  (setq lsp-ui-doc-enable t)
-  (setq lsp-ui-doc-alignment (quote window))
-  (setq lsp-ui-doc-delay 0.3)
-  (setq lsp-ui-doc-include-signature nil)
-  (setq lsp-ui-doc-max-height 30)
-  (setq lsp-ui-doc-max-width 80)
-  (setq lsp-ui-doc-position (quote at-point))
   (add-hook 'lsp-mode-hook 'lsp-ui-mode))
 
 (use-package fish-mode
