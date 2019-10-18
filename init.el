@@ -911,7 +911,18 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (setq-default fill-column 80))
 
 (use-package csv-mode
-  :mode ("\\.csv\\'" . csv-mode))
+  :mode ("\\.csv\\'" . csv-mode)
+  :preface
+  (defun amex-sort-transactions ()
+    (interactive)
+    (save-excursion
+      (save-restriction
+        (goto-char (point-min))
+        (while (re-search-forward "\\([0-9][0-9]\\)/\\([0-9][0-9]\\)/\\([0-9][0-9][0-9][0-9]\\)" nil t)
+          (replace-match "\\2/\\1/\\3"))
+        (csv-sort-fields 1 (point-min) (point-max))
+        (while (re-search-forward "\\([0-9][0-9]\\)/\\([0-9][0-9]\\)/\\([0-9][0-9][0-9][0-9]\\)" nil t)
+          (replace-match "\\2/\\1/\\3"))))))
 
 (use-package js2-mode
   :diminish js2-minor-mode
