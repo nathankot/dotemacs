@@ -383,7 +383,12 @@
       (interactive)
       (counsel-ag "" (projectile-project-root)))
     :functions (counsel-projectile-ag)
-    :bind (("C-s" . counsel-projectile-ag)))
+    :bind (("C-s" . counsel-projectile-ag))
+    :config
+    (advice-add 'counsel--split-command-args :around
+      (lambda (orig-fun &rest args)
+        (message "counsel-ag argument parsing: %S" (apply orig-fun args))
+        (apply orig-fun args))))
 
   (use-package wgrep
     :commands (wgrep-change-to-wgrep-mode ivy-wgrep-change-to-wgrep-mode)
