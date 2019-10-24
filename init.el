@@ -917,6 +917,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :interpreter ("node" . js-mode)
   :init
   (add-hook 'js-mode-hook 'js2-minor-mode)
+  (add-hook 'js-mode-hook #'lsp-deferred)
   (setq js2-highlight-level 3)
   (setq js2-mode-show-parse-errors nil)
   (setq js2-mode-show-strict-warnings nil)
