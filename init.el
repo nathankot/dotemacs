@@ -361,6 +361,8 @@
     :test "make test"
     :test-suffix "_test"))
 
+(use-package origami)
+
 (use-package ivy
   :diminish ivy-mode
   :commands (ivy-mode ivy-read)

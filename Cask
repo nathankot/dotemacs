@@ -10,6 +10,7 @@
 (depends-on "exec-path-from-shell")
 (depends-on "expand-region")
 (depends-on "use-package")
+(depends-on "origami")
 
 (depends-on "editorconfig")
 (depends-on "flycheck-cask")
