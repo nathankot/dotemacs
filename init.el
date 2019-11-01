@@ -361,7 +361,9 @@
     :test "make test"
     :test-suffix "_test"))
 
-(use-package origami)
+(use-package origami
+  :init
+  (add-hook 'prog-mode-hook (lambda () (origami-mode 1))))
 
 (use-package ivy
   :diminish ivy-mode
