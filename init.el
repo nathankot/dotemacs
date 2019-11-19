@@ -1029,8 +1029,12 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 (use-package lsp-mode
   :commands (lsp-deferred lsp-goto-type-definition lsp-goto-implementation)
   :init
-  (setq lsp-prefer-flymake nil)
   (use-package company-lsp :commands company-lsp)
+
+  (setq lsp-prefer-flymake nil)
+  (setq lsp-log-io nil)
+  (setq lsp-log-max nil) ; disable logging
+
   (evil-leader/set-key "jt" 'lsp-goto-type-definition)
   (evil-leader/set-key "ji" 'lsp-goto-implementation)
   (evil-leader/set-key "jd" 'lsp-find-definition)
