@@ -852,10 +852,11 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 (use-package company
   :diminish " c"
   :commands global-company-mode
-  :defines company-dabbrev-downcase
+  :defines company-dabbrev-downcase company-idle-delay company-tooltip-align-annotations
   :init
-  (setq company-dabbrev-downcase nil)
+  (setq company-dabbrev-downcase 0)
   (setq company-tooltip-align-annotations t)
+  (setq company-idle-delay 1)
 
   :config
   (use-package company-emoji)
@@ -1031,9 +1032,12 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :init
   (use-package company-lsp :commands company-lsp)
 
-  (setq lsp-prefer-flymake nil)
-  (setq lsp-log-io nil)
-  (setq lsp-log-max nil) ; disable logging
+  (setq lsp-response-timeout 2)
+  (setq lsp-prefer-flymake :none)
+  (setq lsp-log-io t)
+  (setq lsp-print-performance t)
+  (setq lsp-auto-guess-root t)
+  ;; (setq lsp-log-max nil) ; disable logging
 
   (evil-leader/set-key "jt" 'lsp-goto-type-definition)
   (evil-leader/set-key "ji" 'lsp-goto-implementation)
