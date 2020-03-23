@@ -1120,6 +1120,9 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
           :init (when (executable-find "pry") (add-hook 'ruby-mode-hook 'robe-mode))
           :config (when (executable-find "pry") (add-to-list 'company-backends 'company-robe))))
 
+(use-package kotlin-mode
+  :mode "\\.kt\\'")
+
 (use-package rust-mode
   :mode "\\.rs\\'"
   :init (use-package racer :commands racer-mode)
