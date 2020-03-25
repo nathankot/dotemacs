@@ -508,7 +508,7 @@
   (dolist (w '(
                 split-window-vertically
                 split-window-horizontally
-                ;; persp-switch
+                persp-switch
                 quit-window))
     (advice-add w :around
       (lambda (oldfun &rest args)
@@ -570,19 +570,17 @@
   :init
   (evil-set-initial-state 'profiler-report-mode 'emacs))
 
-;; Sadly, perspective no longer works on the latest version of emacs:
-;;
-;; (use-package perspective
-;;   :init
-;;   (define-key evil-normal-state-map (kbd "C-@") 'persp-switch)
-;;   (evil-leader/set-key "p r" 'persp-rename)
-;;   (evil-leader/set-key "p k" 'persp-kill)
-;;   (evil-leader/set-key "p n" 'persp-next)
-;;   (evil-leader/set-key "p p" 'persp-prev)
-;;   (evil-leader/set-key (kbd ")") 'persp-next)
-;;   (evil-leader/set-key (kbd "(") 'persp-prev)
-;;   :config
-;;   (persp-mode))
+(use-package perspective
+  :init
+  (define-key evil-normal-state-map (kbd "C-@") 'persp-switch)
+  (evil-leader/set-key "p r" 'persp-rename)
+  (evil-leader/set-key "p k" 'persp-kill)
+  (evil-leader/set-key "p n" 'persp-next)
+  (evil-leader/set-key "p p" 'persp-prev)
+  (evil-leader/set-key (kbd ")") 'persp-next)
+  (evil-leader/set-key (kbd "(") 'persp-prev)
+  :config
+  (persp-mode))
 
 (use-package dired
   :init
