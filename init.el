@@ -1032,9 +1032,10 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 
   (setq lsp-response-timeout 2)
   (setq lsp-prefer-flymake :none)
-  (setq lsp-log-io t)
-  (setq lsp-print-performance t)
+  (setq lsp-log-io nil)
+  (setq lsp-print-performance nil)
   (setq lsp-auto-guess-root t)
+  (setq lsp-gopls-hover-kind "NoDocumentation")
   ;; (setq lsp-log-max nil) ; disable logging
 
   (evil-leader/set-key "jt" 'lsp-goto-type-definition)
