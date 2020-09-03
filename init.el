@@ -1036,6 +1036,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (setq lsp-print-performance nil)
   (setq lsp-auto-guess-root t)
   (setq lsp-gopls-hover-kind "NoDocumentation")
+  (setq lsp-enable-file-watchers nil)
   ;; (setq lsp-log-max nil) ; disable logging
 
   (evil-leader/set-key "jt" 'lsp-goto-type-definition)
