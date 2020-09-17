@@ -16,7 +16,7 @@
        ("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
   '(package-selected-packages
      (quote
-       (guide-key yasnippet yaml-mode writeroom-mode wgrep web-mode use-package sx stylus-mode smartparens smart-mode-line scss-mode robe rainbow-mode rainbow-delimiters puppet-mode projectile popwin php-mode magit lua-mode less-css-mode ledger-mode js2-mode idle-highlight-mode htmlize helm-dash haskell-mode git-gutter gist flycheck-ledger flycheck-cask fish-mode expand-region exec-path-from-shell evil-surround evil-snipe evil-search-highlight-persist evil-visual-mark-mode evil-matchit evil-commentary emmet-mode editorconfig dockerfile-mode counsel company-tern coffee-mode cask))))
+       (guide-key yasnippet yaml-mode writeroom-mode wgrep web-mode use-package sx stylus-mode smartparens smart-mode-line scss-mode robe rainbow-mode rainbow-delimiters puppet-mode projectile popwin php-mode magit lua-mode less-css-mode ledger-mode js2-mode idle-highlight-mode htmlize helm-dash haskell-mode git-gutter gist flycheck-ledger flycheck-cask fish-mode expand-region exec-path-from-shell evil-surround evil-snipe evil-search-highlight-persist evil-visual-mark-mode evil-matchit evil-commentary emmet-mode editorconfig dockerfile-mode counsel coffee-mode cask))))
 
 (require 'cask (concat (getenv "HOMEBREW_ROOT") "/share/emacs/site-lisp/cask/cask.el"))
 (cask-initialize)
@@ -936,23 +936,6 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (setq js2-mode-show-parse-errors nil)
   (setq js2-mode-show-strict-warnings nil)
   (setq js-indent-level 2)
-
-  (and (executable-find "tern")
-    (progn
-      (use-package tern
-        :diminish " T"
-        :commands (tern-mode tern-mode-enable)
-        :init
-        (add-hook 'js2-minor-mode-hook 'tern-mode-enable)
-        (add-hook 'js-mode-hook 'tern-mode-enable)
-        (add-hook 'web-mode-hook
-          (lambda ()
-            (when (string-equal "jsx" (file-name-extension buffer-file-name))
-              (tern-mode-enable)))))
-
-      (use-package company-tern
-        :config
-        (add-to-list 'company-backends 'company-tern))))
 
   :config
   (evil-define-key 'insert js2-minor-mode-map (kbd "RET") 'js2-line-break))

@@ -46,7 +46,6 @@
 (depends-on "yasnippet")
 
 (depends-on "company")
-(depends-on "company-tern")
 (depends-on "company-emoji")
 (depends-on "company-lsp")
 
