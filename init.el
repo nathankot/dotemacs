@@ -4,8 +4,6 @@
 
 ;;; Code:
 
-;; (package-initialize)
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -13,16 +11,25 @@
  ;; If there is more than one, they won't work right.
   '(custom-safe-themes
      (quote
-       ("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
-  '(package-selected-packages
-     (quote
-       (guide-key yasnippet yaml-mode writeroom-mode wgrep web-mode use-package sx stylus-mode smartparens smart-mode-line scss-mode robe rainbow-mode rainbow-delimiters puppet-mode projectile popwin php-mode magit lua-mode less-css-mode ledger-mode js2-mode idle-highlight-mode htmlize helm-dash haskell-mode git-gutter gist flycheck-ledger flycheck-cask fish-mode expand-region exec-path-from-shell evil-surround evil-snipe evil-search-highlight-persist evil-visual-mark-mode evil-matchit evil-commentary emmet-mode editorconfig dockerfile-mode counsel coffee-mode cask))))
+       ("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))))
 
-(require 'cask (concat (getenv "HOMEBREW_ROOT") "/share/emacs/site-lisp/cask/cask.el"))
-(cask-initialize)
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-(use-package dash)
-(use-package exec-path-from-shell :init (exec-path-from-shell-initialize))
+(straight-use-package 'use-package)
+
+(use-package dash :straight t)
+(use-package exec-path-from-shell :init (exec-path-from-shell-initialize) :straight t)
 
 ;; Basic settings.
 ;; ================================================================================
@@ -96,6 +103,7 @@
   (require 'randomize-region))
 
 (use-package smart-mode-line
+  :straight t
   :init
   (sml/setup)
   (sml/apply-theme 'respectful)
@@ -126,6 +134,7 @@
 ;; ================================================================================
 
 (use-package evil
+  :straight t
   :preface
   (defun split-window-vertically-and-switch ()
     (interactive)
@@ -190,25 +199,32 @@
     evil-motion-state-cursor '("gray" box))
 
   (use-package evil-leader
+    :straight t
     :commands (global-evil-leader-mode)
     :config (evil-leader/set-leader ","))
 
   (use-package evil-search-highlight-persist
+    :straight t
     :commands (global-evil-search-highlight-persist))
 
   (use-package evil-commentary
+    :straight t
     :commands evil-commentary-mode)
 
   (use-package evil-snipe
+    :straight t
     :commands (evil-snipe-mode evil-snipe-override-mode))
 
   (use-package evil-surround
+    :straight t
     :commands (global-evil-surround-mode evil-surround-mode))
 
   (use-package evil-matchit
+    :straight t
     :commands (global-evil-matchit-mode evil-matchit-mode))
 
   (use-package evil-visual-mark-mode
+    :straight t
     :commands evil-visual-mark-mode
     :config
     ;; Marks aren't cleared after deletion until evil-visual-mark-mode re-renders:
@@ -296,6 +312,7 @@
 ;; ================================================================================
 
 (use-package projectile
+  :straight t
   :diminish projectile-mode
   :commands ( projectile-global-mode projectile-invalidate-cache
               projectile-find-other-file
@@ -362,10 +379,12 @@
     :test-suffix "_test"))
 
 (use-package origami
+  :straight t
   :init
   (add-hook 'prog-mode-hook (lambda () (origami-mode 1))))
 
 (use-package ivy
+  :straight t
   :diminish ivy-mode
   :commands (ivy-mode ivy-read)
   :init
@@ -376,10 +395,12 @@
   (evil-define-key 'normal ivy-mode-map (kbd "RET") 'ivy-occur-press)
 
   (use-package swiper
+    :straight t
     :commands (swiper swiper-all)
     :init (evil-leader/set-key "s" 'swiper))
 
   (use-package counsel
+    :straight t
     :commands (counsel-mode counsel-ag)
     :diminish counsel-mode
     :preface
@@ -395,6 +416,7 @@
         (apply orig-fun args))))
 
   (use-package wgrep
+    :straight t
     :commands (wgrep-change-to-wgrep-mode ivy-wgrep-change-to-wgrep-mode)
     :config
     (advice-add #'save-buffer :around
@@ -439,12 +461,14 @@
   (define-key ivy-minibuffer-map (kbd "C-o") 'ivy-previous-history-element))
 
 (use-package display-line-numbers
+  :straight t
   :init
   (setq display-line-numbers-type 'relative)
   (setq display-line-numbers-width-start t)
   (global-display-line-numbers-mode t))
 
 (use-package popwin
+  :straight t
   :commands popwin-mode
   :init (setq popwin:special-display-config  '( ("^\\*shell:.*\\*$" :regexp t :position bottom :noselect t :height 10 :stick t)
                                                 ("*Warnings*" :noselect t)
@@ -455,8 +479,11 @@
   (evil-define-key 'emacs popwin:keymap (kbd "q") 'popwin:close-popup-window))
 
 (use-package smartparens
+  :straight t
   :commands (smartparens-global-mode show-smartparens-global-mode)
-  :init (use-package smartparens-config)
+  :init (use-package
+    :straight t
+    smartparens-config)
   :config
   (sp-local-pair 'makefile-mode "$(" ")")
   (sp-local-pair 'makefile-bsdmake-mode "$(" ")")
@@ -477,6 +504,7 @@
     (kbd "M-o") 'sp-forward-barf-sexp))
 
 (use-package string-inflection
+  :straight t
   :commands (string-inflection-all-cycle string-inflection-underscore string-inflection-camelcase)
   :init
   (evil-leader/set-key "qs" 'string-inflection-underscore)
@@ -484,11 +512,13 @@
   (evil-leader/set-key "qq" 'string-inflection-all-cycle))
 
 (use-package dumb-jump
+  :straight t
   :commands (dumb-jump-go)
   :init
   (evil-leader/set-key "jd" 'dumb-jump-go))
 
 (use-package writeroom-mode
+  :straight t
   :commands writeroom-mode
   :init
   (setq writeroom-restore-window-config t)
@@ -524,9 +554,11 @@
       (flycheck-mode (* -1 arg)))))
 
 (use-package undo-tree
+  :straight t
   :diminish undo-tree-mode)
 
 (use-package editorconfig
+  :straight t
   :commands editorconfig-mode
   :diminish editorconfig-mode
   :config
@@ -566,11 +598,11 @@
   (define-key shell-mode-map (kbd "C-c C-c") (lambda () (interactive) (delete-process (buffer-name)))))
 
 (use-package profiler
-  :ensure nil
   :init
   (evil-set-initial-state 'profiler-report-mode 'emacs))
 
 (use-package perspective
+  :straight t
   :init
   (define-key evil-normal-state-map (kbd "C-@") 'persp-switch)
   (evil-leader/set-key "p r" 'persp-rename)
@@ -604,6 +636,7 @@
     (kbd "maf") 'find-file))
 
 (use-package git-gutter
+  :straight t
   :diminish git-gutter-mode
   :commands global-git-gutter-mode
   :config
@@ -613,6 +646,7 @@
   (evil-leader/set-key "g r" 'git-gutter:revert-hunk))
 
 (use-package magit
+  :straight t
   :commands ( magit-log magit-commit magit-commit-amend
               magit-status magit-diff-unstaged magit-diff-staged
               magit-blame magit-blame-addition magit-blame-quit magit-stage-file )
@@ -687,12 +721,15 @@
     (kbd "RET") 'git-rebase-show-commit))
 
 (use-package gist
+  :straight t
   :init
   (evil-set-initial-state 'gist-list-mode 'emacs))
 
-(use-package git-link)
+(use-package git-link
+  :straight t)
 
 (use-package flycheck
+  :straight t
   :diminish flycheck-mode
   :commands ( global-flycheck-mode flycheck-mode
               counsel-flycheck
@@ -747,10 +784,12 @@
   (define-key evil-normal-state-map (kbd "[ e") 'previous-error))
 
 (use-package turnip
+  :straight t
   :config
   (evil-leader/set-key "ts" 'turnip-send-region))
 
 (use-package flyspell
+  :straight t
   :init
   (add-hook 'prog-mode-hook 'flyspell-prog-mode)
   :config
@@ -797,6 +836,7 @@
     )))
 
 (use-package yasnippet
+  :straight t
   :commands ( yas-global-mode yas-minor-mode
               yas-expand yas-expand-snippet
               yas-activate-extra-mode )
@@ -824,6 +864,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
        "~/.emacs.d/.snippets/personal")))
 
 (use-package counsel-dash
+  :straight t
   :commands (counsel-dash
               counsel-dash-set-local-docsets
               counsel-dash-activate-local-docset
@@ -848,6 +889,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (add-hook 'swift-mode-hook (lambda () (setq-local counsel-dash-docsets '("iOS" "Swift")))))
 
 (use-package company
+  :straight t
   :diminish " c"
   :commands global-company-mode
   :defines company-dabbrev-downcase company-idle-delay company-tooltip-align-annotations
@@ -857,7 +899,8 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (setq company-idle-delay 1)
 
   :config
-  (use-package company-emoji)
+  (use-package company-emoji
+    :straight t)
   ; Swap some keybindings
   (define-key evil-insert-state-map (kbd "C-@") 'company-complete)
   (define-key company-active-map (kbd "<backtab>") 'company-select-previous)
@@ -893,6 +936,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 
 
 (use-package pine-script-mode
+  :straight t
   :mode ("\\.pine\\'" . pine-script-mode)
   :init
   (add-hook 'pine-script-mode-hook
@@ -910,6 +954,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (setq-default fill-column 80))
 
 (use-package csv-mode
+  :straight t
   :mode ("\\.csv\\'" . csv-mode)
   :preface
   (defun amex-sort-transactions ()
@@ -924,6 +969,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
           (replace-match "\\2/\\1/\\3"))))))
 
 (use-package js2-mode
+  :straight t
   :diminish js2-minor-mode
   :commands (js2-mode js2-minor-mode)
   :mode ("\\.js\\'" . js-mode)
@@ -941,14 +987,17 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (evil-define-key 'insert js2-minor-mode-map (kbd "RET") 'js2-line-break))
 
 (use-package typescript-mode
+  :straight t
   :init
   (add-hook 'typescript-mode-hook #'lsp-deferred)
   :mode "\\.ts\\'")
 
 (use-package coffee-mode
+  :straight t
   :mode "\\.coffee\\'")
 
 (use-package web-mode
+  :straight t
   :mode "\\.phtml\\'"
   :mode "\\.tpl\\.php\\'"
   :mode "\\.[agj]sp\\'"
@@ -983,6 +1032,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :init
   (add-hook 'web-mode-hook #'lsp-deferred)
   (use-package emmet-mode
+    :straight t
     :commands emmet-mode
                                         ; emmet-mode still looks for the old expand-snippet function name
     :preface (defalias 'yas/expand-snippet 'yas-expand-snippet)
@@ -1009,9 +1059,10 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (define-key prog-mode-map (kbd "C-/")   'web-mode-element-close))
 
 (use-package lsp-mode
+  :straight t
   :commands (lsp-deferred lsp-goto-type-definition lsp-goto-implementation)
   :init
-  (use-package company-lsp :commands company-lsp)
+  (use-package company-lsp :commands company-lsp :straight t)
 
   (setq lsp-response-timeout 2)
   (setq lsp-prefer-flymake :none)
@@ -1029,6 +1080,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (evil-leader/set-key "?" 'lsp-describe-thing-at-point))
 
 (use-package lsp-ui
+  :straight t
   :commands (lsp-ui-mode)
   :custom
   ; Unfortunately we can't use these because all of the positioning
@@ -1047,23 +1099,29 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (add-hook 'lsp-mode-hook 'lsp-ui-mode))
 
 (use-package fish-mode
+  :straight t
   :mode "\\.fish\\'")
 
 (use-package less-css-mode
+  :straight t
   :mode "\\.less\\'")
 
 (use-package stylus-mode
+  :straight t
   :mode "\\.stylus\\'")
 
 (use-package scss-mode
+  :straight t
   :mode "\\.sass\\'"
   :mode "\\.scss\\'"
   :init (setq scss-compile-at-save nil))
 
 (use-package php-mode
+  :straight t
   :mode "\\.php\\'")
 
 (use-package markdown-mode
+  :straight t
   :mode "\\.md\\'"
   :mode "\\.markdown\\'"
   :mode "^README\\'"
@@ -1075,43 +1133,54 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
       (add-hook 'before-save-hook 'convert-orgtbl-to-gfm nil t))))
 
 (use-package lua-mode
+  :straight t
   :mode "\\.lua\\'")
 
 (use-package swift-mode
+  :straight t
   :mode "\\.swift\\'"
   :init
   (use-package company-sourcekit
+    :straight t
     :load-path "vendor/company-sourcekit"
     :init (setq company-sourcekit-use-yasnippet t)
     :config (add-to-list 'company-backends 'company-sourcekit))
   (add-to-list 'flycheck-checkers 'swift))
 
 (use-package dockerfile-mode
+  :straight t
   :mode "^Dockerfile\\'"
   :mode "^Dockerfile.*\\'")
 
 (use-package puppet-mode
+  :straight t
   :mode "\\.pp\\'")
 
 (use-package yaml-mode
+  :straight t
   :mode "\\.yaml\\'"
   :mode "\\.yml\\'")
 
 (use-package ruby-mode
+  :straight t
   :mode "\\.rb\\'"
   :init (use-package robe
+          :straight t
           :init (when (executable-find "pry") (add-hook 'ruby-mode-hook 'robe-mode))
           :config (when (executable-find "pry") (add-to-list 'company-backends 'company-robe))))
 
 (use-package kotlin-mode
+  :straight t
   :mode "\\.kt\\'")
 
 (use-package rust-mode
+  :straight t
   :mode "\\.rs\\'"
-  :init (use-package racer :commands racer-mode)
+  :init (use-package racer :commands racer-mode :straight t)
   :config (add-hook 'rust-mode-hook #'racer-mode))
 
 (use-package haskell-mode
+  :straight t
   :mode "\\.hs\\'"
   :mode "\\.lhs\\'"
   :mode "config/models\\'"
@@ -1146,6 +1215,7 @@ INITIAL will be used as the initial input, if given."
   (setq haskell-process-type 'stack-ghci)
   (and (executable-find "stylish-haskell") (setq haskell-stylish-on-save t))
   (use-package intero
+    :straight t
     :init
     (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
     (add-hook 'haskell-mode-hook 'intero-mode)
@@ -1160,18 +1230,16 @@ INITIAL will be used as the initial input, if given."
   (evil-define-key 'normal haskell-mode-map (kbd "?") 'counsel-hoogle))
 
 (use-package go-mode
+  :straight t
   :mode "\\.go\\'"
   :init
-  ;; (use-package company-go
-  ;;   :load-path "vendor/gocode/emacs-company"
-  ;;   :init (setq company-go-show-annotation t)
-  ;;   :config (add-to-list 'company-backends 'company-go))
   (add-hook 'go-mode-hook #'lsp-deferred)
   :config
   (setq gofmt-command "goimports")
   (add-hook 'before-save-hook 'gofmt-before-save))
 
 (use-package rainbow-mode
+  :straight t
   :diminish rainbow-mode
   :commands (rainbow-mode)
   :init
@@ -1180,14 +1248,16 @@ INITIAL will be used as the initial input, if given."
   (add-hook 'web-mode-hook 'rainbow-mode))
 
 (use-package rainbow-delimiters
+  :straight t
   :commands rainbow-delimiters-mode
   :init
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
 
 (use-package ledger-mode
+  :straight t
   :mode "\\.ledger\\'"
   :config
-  (use-package flycheck-ledger)
+  (use-package flycheck-ledger :straight t)
 
   (setq ledger-reconcile-default-commodity "NZD")
   (setq ledger-reconcile-sort-key "(date)")
@@ -1214,18 +1284,19 @@ INITIAL will be used as the initial input, if given."
     "?" 'ledger-display-balance-at-point))
 
 (use-package conf-mode
-  :ensure nil
   :mode "\\.conf\\'"
   :mode "\\.ini\\'"
   :mode "\\.toml\\'")
 
 (use-package protobuf-mode
+  :straight t
   :mode "\\.proto\\'")
 
 ;; PROGRAMS
 ;; ================================================================================
 
 (use-package sx
+  :straight t
   :commands (sx-tab-newest sx-search sx-authenticate sx-ask
               sx-inbox sx-tab-month sx-tab-starred sx-tab-featured
               sx-tab-topvoted sx-tab-frontpage sx-tab-unanswered
