@@ -481,9 +481,7 @@
 (use-package smartparens
   :straight t
   :commands (smartparens-global-mode show-smartparens-global-mode)
-  :init (use-package
-    :straight t
-    smartparens-config)
+  :init (use-package smartparens-config)
   :config
   (sp-local-pair 'makefile-mode "$(" ")")
   (sp-local-pair 'makefile-bsdmake-mode "$(" ")")
@@ -900,7 +898,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 
   :config
   (use-package company-emoji
-    :straight t)
+    :straight (company-emoji :type git :host github :repo "dunn/company-emoji" :branch "trunk"))
   ; Swap some keybindings
   (define-key evil-insert-state-map (kbd "C-@") 'company-complete)
   (define-key company-active-map (kbd "<backtab>") 'company-select-previous)

@@ -18,3 +18,4 @@ go.sum
 straight/repos
 straight/build
 straight/build-cache.el
+straight/modified
