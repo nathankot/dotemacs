@@ -1232,6 +1232,11 @@ INITIAL will be used as the initial input, if given."
   :mode "\\.go\\'"
   :init
   (add-hook 'go-mode-hook #'lsp-deferred)
+  (use-package gotest
+    :straight t
+    :config
+    (evil-leader/set-key-for-mode 'go-mode "tc" 'go-test-current-test)
+    (evil-leader/set-key-for-mode 'go-mode "tf" 'go-test-current-file))
   :config
   (setq gofmt-command "goimports")
   (add-hook 'before-save-hook 'gofmt-before-save))
