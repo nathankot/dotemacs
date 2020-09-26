@@ -80,7 +80,7 @@
   (interactive)
   (message "%d" (point)))
 
-(defun align-keycodes ()
+(defun align-qmk-keycodes ()
   "Used to align keycodes in qmk_keyboard"
   (interactive)
   (align-regexp
@@ -119,16 +119,6 @@
   (setq sml/show-client nil)
   (setq sml/show-remote nil)
   (setq sml/position-percentage-format nil))
-
-;; Breaks lsp-ui tooltips
-;; (use-package fill-column-indicator
-;;   :init
-;;   (define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
-;;   (global-fci-mode 1)
-;;   :config
-;;   (setq fci-rule-width 1)
-;;   (setq fci-rule-color "#F8F8F8")
-;;   (setq fci-rule-column 80))
 
 ;; EVIL
 ;; ================================================================================
@@ -931,7 +921,6 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 
 ;; LANGUAGE PACKS
 ;; ================================================================================
-
 
 (use-package pine-script-mode
   :straight t
