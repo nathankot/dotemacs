@@ -1127,11 +1127,12 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :straight t
   :mode "\\.swift\\'"
   :init
-  (use-package company-sourcekit
-    :straight t
-    :load-path "vendor/company-sourcekit"
-    :init (setq company-sourcekit-use-yasnippet t)
-    :config (add-to-list 'company-backends 'company-sourcekit))
+  (and (executable-find "sourcekittendaemon")
+    (use-package company-sourcekit
+      :straight t
+      :load-path "vendor/company-sourcekit"
+      :init (setq company-sourcekit-use-yasnippet t)
+      :config (add-to-list 'company-backends 'company-sourcekit)))
   (add-to-list 'flycheck-checkers 'swift))
 
 (use-package dockerfile-mode
