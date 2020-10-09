@@ -919,6 +919,13 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (add-hook 'company-completion-finished-hook 'company-maybe-turn-on-fci)
   (add-hook 'company-completion-cancelled-hook 'company-maybe-turn-on-fci))
 
+(use-package ansi-color
+  :config
+  (defun colorize-compilation-buffer ()
+    (when (eq major-mode 'compilation-mode)
+      (ansi-color-apply-on-region (point-min) (point-max))))
+  :hook (compilation-filter . colorize-compilation-buffer))
+
 ;; LANGUAGE PACKS
 ;; ================================================================================
 
