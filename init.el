@@ -1174,6 +1174,9 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
     (add-hook 'rust-mode-hook #'lsp-deferred)
   :config
     (evil-leader/set-key-for-mode 'rust-mode "tt" 'rust-test)
+    (evil-leader/set-key-for-mode 'rust-mode "m r" (lambda () (interactive) (rust-run)))
+    (evil-leader/set-key-for-mode 'rust-mode "m b" (lambda () (interactive) (rust-compile)))
+    (evil-leader/set-key-for-mode 'rust-mode "m t" (lambda () (interactive) (rust-test)))
   :straight t
   :mode "\\.rs\\'")
 
