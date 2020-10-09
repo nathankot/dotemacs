@@ -1169,10 +1169,13 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :mode "\\.kt\\'")
 
 (use-package rust-mode
+  :init
+    (setq rust-format-on-save t)
+    (add-hook 'rust-mode-hook #'lsp-deferred)
+  :config
+    (evil-leader/set-key-for-mode 'rust-mode "tt" 'rust-test)
   :straight t
-  :mode "\\.rs\\'"
-  :init (use-package racer :commands racer-mode :straight t)
-  :config (add-hook 'rust-mode-hook #'racer-mode))
+  :mode "\\.rs\\'")
 
 (use-package haskell-mode
   :straight t
