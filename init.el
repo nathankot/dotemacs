@@ -577,6 +577,8 @@
   (evil-set-initial-state 'shell-mode 'emacs)
 
   :config
+  (add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
+  (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
   ;; The assumption here is that I only use shell mode to run processes,
   ;; I don't use it for actuall shell access (have tmux for that.)
   (add-hook 'shell-mode-hook 'read-only-mode)
