@@ -1067,6 +1067,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (setq lsp-auto-guess-root t)
   (setq lsp-gopls-hover-kind "NoDocumentation")
   (setq lsp-enable-file-watchers nil)
+  (setq lsp-rust-server 'rust-analyzer)
   ;; (setq lsp-log-max nil) ; disable logging
 
   (evil-leader/set-key "jt" 'lsp-goto-type-definition)
