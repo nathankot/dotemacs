@@ -1247,6 +1247,16 @@ INITIAL will be used as the initial input, if given."
   (setq gofmt-command "goimports")
   (add-hook 'before-save-hook 'gofmt-before-save))
 
+(use-package c-mode
+  :hook ((c-mode c++-mode) . #'lsp-deferred)
+  :no-require t
+  :init
+  (use-package ccls
+    :straight t
+    :config
+    (and (executable-find "ccls")
+      (setq ccls-executable (executable-find "ccls")))))
+
 (use-package rainbow-mode
   :straight t
   :diminish rainbow-mode
