@@ -376,7 +376,6 @@
 (use-package ivy
   :straight t
   :diminish ivy-mode
-  :commands (ivy-mode ivy-read)
   :init
   (setq ivy-display-style 'fancy)
   (define-key evil-normal-state-map (kbd "DEL") 'ivy-resume)
@@ -396,7 +395,7 @@
     :preface
     (defun counsel-projectile-ag ()
       (interactive)
-      (counsel-ag "" (projectile-project-root)))
+      (counsel-ag "" (projectile-project-root) "--nogroup"))
     :functions (counsel-projectile-ag)
     :bind (("C-s" . counsel-projectile-ag))
     :config
