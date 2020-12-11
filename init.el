@@ -1217,17 +1217,11 @@ INITIAL will be used as the initial input, if given."
   (setq haskell-hoogle-url "https://www.stackage.org/lts/hoogle?q=%s")
   (setq haskell-process-type 'stack-ghci)
   (and (executable-find "stylish-haskell") (setq haskell-stylish-on-save t))
-  (use-package intero
+  (use-package lsp-haskell
     :straight t
-    :init
-    (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
-    (add-hook 'haskell-mode-hook 'intero-mode)
-    (evil-set-initial-state 'intero-repl-mode 'emacs)
-
     :config
-    (evil-define-key 'normal haskell-mode-map (kbd "M-i") 'intero-info)
-    (evil-leader/set-key-for-mode 'haskell-mode "t" 'intero-type-at)
-    (evil-leader/set-key-for-mode 'haskell-mode "f" 'intero-goto-definition))
+    (add-hook 'haskell-mode-hook #'lsp)
+    (add-hook 'haskell-literate-mode-hook #'lsp))
 
   :config
   (evil-define-key 'normal haskell-mode-map (kbd "?") 'counsel-hoogle))
