@@ -885,6 +885,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :init
   (setq company-dabbrev-downcase 0)
   (setq company-tooltip-align-annotations t)
+  (setq company-minimum-prefix-length 1)
   (setq company-idle-delay 1)
 
   :config
@@ -1216,12 +1217,21 @@ INITIAL will be used as the initial input, if given."
   (setq haskell-hoogle-command "stack hoogle -- --count=30")
   (setq haskell-hoogle-url "https://www.stackage.org/lts/hoogle?q=%s")
   (setq haskell-process-type 'stack-ghci)
-  (and (executable-find "stylish-haskell") (setq haskell-stylish-on-save t))
+
+  (use-package ormolu
+    :straight t
+    :hook (haskell-mode . ormolu-format-on-save-mode))
+
   (use-package lsp-haskell
     :straight t
     :config
     (add-hook 'haskell-mode-hook #'lsp)
-    (add-hook 'haskell-literate-mode-hook #'lsp))
+    (add-hook 'haskell-literate-mode-hook #'lsp)
+
+    (setq lsp-haskell-hlint-on t)
+    (setq lsp-haskell-diagnostics-on-change nil)
+    (setq lsp-haskell-format-on-import-on t)
+    (setq lsp-haskell-formatting-provider "ormolu"))
 
   :config
   (evil-define-key 'normal haskell-mode-map (kbd "?") 'counsel-hoogle))
