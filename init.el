@@ -1206,7 +1206,7 @@ INITIAL will be used as the initial input, if given."
                   haskell-hoogle-command
                   " "
                   (shell-quote-argument s))) "\n")))
-      :dynamic-collection t
+      :dynamic-collection nil
       :history 'counsel-hoogle-history-input
       :initial-input initial
       :action (lambda (s)
@@ -1230,7 +1230,7 @@ INITIAL will be used as the initial input, if given."
 
     (setq lsp-haskell-hlint-on t)
     (setq lsp-haskell-diagnostics-on-change nil)
-    (setq lsp-haskell-format-on-import-on t)
+    (setq lsp-haskell-format-on-import-on nil)
     (setq lsp-haskell-formatting-provider "ormolu"))
 
   :config
