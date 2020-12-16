@@ -1036,10 +1036,10 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :custom
   (lsp-response-timeout 2)
   (lsp-prefer-flymake :none)
-  (lsp-log-io nil)
   (lsp-print-performance nil)
   (lsp-auto-guess-root t)
   (lsp-enable-file-watchers nil)
+  ;; (lsp-log-io t "enable for debugging")
   ;; (lsp-log-max nil "disable logging")
 
   ;; Language-specific settings:
@@ -1055,23 +1055,16 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (evil-leader/set-key "jr" 'lsp-find-references)
   (evil-leader/set-key "?" 'lsp-describe-thing-at-point)
 
-  (use-package lsp-ui
-    :straight t
-    :hook (lsp-mode . lsp-ui-mode)
-    :custom
-    ;; Unfortunately we can't use these because all of the positioning
-    ;; logic in lsp-ui is defined in pixels:
-    (lsp-ui-sideline-enable nil)
-    (lsp-ui-doc-enable nil)
-    ;; (lsp-ui-doc-delay 0.3)
-    ;; (lsp-ui-doc-include-signature nil)
-    ;; (lsp-ui-doc-max-width 99999)
-    ;; (lsp-ui-doc-max-height 4)
-    ;; (lsp-ui-doc-use-childframe t)
-    ;; (lsp-ui-doc-use-webkit nil)
-    ;; (lsp-ui-doc-alignment 'window)
-    ;; (lsp-ui-doc-position 'top)
-    ))
+  ;; Workaround or doc links being removed:
+  ;; https://github.com/emacs-lsp/lsp-ui/issues/452
+  (defun markdown-raw-links (&rest ignore)
+    "Convert link markup [ANCHOR](URL) to raw URL
+     so lsp-ui-doc--make-clickable-link can find it"
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward markdown-regex-link-inline nil t)
+        (replace-match (replace-regexp-in-string "\n" "" (match-string 6))))))
+  (advice-add 'lsp--render-markdown :before #'markdown-raw-links))
 
 (use-package fish-mode
   :straight t
