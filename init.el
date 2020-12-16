@@ -272,9 +272,9 @@
   (define-key evil-insert-state-map (kbd "RET") 'comment-indent-new-line)
 
   (define-key evil-normal-state-map (kbd "-") 'split-window-vertically-and-switch)
-  (define-key evil-emacs-state-map (kbd "-") 'split-window-vertically-and-switch)
+  (define-key evil-motion-state-map (kbd "-") 'split-window-vertically-and-switch)
   (define-key evil-normal-state-map (kbd "|") 'split-window-horizontally-and-switch)
-  (define-key evil-emacs-state-map (kbd "|") 'split-window-horizontally-and-switch)
+  (define-key evil-motion-state-map (kbd "|") 'split-window-horizontally-and-switch)
 
   (evil-leader/set-key "w" 'save-buffer)
   (evil-leader/set-key "i" 'evil-window-move-far-left)
