@@ -120,6 +120,8 @@
   (setq sml/show-remote nil)
   (setq sml/position-percentage-format nil))
 
+(use-package diminish :straight t)
+
 ;; EVIL
 ;; ================================================================================
 
@@ -136,41 +138,44 @@
     (split-window-horizontally)
     (other-window 1))
 
-  (defun apply-emacs-defaults-to-mode (mode)
-    (let ((keymap-symbol (intern (concat (symbol-name mode) "-map"))))
-      (evil-delay
-        `(and (boundp ',keymap-symbol) (keymapp (symbol-value ',keymap-symbol)))
-        `(let ((map (symbol-value ',keymap-symbol)))
-           (dolist (k '("h" "j" "k" "l" "v" "m" "p" "n" "z"))
-             (-when-let (def (lookup-key map k))
-               (define-key map (upcase k) def)
-               (define-key map k nil)))
+  (defun evil-apply-emacs-state-defaults (mode)
+    (let ((map (symbol-value (intern (concat (symbol-name mode) "-map")))))
+      (evil-define-key 'emacs map
+        (dolist (k '("C-j" "C-k" "C-q"))
+          (-when-let (def (lookup-key map (kbd k)))
+            (define-key map (kbd k) nil)))
+        (kbd "C-e") 'evil-scroll-line-down
+        (kbd "C-y") 'evil-scroll-line-up
+        (kbd "C-u") 'evil-scroll-up
+        (kbd "C-d") 'evil-scroll-down)))
 
-           (evil-add-hjkl-bindings map 'emacs
-             "v" 'evil-visual-char)
-
-           (evil-define-key 'emacs map
-             (kbd "m") nil
-             (kbd "C-e") 'evil-scroll-line-down
-             (kbd "C-y") 'evil-scroll-line-up
-             (kbd "C-u") 'evil-scroll-up
-             (kbd "C-d") 'evil-scroll-down
-             (kbd "{") 'evil-backward-paragraph
-             (kbd "}") 'evil-forward-paragraph
-             (kbd "SPC") 'evil-search-forward
-             (kbd "/") 'evil-search-forward
-             (kbd "n") 'evil-search-next
-             (kbd "M") 'evil-window-middle
-             (kbd "H") 'evil-window-top
-             (kbd "L") 'evil-window-bottom
-             (kbd "gg") 'evil-goto-first-line
-             (kbd "z L") 'evil-scroll-right
-             (kbd "z H") 'evil-scroll-left
-             (kbd ", SPC") 'evil-search-highlight-persist-remove-all
-             (kbd ", ,") 'writeroom-mode
-             (kbd "0") 'evil-beginning-of-line))
-        'after-load-functions t nil
-        (format "evil-define-emacs-defaults-in-%s" (symbol-name keymap-symbol)))))
+  (defun evil-apply-motion-state-defaults (mode)
+    (let ((map (symbol-value (intern (concat (symbol-name mode) "-map")))))
+      (dolist (k '("C-j" "C-k" "C-q" "h" "j" "k" "l" "v" "m" "p" "n" "z"))
+        (-when-let (def (lookup-key map (kbd k)))
+          (or (string-prefix-p "C-" k)
+            (define-key map (kbd (upcase k)) def))
+          (define-key map (kbd k) nil)))
+      (evil-define-key 'motion map
+        (kbd "m") nil
+        (kbd "C-e") 'evil-scroll-line-down
+        (kbd "C-y") 'evil-scroll-line-up
+        (kbd "C-u") 'evil-scroll-up
+        (kbd "C-d") 'evil-scroll-down
+        (kbd "{") 'evil-backward-paragraph
+        (kbd "}") 'evil-forward-paragraph
+        (kbd "SPC") 'evil-search-forward
+        (kbd "/") 'evil-search-forward
+        (kbd "n") 'evil-search-next
+        (kbd "M") 'evil-window-middle
+        (kbd "H") 'evil-window-top
+        (kbd "L") 'evil-window-bottom
+        (kbd "gg") 'evil-goto-first-line
+        (kbd "z L") 'evil-scroll-right
+        (kbd "z H") 'evil-scroll-left
+        (kbd ", SPC") 'evil-search-highlight-persist-remove-all
+        (kbd ", ,") 'writeroom-mode
+        (kbd "0") 'evil-beginning-of-line)))
 
   :init
   (setq evil-emacs-state-modes nil)
@@ -188,49 +193,54 @@
     evil-insert-state-cursor '("gray" bar)
     evil-motion-state-cursor '("gray" box))
 
+  :config
+
+  (add-function :after (symbol-function 'evil-set-initial-state)
+    (lambda (mode state)
+      (cond
+        ((eq state 'emacs) (evil-apply-emacs-state-defaults mode))
+        ((eq state 'motion) (evil-apply-motion-state-defaults mode)))))
+
   (use-package evil-leader
     :straight t
-    :commands (global-evil-leader-mode)
-    :config (evil-leader/set-leader ","))
-
-  (use-package evil-search-highlight-persist
-    :straight t
-    :commands (global-evil-search-highlight-persist))
-
-  (use-package evil-commentary
-    :straight t
-    :commands evil-commentary-mode)
+    :config
+    (evil-leader/set-leader ",")
+    (global-evil-leader-mode))
 
   (use-package evil-snipe
     :straight t
-    :commands (evil-snipe-mode evil-snipe-override-mode))
+    :config
+    (evil-snipe-mode 1)
+    (evil-snipe-override-mode 1))
+
+  (use-package evil-search-highlight-persist
+    :straight t
+    :config
+    (global-evil-search-highlight-persist))
+
+  (use-package evil-commentary
+    :straight t
+    :config
+    (evil-commentary-mode))
 
   (use-package evil-surround
     :straight t
-    :commands (global-evil-surround-mode evil-surround-mode))
+    :config
+    (global-evil-surround-mode 1))
 
   (use-package evil-matchit
     :straight t
-    :commands (global-evil-matchit-mode evil-matchit-mode))
+    :config
+    (global-evil-matchit-mode 1))
 
   (use-package evil-visual-mark-mode
     :straight t
-    :commands evil-visual-mark-mode
     :config
     ;; Marks aren't cleared after deletion until evil-visual-mark-mode re-renders:
     (advice-add #'evil-delete-marks :after
       (lambda (&rest args)
-        (evil-visual-mark-render))))
-
-  :config
-  (global-evil-leader-mode)
-  (evil-snipe-mode 1)
-  (global-evil-search-highlight-persist)
-  (evil-commentary-mode)
-  (evil-snipe-override-mode 1)
-  (global-evil-surround-mode 1)
-  (global-evil-matchit-mode 1)
-  (evil-visual-mark-mode 1)
+        (evil-visual-mark-render)))
+    (evil-visual-mark-mode 1))
 
   ;; Remove pesky combos
   (global-unset-key (kbd "M-u"))
@@ -289,13 +299,7 @@
 
   ;; Recreate unimpaired
   (define-key evil-normal-state-map (kbd "[ b") 'previous-buffer)
-  (define-key evil-normal-state-map (kbd "] b") 'next-buffer)
-
-  ;; Default keys for emacs state
-  (add-function :after (symbol-function 'evil-set-initial-state)
-    (lambda (mode state)
-      (when (or (eq state 'emacs) (eq state 'motion))
-        (apply-emacs-defaults-to-mode mode)))))
+  (define-key evil-normal-state-map (kbd "] b") 'next-buffer))
 
 
 ;; Utilities
@@ -370,8 +374,7 @@
 
 (use-package origami
   :straight t
-  :init
-  (add-hook 'prog-mode-hook (lambda () (origami-mode 1))))
+  :hook (prog-mode . (lambda () (origami-mode 1))))
 
 (use-package ivy
   :straight t
@@ -390,7 +393,6 @@
 
   (use-package counsel
     :straight t
-    :commands (counsel-mode counsel-ag)
     :diminish counsel-mode
     :preface
     (defun counsel-projectile-ag ()
@@ -406,7 +408,6 @@
 
   (use-package wgrep
     :straight t
-    :commands (wgrep-change-to-wgrep-mode ivy-wgrep-change-to-wgrep-mode)
     :config
     (advice-add #'save-buffer :around
       (lambda (old-fun &rest args)
@@ -458,7 +459,6 @@
 
 (use-package popwin
   :straight t
-  :commands popwin-mode
   :init (setq popwin:special-display-config  '( ("^\\*shell:.*\\*$" :regexp t :position bottom :noselect t :height 10 :stick t)
                                                 ("*Warnings*" :noselect t)
                                                 ("*GHC Error*" :noselect t)
@@ -468,8 +468,8 @@
   (evil-define-key 'emacs popwin:keymap (kbd "q") 'popwin:close-popup-window))
 
 (use-package smartparens
+  :diminish
   :straight t
-  :commands (smartparens-global-mode show-smartparens-global-mode)
   :init (use-package smartparens-config)
   :config
   (sp-local-pair 'makefile-mode "$(" ")")
@@ -546,7 +546,6 @@
 
 (use-package editorconfig
   :straight t
-  :commands editorconfig-mode
   :diminish editorconfig-mode
   :config
   (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-attr-indent-offset))
@@ -575,20 +574,20 @@
   :init
   (evil-set-initial-state 'shell-mode 'emacs)
 
+  :hook (shell-mode . ansi-color-for-comint-mode-on)
+  :hook (shell-mode . read-only-mode)
+  :hook (shell-mode . buffer-disable-undo)
+  :hook (shell-mode . (lambda () (display-line-numbers-mode -1)))
   :config
   (add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
-  (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
   ;; The assumption here is that I only use shell mode to run processes,
   ;; I don't use it for actuall shell access (have tmux for that.)
-  (add-hook 'shell-mode-hook 'read-only-mode)
-  (add-hook 'shell-mode-hook 'buffer-disable-undo)
-  (add-hook 'shell-mode-hook (lambda () (display-line-numbers-mode -1)))
   (evil-define-key 'emacs shell-mode-map (kbd "q") 'delete-window)
   (define-key shell-mode-map (kbd "C-c C-c") (lambda () (interactive) (delete-process (buffer-name)))))
 
 (use-package profiler
-  :init
-  (evil-set-initial-state 'profiler-report-mode 'emacs))
+  :config
+  (evil-set-initial-state 'profiler-report-mode 'motion))
 
 (use-package perspective
   :straight t
@@ -604,15 +603,14 @@
   (persp-mode))
 
 (use-package dired
-  :init
-  (setq dired-use-ls-dired nil)
-  (evil-leader/set-key "kr" 'dired)
-  (evil-set-initial-state 'dired-mode 'emacs)
-
   :config
+  (evil-set-initial-state 'dired-mode 'motion)
+  (evil-leader/set-key "kr" 'dired)
+  (setq dired-use-ls-dired nil)
   (define-key dired-mode-map (kbd "(") nil)
   (define-key dired-mode-map (kbd "C-w") 'dired-toggle-read-only)
-  (evil-define-key 'emacs dired-mode-map
+  (evil-define-key 'motion dired-mode-map
+    (kbd "RET") 'dired-find-file
     (kbd ".") nil
     (kbd "m") nil
     (kbd "..") 'dired-up-directory
@@ -627,7 +625,6 @@
 (use-package git-gutter
   :straight t
   :diminish git-gutter-mode
-  :commands global-git-gutter-mode
   :config
   (define-key evil-normal-state-map (kbd "] c") 'git-gutter:next-hunk)
   (define-key evil-normal-state-map (kbd "[ c") 'git-gutter:previous-hunk)
@@ -643,29 +640,7 @@
   (global-git-commit-mode)
   (setq vc-handled-backends ())
   (setq magit-completing-read-function 'ivy-completing-read)
-  (evil-set-initial-state 'git-rebase-mode 'emacs)
   (setq git-commit-major-mode 'text-mode)
-  (evil-set-initial-state 'text-mode 'insert)
-
-  (evil-set-initial-state 'magit-branch-manager-mode 'emacs)
-  (evil-set-initial-state 'magit-cherry-mode 'emacs)
-  (evil-set-initial-state 'magit-diff-mode 'emacs)
-  (evil-set-initial-state 'magit-key-mode 'emacs)
-  (evil-set-initial-state 'magit-log-mode 'emacs)
-  (evil-set-initial-state 'magit-log-select-mode 'emacs)
-  (evil-set-initial-state 'magit-mode 'emacs)
-  (evil-set-initial-state 'magit-popup-mode 'emacs)
-  (evil-set-initial-state 'magit-popup-sequence-mode 'emacs)
-  (evil-set-initial-state 'magit-process-mode 'emacs)
-  (evil-set-initial-state 'magit-rebase-mode 'emacs)
-  (evil-set-initial-state 'magit-reflog-mode 'emacs)
-  (evil-set-initial-state 'magit-refs-mode 'emacs)
-  (evil-set-initial-state 'magit-revision-mode 'emacs)
-  (evil-set-initial-state 'magit-stash-mode 'emacs)
-  (evil-set-initial-state 'magit-stashes-mode 'emacs)
-  (evil-set-initial-state 'magit-status-mode 'emacs)
-  (evil-set-initial-state 'magit-wazzup-mode 'emacs)
-
   (evil-leader/set-key
     "g l" 'magit-log
     "g c" 'magit-commit
@@ -678,10 +653,28 @@
               (call-interactively 'magit-blame-addition)))
     "g w" 'magit-stage-file)
 
+  :hook (git-commit-mode . (lambda () (auto-fill-mode 0)))
   :config
-
-  (add-hook 'git-commit-mode-hook
-    (lambda () (auto-fill-mode 0)))
+  (evil-set-initial-state 'text-mode 'insert)
+  (evil-set-initial-state 'git-rebase-mode 'motion)
+  (evil-set-initial-state 'magit-branch-manager-mode 'motion)
+  (evil-set-initial-state 'magit-cherry-mode 'motion)
+  (evil-set-initial-state 'magit-diff-mode 'motion)
+  (evil-set-initial-state 'magit-key-mode 'motion)
+  (evil-set-initial-state 'magit-log-mode 'motion)
+  (evil-set-initial-state 'magit-log-select-mode 'motion)
+  (evil-set-initial-state 'magit-mode 'motion)
+  (evil-set-initial-state 'magit-popup-mode 'motion)
+  (evil-set-initial-state 'magit-popup-sequence-mode 'motion)
+  (evil-set-initial-state 'magit-process-mode 'motion)
+  (evil-set-initial-state 'magit-rebase-mode 'motion)
+  (evil-set-initial-state 'magit-reflog-mode 'motion)
+  (evil-set-initial-state 'magit-refs-mode 'motion)
+  (evil-set-initial-state 'magit-revision-mode 'motion)
+  (evil-set-initial-state 'magit-stash-mode 'motion)
+  (evil-set-initial-state 'magit-stashes-mode 'motion)
+  (evil-set-initial-state 'magit-status-mode 'motion)
+  (evil-set-initial-state 'magit-wazzup-mode 'motion)
 
   (define-key magit-file-section-map (kbd "C-j") nil)
   (define-key magit-hunk-section-map (kbd "C-j") nil)
@@ -711,8 +704,8 @@
 
 (use-package gist
   :straight t
-  :init
-  (evil-set-initial-state 'gist-list-mode 'emacs))
+  :config
+  (evil-set-initial-state 'gist-list-mode 'motion))
 
 (use-package git-link
   :straight t)
@@ -720,12 +713,6 @@
 (use-package flycheck
   :straight t
   :diminish flycheck-mode
-  :commands ( global-flycheck-mode flycheck-mode
-              counsel-flycheck
-              flycheck-define-checker counsel-flycheck
-              flycheck-error-list-refresh
-              flycheck-error-list-set-source
-              flycheck-error-list-reset-filter )
   :preface
 
   (defvar counsel-flycheck-history nil
@@ -758,7 +745,6 @@
   (setq flycheck-check-syntax-automatically '(save))
   (setq flycheck-highlighting-mode nil)
   (evil-leader/set-key "el" 'counsel-flycheck)
-  (setq-default flycheck-disabled-checkers '(haskell-stack-ghc))
 
   :config
   (delete 'go-vet flycheck-checkers)
@@ -774,13 +760,13 @@
 
 (use-package turnip
   :straight t
+  :commands turnip-send-region
   :config
   (evil-leader/set-key "ts" 'turnip-send-region))
 
 (use-package flyspell
   :straight t
-  :init
-  (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+  :hook (prog-mode . flyspell-prog-mode)
   :config
   ;; Following setup that uses run-together mode for aspell is taken from:
   ;; http://blog.binchen.org/posts/what-s-the-best-spell-check-set-up-in-emacs.html
@@ -844,7 +830,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
                    (yas--skip-and-clear field)
                    (yas-next-field 1))
                  (t (call-interactively 'backward-delete-char)))))
-  :diminish (yas-minor-mode . " y")
+  :diminish yas-minor-mode
   :init
   (evil-define-key 'insert yas-minor-mode-map (kbd "DEL") 'yas-skip-and-clear-or-backward-delete-char)
   (evil-define-key 'insert yas-minor-mode-map (kbd "C-e") 'yas-expand)
@@ -879,15 +865,26 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 
 (use-package company
   :straight t
-  :diminish " c"
+  :diminish
   :commands global-company-mode
   :defines company-dabbrev-downcase company-idle-delay company-tooltip-align-annotations
+  :preface
+  ; Fix fci-mode with company-mode
+  (defvar-local company-fci-mode-on-p nil)
+  (defun company-turn-off-fci (&rest ignore)
+    (when (boundp 'fci-mode)
+      (setq company-fci-mode-on-p fci-mode)
+      (when fci-mode (fci-mode -1))))
+  (defun company-maybe-turn-on-fci (&rest ignore)
+    (when company-fci-mode-on-p (fci-mode 1)))
+  :hook (company-completion-started . company-turn-off-fci)
+  :hook (company-completion-finished . company-maybe-turn-on-fci)
+  :hook (company-completion-cancelled . company-maybe-turn-on-fci)
   :init
   (setq company-dabbrev-downcase 0)
   (setq company-tooltip-align-annotations t)
   (setq company-minimum-prefix-length 1)
   (setq company-idle-delay 1)
-
   :config
   (use-package company-emoji
     :straight (company-emoji :type git :host github :repo "dunn/company-emoji" :branch "trunk"))
@@ -908,18 +905,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
        company-dabbrev-code
        company-keywords
        company-emoji
-       company-yasnippet))
-  ; Fix fci-mode with company-mode
-  (defvar-local company-fci-mode-on-p nil)
-  (defun company-turn-off-fci (&rest ignore)
-    (when (boundp 'fci-mode)
-      (setq company-fci-mode-on-p fci-mode)
-      (when fci-mode (fci-mode -1))))
-  (defun company-maybe-turn-on-fci (&rest ignore)
-    (when company-fci-mode-on-p (fci-mode 1)))
-  (add-hook 'company-completion-started-hook 'company-turn-off-fci)
-  (add-hook 'company-completion-finished-hook 'company-maybe-turn-on-fci)
-  (add-hook 'company-completion-cancelled-hook 'company-maybe-turn-on-fci))
+       company-yasnippet)))
 
 (use-package ansi-color
   :config
@@ -951,18 +937,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 
 (use-package csv-mode
   :straight t
-  :mode ("\\.csv\\'" . csv-mode)
-  :preface
-  (defun amex-sort-transactions ()
-    (interactive)
-    (save-excursion
-      (save-restriction
-        (goto-char (point-min))
-        (while (re-search-forward "\\([0-9][0-9]\\)/\\([0-9][0-9]\\)/\\([0-9][0-9][0-9][0-9]\\)" nil t)
-          (replace-match "\\2/\\1/\\3"))
-        (csv-sort-fields 1 (point-min) (point-max))
-        (while (re-search-forward "\\([0-9][0-9]\\)/\\([0-9][0-9]\\)/\\([0-9][0-9][0-9][0-9]\\)" nil t)
-          (replace-match "\\2/\\1/\\3"))))))
+  :mode ("\\.csv\\'" . csv-mode))
 
 (use-package js2-mode
   :straight t
@@ -1185,28 +1160,32 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 
 (use-package haskell-mode
   :straight t
+  :commands haskell-mode
   :mode "\\.hs\\'"
   :mode "\\.lhs\\'"
   :mode "config/models\\'"
   :mode "config/routes\\'"
-  :commands counsel-hoogle
+  :hook (haskell-mode . interactive-haskell-mode)
   :preface
   (defvar counsel-hoogle-history-input nil
     "Input history used by `ivy-read'.")
+  (defun counsel-hoogle-function (s &rest _)
+    (or
+      (ivy-more-chars)
+      (progn
+        (counsel--async-command
+          (concat
+            haskell-hoogle-command
+            " "
+            (shell-quote-argument s)))
+        nil)))
   (defun counsel-hoogle (&optional initial)
     "Query hoogle using counsel.
 INITIAL will be used as the initial input, if given."
     (interactive)
     (ivy-read "Hoogle: "
-      #'(lambda (s &rest _)
-          (if (eq (length s) 0) nil
-            (split-string
-              (shell-command-to-string
-                (concat
-                  haskell-hoogle-command
-                  " "
-                  (shell-quote-argument s))) "\n")))
-      :dynamic-collection nil
+      #'counsel-hoogle-function
+      :dynamic-collection t
       :history 'counsel-hoogle-history-input
       :initial-input initial
       :action (lambda (s)
@@ -1214,9 +1193,11 @@ INITIAL will be used as the initial input, if given."
                   (format haskell-hoogle-url
                     (url-hexify-string ivy-text))))))
   :init
-  (setq haskell-hoogle-command "stack hoogle -- --count=30")
+  (setq haskell-hoogle-command "stack hoogle --no-setup -- -q --count=30")
   (setq haskell-hoogle-url "https://www.stackage.org/lts/hoogle?q=%s")
-  (setq haskell-process-type 'stack-ghci)
+
+  :config
+  (evil-define-key 'normal haskell-mode-map (kbd "?") 'counsel-hoogle)
 
   (use-package ormolu
     :straight t
@@ -1224,31 +1205,44 @@ INITIAL will be used as the initial input, if given."
 
   (use-package lsp-haskell
     :straight t
+    :hook (haskell-mode . lsp)
+    :hook (haskell-literate-mode . lsp)
     :config
-    (add-hook 'haskell-mode-hook #'lsp)
-    (add-hook 'haskell-literate-mode-hook #'lsp)
-
     (setq lsp-haskell-hlint-on t)
     (setq lsp-haskell-diagnostics-on-change nil)
     (setq lsp-haskell-format-on-import-on nil)
     (setq lsp-haskell-formatting-provider "ormolu"))
 
-  :config
-  (evil-define-key 'normal haskell-mode-map (kbd "?") 'counsel-hoogle))
+  (use-package haskell-interactive-mode
+    :init
+    (custom-set-variables
+      '(haskell-process-type 'stack-ghci)
+      '(haskell-process-suggest-remove-import-lines t)
+      '(haskell-process-auto-import-loaded-modules t)
+      '(haskell-interactive-popup-errors nil))
+    :config
+    (use-package haskell-process)
+    (evil-set-initial-state 'haskell-interactive-mode 'emacs)
+    (evil-define-key 'normal haskell-mode-map (kbd "`") 'haskell-interactive-bring)
+    (evil-leader/set-key-for-mode 'haskell-mode "hl" 'haskell-process-load-or-reload)
+    (define-key haskell-interactive-mode-map (kbd "C-j") nil)
+    (evil-define-key 'emacs haskell-interactive-mode-map
+      (kbd "<up>") 'haskell-interactive-mode-history-previous
+      (kbd "<down>") 'haskell-interactive-mode-history-next)))
 
 (use-package go-mode
   :straight t
   :mode "\\.go\\'"
+  :hook (go-mode . lsp-deferred)
+  :hook (before-save . gofmt-before-save)
   :init
-  (add-hook 'go-mode-hook #'lsp-deferred)
   (use-package gotest
     :straight t
     :config
     (evil-leader/set-key-for-mode 'go-mode "tc" 'go-test-current-test)
     (evil-leader/set-key-for-mode 'go-mode "tf" 'go-test-current-file))
   :config
-  (setq gofmt-command "goimports")
-  (add-hook 'before-save-hook 'gofmt-before-save))
+  (setq gofmt-command "goimports"))
 
 (use-package c-mode
   :hook ((c-mode c++-mode) . #'lsp-deferred)
@@ -1264,16 +1258,14 @@ INITIAL will be used as the initial input, if given."
   :straight t
   :diminish rainbow-mode
   :commands (rainbow-mode)
-  :init
-  (add-hook 'css-mode-hook 'rainbow-mode)
-  (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
-  (add-hook 'web-mode-hook 'rainbow-mode))
+  :hook (css-mode . rainbow-mode)
+  :hook (emacs-lisp-mode . rainbow-mode)
+  :hook (web-mode . rainbow-mode))
 
 (use-package rainbow-delimiters
   :straight t
   :commands rainbow-delimiters-mode
-  :init
-  (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode))
+  :hook (emacs-lisp-mode . rainbow-delimiters-mode))
 
 (use-package ledger-mode
   :straight t
@@ -1296,7 +1288,7 @@ INITIAL will be used as the initial input, if given."
   (evil-leader/set-key-for-mode 'ledger-reconcile-mode
     "w" 'ledger-reconcile-save)
 
-  (evil-set-initial-state 'ledger-reconcile-mode 'emacs)
+  (evil-set-initial-state 'ledger-reconcile-mode 'motion)
 
   (evil-leader/set-key-for-mode 'ledger-mode
     "n" 'ledger-add-transaction
@@ -1316,13 +1308,6 @@ INITIAL will be used as the initial input, if given."
 
 ;; PROGRAMS
 ;; ================================================================================
-
-(use-package sx
-  :straight t
-  :commands (sx-tab-newest sx-search sx-authenticate sx-ask
-              sx-inbox sx-tab-month sx-tab-starred sx-tab-featured
-              sx-tab-topvoted sx-tab-frontpage sx-tab-unanswered
-              sx-tab-unanswered-my-tags))
 
 (use-package org
   :commands (turn-on-orgtbl org-mode)
