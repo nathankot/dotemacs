@@ -602,6 +602,10 @@
   :config
   (persp-mode))
 
+(use-package help-mode
+  :config
+  (evil-set-initial-state 'help-mode 'motion))
+
 (use-package dired
   :config
   (evil-set-initial-state 'dired-mode 'motion)
@@ -633,9 +637,7 @@
 
 (use-package magit
   :straight t
-  :commands ( magit-log magit-commit magit-commit-amend
-              magit-status magit-diff-unstaged magit-diff-staged
-              magit-blame magit-blame-addition magit-blame-quit magit-stage-file )
+  :hook (git-commit-mode . (lambda () (auto-fill-mode 0)))
   :init
   (global-git-commit-mode)
   (setq vc-handled-backends ())
@@ -653,28 +655,27 @@
               (call-interactively 'magit-blame-addition)))
     "g w" 'magit-stage-file)
 
-  :hook (git-commit-mode . (lambda () (auto-fill-mode 0)))
   :config
   (evil-set-initial-state 'text-mode 'insert)
-  (evil-set-initial-state 'git-rebase-mode 'motion)
-  (evil-set-initial-state 'magit-branch-manager-mode 'motion)
+  ;; (evil-set-initial-state 'git-rebase-mode 'motion)
+  ;; (evil-set-initial-state 'magit-branch-manager-mode 'motion)
   (evil-set-initial-state 'magit-cherry-mode 'motion)
   (evil-set-initial-state 'magit-diff-mode 'motion)
-  (evil-set-initial-state 'magit-key-mode 'motion)
+  ;; (evil-set-initial-state 'magit-key-mode 'motion)
   (evil-set-initial-state 'magit-log-mode 'motion)
   (evil-set-initial-state 'magit-log-select-mode 'motion)
   (evil-set-initial-state 'magit-mode 'motion)
-  (evil-set-initial-state 'magit-popup-mode 'motion)
-  (evil-set-initial-state 'magit-popup-sequence-mode 'motion)
+  ;; (evil-set-initial-state 'magit-popup-mode 'motion)
+  ;; (evil-set-initial-state 'magit-popup-sequence-mode 'motion)
   (evil-set-initial-state 'magit-process-mode 'motion)
-  (evil-set-initial-state 'magit-rebase-mode 'motion)
+  ;; (evil-set-initial-state 'magit-rebase-mode 'motion)
   (evil-set-initial-state 'magit-reflog-mode 'motion)
   (evil-set-initial-state 'magit-refs-mode 'motion)
   (evil-set-initial-state 'magit-revision-mode 'motion)
   (evil-set-initial-state 'magit-stash-mode 'motion)
   (evil-set-initial-state 'magit-stashes-mode 'motion)
   (evil-set-initial-state 'magit-status-mode 'motion)
-  (evil-set-initial-state 'magit-wazzup-mode 'motion)
+  ;; (evil-set-initial-state 'magit-wazzup-mode 'motion)
 
   (define-key magit-file-section-map (kbd "C-j") nil)
   (define-key magit-hunk-section-map (kbd "C-j") nil)
@@ -1032,43 +1033,45 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 (use-package lsp-mode
   :straight t
   :commands (lsp-deferred lsp-goto-type-definition lsp-goto-implementation)
-  :init
-  (use-package company-lsp :commands company-lsp :straight t)
+  :custom
+  (lsp-response-timeout 2)
+  (lsp-prefer-flymake :none)
+  (lsp-log-io nil)
+  (lsp-print-performance nil)
+  (lsp-auto-guess-root t)
+  (lsp-enable-file-watchers nil)
+  ;; (lsp-log-max nil "disable logging")
 
-  (setq lsp-response-timeout 2)
-  (setq lsp-prefer-flymake :none)
-  (setq lsp-log-io nil)
-  (setq lsp-print-performance nil)
-  (setq lsp-auto-guess-root t)
-  (setq lsp-gopls-hover-kind "NoDocumentation")
-  (setq lsp-enable-file-watchers nil)
-  (setq lsp-rust-server 'rust-analyzer)
-  ;; (setq lsp-log-max nil) ; disable logging
+  ;; Language-specific settings:
+  (lsp-go-hover-kind "NoDocumentation")
+  (lsp-rust-server 'rust-analyzer)
+  :init
+
+  :config
 
   (evil-leader/set-key "jt" 'lsp-goto-type-definition)
   (evil-leader/set-key "ji" 'lsp-goto-implementation)
   (evil-leader/set-key "jd" 'lsp-find-definition)
   (evil-leader/set-key "jr" 'lsp-find-references)
-  (evil-leader/set-key "?" 'lsp-describe-thing-at-point))
+  (evil-leader/set-key "?" 'lsp-describe-thing-at-point)
 
-(use-package lsp-ui
-  :straight t
-  :commands (lsp-ui-mode)
-  :custom
-  ; Unfortunately we can't use these because all of the positioning
-  ; logic in lsp-ui is defined in pixels:
-  (lsp-ui-sideline-enable nil)
-  (lsp-ui-doc-enable nil)
-  ;; (lsp-ui-doc-delay 0.3)
-  ;; (lsp-ui-doc-include-signature nil)
-  ;; (lsp-ui-doc-max-width 99999)
-  ;; (lsp-ui-doc-max-height 4)
-  ;; (lsp-ui-doc-use-childframe t)
-  ;; (lsp-ui-doc-use-webkit nil)
-  ;; (lsp-ui-doc-alignment 'window)
-  ;; (lsp-ui-doc-position 'top)
-  :init
-  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+  (use-package lsp-ui
+    :straight t
+    :hook (lsp-mode . lsp-ui-mode)
+    :custom
+    ;; Unfortunately we can't use these because all of the positioning
+    ;; logic in lsp-ui is defined in pixels:
+    (lsp-ui-sideline-enable nil)
+    (lsp-ui-doc-enable nil)
+    ;; (lsp-ui-doc-delay 0.3)
+    ;; (lsp-ui-doc-include-signature nil)
+    ;; (lsp-ui-doc-max-width 99999)
+    ;; (lsp-ui-doc-max-height 4)
+    ;; (lsp-ui-doc-use-childframe t)
+    ;; (lsp-ui-doc-use-webkit nil)
+    ;; (lsp-ui-doc-alignment 'window)
+    ;; (lsp-ui-doc-position 'top)
+    ))
 
 (use-package fish-mode
   :straight t
@@ -1215,11 +1218,11 @@ INITIAL will be used as the initial input, if given."
 
   (use-package haskell-interactive-mode
     :init
-    (custom-set-variables
-      '(haskell-process-type 'stack-ghci)
-      '(haskell-process-suggest-remove-import-lines nil)
-      '(haskell-process-auto-import-loaded-modules nil)
-      '(haskell-interactive-popup-errors nil))
+    :custom
+    (haskell-process-type 'stack-ghci)
+    (haskell-process-suggest-remove-import-lines nil)
+    (haskell-process-auto-import-loaded-modules nil)
+    (haskell-interactive-popup-errors nil)
     :config
     (use-package haskell-process)
     (evil-set-initial-state 'haskell-interactive-mode 'emacs)
