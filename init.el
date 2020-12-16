@@ -1217,8 +1217,8 @@ INITIAL will be used as the initial input, if given."
     :init
     (custom-set-variables
       '(haskell-process-type 'stack-ghci)
-      '(haskell-process-suggest-remove-import-lines t)
-      '(haskell-process-auto-import-loaded-modules t)
+      '(haskell-process-suggest-remove-import-lines nil)
+      '(haskell-process-auto-import-loaded-modules nil)
       '(haskell-interactive-popup-errors nil))
     :config
     (use-package haskell-process)
