@@ -1104,6 +1104,10 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :straight t
   :mode "\\.lua\\'")
 
+(use-package terraform-mode
+  :straight t
+  :mode "\\.tf\\'")
+
 (use-package swift-mode
   :straight t
   :mode "\\.swift\\'"
