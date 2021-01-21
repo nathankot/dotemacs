@@ -657,18 +657,12 @@
 
   :config
   (evil-set-initial-state 'text-mode 'insert)
-  ;; (evil-set-initial-state 'git-rebase-mode 'motion)
-  ;; (evil-set-initial-state 'magit-branch-manager-mode 'motion)
   (evil-set-initial-state 'magit-cherry-mode 'motion)
   (evil-set-initial-state 'magit-diff-mode 'motion)
-  ;; (evil-set-initial-state 'magit-key-mode 'motion)
   (evil-set-initial-state 'magit-log-mode 'motion)
   (evil-set-initial-state 'magit-log-select-mode 'motion)
   (evil-set-initial-state 'magit-mode 'motion)
-  ;; (evil-set-initial-state 'magit-popup-mode 'motion)
-  ;; (evil-set-initial-state 'magit-popup-sequence-mode 'motion)
   (evil-set-initial-state 'magit-process-mode 'motion)
-  ;; (evil-set-initial-state 'magit-rebase-mode 'motion)
   (evil-set-initial-state 'magit-reflog-mode 'motion)
   (evil-set-initial-state 'magit-refs-mode 'motion)
   (evil-set-initial-state 'magit-revision-mode 'motion)
@@ -676,6 +670,10 @@
   (evil-set-initial-state 'magit-stashes-mode 'motion)
   (evil-set-initial-state 'magit-status-mode 'motion)
   ;; (evil-set-initial-state 'magit-wazzup-mode 'motion)
+  ;; (evil-set-initial-state 'magit-branch-manager-mode 'motion)
+  ;; (evil-set-initial-state 'magit-key-mode 'motion)
+  ;; (evil-set-initial-state 'magit-popup-mode 'motion)
+  ;; (evil-set-initial-state 'magit-popup-sequence-mode 'motion)
 
   (define-key magit-file-section-map (kbd "C-j") nil)
   (define-key magit-hunk-section-map (kbd "C-j") nil)
@@ -694,14 +692,18 @@
     (kbd "p") 'magit-push-popup
     (kbd "l") 'magit-log-popup)
 
-  (evil-define-key 'emacs git-rebase-mode-map
-    (kbd "s") 'git-rebase-squash
-    (kbd "p") 'git-rebase-pick
-    (kbd "r") 'git-rebase-reword
-    (kbd "e") 'git-rebase-edit
-    (kbd "N") 'git-rebase-move-line-down
-    (kbd "P") 'git-rebase-move-line-up
-    (kbd "RET") 'git-rebase-show-commit))
+  (use-package git-rebase
+    :config
+    (evil-set-initial-state 'git-rebase-mode 'motion)
+    (evil-define-key 'motion git-rebase-mode-map
+      (kbd "s") 'git-rebase-squash
+      (kbd "p") 'git-rebase-pick
+      (kbd "r") 'git-rebase-reword
+      (kbd "e") 'git-rebase-edit
+      (kbd "K") 'git-rebase-kill-line
+      (kbd "N") 'git-rebase-move-line-down
+      (kbd "P") 'git-rebase-move-line-up
+      (kbd "RET") 'git-rebase-show-commit)))
 
 (use-package gist
   :straight t
