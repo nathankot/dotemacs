@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: testtab
+# key: tt
+# contributor : @nkot
+# --
+func Test${1:Symbol}(t *testing.T) {
+  testCases := []struct{
+    description string
+  }{
+  }
+
+  for _, testCase := range testCases {
+    t.Run(testCase.description, func(t * testing.T) {
+      $0
+    })
+  }
+}
