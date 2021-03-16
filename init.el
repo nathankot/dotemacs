@@ -376,6 +376,12 @@
   :straight t
   :hook (prog-mode . (lambda () (origami-mode 1))))
 
+(use-package xref
+  :config
+  (evil-define-key 'normal xref--xref-buffer-mode-map (kbd "RET") 'xref-show-location-at-point)
+  (evil-define-key 'normal xref--xref-buffer-mode-map (kbd "[c") 'xref-prev-line)
+  (evil-define-key 'normal xref--xref-buffer-mode-map (kbd "]c") 'xref-next-line))
+
 (use-package ivy
   :straight t
   :diminish ivy-mode
@@ -384,7 +390,6 @@
   (define-key evil-normal-state-map (kbd "DEL") 'ivy-resume)
   (evil-set-initial-state 'ivy-occur-mode 'normal)
   (evil-define-key 'normal ivy-occur-mode-map (kbd "RET") 'ivy-occur-press)
-  (evil-define-key 'normal ivy-mode-map (kbd "RET") 'ivy-occur-press)
 
   (use-package swiper
     :straight t
@@ -639,7 +644,6 @@
   :straight t
   :hook (git-commit-mode . (lambda () (auto-fill-mode 0)))
   :init
-  (global-git-commit-mode)
   (setq vc-handled-backends ())
   (setq magit-completing-read-function 'ivy-completing-read)
   (setq git-commit-major-mode 'text-mode)
