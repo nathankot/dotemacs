@@ -253,6 +253,8 @@
   ;; Remove keys that we want to use
   (define-key evil-normal-state-map (kbd "C-p") nil)
   (define-key evil-motion-state-map (kbd "C-b") nil)
+  (define-key evil-motion-state-map (kbd "RET") nil)
+  (define-key evil-normal-state-map (kbd "RET") nil)
   (define-key evil-motion-state-map (kbd "C-w") nil)
   (define-key evil-motion-state-map (kbd "TAB") nil)
   (define-key evil-emacs-state-map (kbd "C-w") nil)
@@ -390,6 +392,7 @@
   (define-key evil-normal-state-map (kbd "DEL") 'ivy-resume)
   (evil-set-initial-state 'ivy-occur-mode 'normal)
   (evil-define-key 'normal ivy-occur-mode-map (kbd "RET") 'ivy-occur-press)
+  (evil-define-key 'motion ivy-occur-mode-map (kbd "RET") 'ivy-occur-press)
 
   (use-package swiper
     :straight t
