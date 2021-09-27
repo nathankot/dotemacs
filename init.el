@@ -1043,7 +1043,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :straight t
   :commands (lsp-deferred lsp-goto-type-definition lsp-goto-implementation)
   :custom
-  (lsp-response-timeout 2)
+  (lsp-response-timeout 10)
   (lsp-prefer-flymake :none)
   (lsp-print-performance nil)
   (lsp-auto-guess-root t)
