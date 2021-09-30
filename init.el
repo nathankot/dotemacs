@@ -699,6 +699,10 @@
     (kbd "p") 'magit-push-popup
     (kbd "l") 'magit-log-popup)
 
+  ; Remove the git commit diff hook so that commit buffers load a lot quicker.
+  ; See: https://magit.vc/manual/magit/Performance.html
+  (remove-hook 'server-switch-hook 'magit-commit-diff)
+
   (use-package git-rebase
     :config
     (evil-set-initial-state 'git-rebase-mode 'motion)
