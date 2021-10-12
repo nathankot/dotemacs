@@ -64,6 +64,7 @@
 (setq auto-save-default nil)
 (setq scroll-margin 5 scroll-conservatively 9999 scroll-step 1) ;; Smooth scrolling
 (setq gc-cons-threshold 134217728) ;; Increase garbage collection limit
+(setq read-process-output-max (* 1024 1024))
 (setq visible-bell nil)
 (setq ring-bell-function 'ignore)
 (setq blink-matching-paren nil)
@@ -1048,10 +1049,12 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :commands (lsp-deferred lsp-goto-type-definition lsp-goto-implementation)
   :custom
   (lsp-response-timeout 10)
+  (lsp-idle-delay 3)
   (lsp-prefer-flymake :none)
   (lsp-print-performance nil)
   (lsp-auto-guess-root t)
   (lsp-enable-file-watchers nil)
+  (lsp-log-io nil)
   ;; (lsp-log-io t "enable for debugging")
   ;; (lsp-log-max nil "disable logging")
 
