@@ -651,6 +651,7 @@
   (setq vc-handled-backends ())
   (setq magit-completing-read-function 'ivy-completing-read)
   (setq git-commit-major-mode 'text-mode)
+  (setq magit-refresh-status-buffer nil)
   (evil-leader/set-key
     "g l" 'magit-log
     "g c" 'magit-commit
