@@ -1076,6 +1076,15 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   ;; Language-specific settings:
   (lsp-go-hover-kind "NoDocumentation")
   (lsp-rust-server 'rust-analyzer)
+  (setq lsp-go-directory-filters [
+    "-node_modules"
+    "-bin"
+    "-docs"
+    "-node"
+    "-proto"
+    "-resources"
+    "-tmp"
+  ])
   :init
 
   :config
