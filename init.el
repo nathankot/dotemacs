@@ -1074,9 +1074,10 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   ;; (lsp-log-max nil "disable logging")
 
   ;; Language-specific settings:
-  (lsp-go-hover-kind "NoDocumentation")
   (lsp-rust-server 'rust-analyzer)
-  (setq lsp-go-directory-filters [
+  (lsp-go-hover-kind "NoDocumentation")
+  ;; (lsp-go-gopls-server-args '("--debug=localhost:6060"))
+  (lsp-go-directory-filters [
     "-node_modules"
     "-bin"
     "-docs"
@@ -1085,6 +1086,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
     "-resources"
     "-tmp"
   ])
+
   :init
 
   :config
