@@ -1070,6 +1070,13 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (lsp-auto-guess-root t)
   (lsp-enable-file-watchers nil)
   (lsp-log-io nil)
+  (lsp-headerline-breadcrumb-enable nil)
+  (lsp-enable-symbol-highlighting nil)
+  (lsp-ui-doc-enable nil)
+  (lsp-lens-enable nil)
+  (lsp-ui-sideline-enable nil)
+  (lsp-diagnostics-provider :none)
+  (lsp-signature-render-documentation nil)
   ;; (lsp-log-io t "enable for debugging")
   ;; (lsp-log-max nil "disable logging")
 
