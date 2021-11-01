@@ -117,24 +117,6 @@
   :init
   (require 'randomize-region))
 
-(use-package smart-mode-line
-  :straight t
-  :init
-  (sml/setup)
-  (sml/apply-theme 'respectful)
-
-  :config
-  (setq sml/shorten-directory t)
-  (setq sml/shorten-modes nil)
-  (setq sml/name-width 30)
-  (setq sml/numbers-separator "")
-  (setq sml/show-trailing-N nil)
-  (setq sml/show-frame-identification nil)
-  (setq sml/mule-info nil)
-  (setq sml/show-client nil)
-  (setq sml/show-remote nil)
-  (setq sml/position-percentage-format nil))
-
 (use-package diminish :straight t)
 
 ;; EVIL
