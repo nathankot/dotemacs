@@ -1,6 +1,7 @@
 (("Emacs-wgrep" . "f9687c28bbc2e84f87a479b6ce04407bb97cfb23")
  ("coffee-mode" . "35a41c7d8233eac0b267d9593e67fb8b6235e134")
  ("company-emoji" . "90594eb58b20fb937cfd4e946efcc446ee630e6f")
+ ("company-lsp" . "f921ffa0cdc542c21dc3dd85f2c93df4288e83bd")
  ("company-mode" . "811beeade86669e20da35efed5b00de6a5e305ab")
  ("counsel-dash" . "370d5f6f14b5294d0eb717f7b2a6a8e93df1ed24")
  ("csv-mode" . "b6bb82a83a833981a2e62c45b4de936fa5b444a8")

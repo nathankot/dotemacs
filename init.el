@@ -898,6 +898,12 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :diminish
   :commands global-company-mode
   :defines company-dabbrev-downcase company-idle-delay company-tooltip-align-annotations
+  :custom
+  (company-dabbrev-downcase 0)
+  (company-tooltip-align-annotations t)
+  (company-minimum-prefix-length 1)
+  (company-idle-delay 1)
+
   :preface
   ; Fix fci-mode with company-mode
   (defvar-local company-fci-mode-on-p nil)
@@ -907,17 +913,13 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
       (when fci-mode (fci-mode -1))))
   (defun company-maybe-turn-on-fci (&rest ignore)
     (when company-fci-mode-on-p (fci-mode 1)))
+
   :hook (company-completion-started . company-turn-off-fci)
   :hook (company-completion-finished . company-maybe-turn-on-fci)
   :hook (company-completion-cancelled . company-maybe-turn-on-fci)
-  :init
-  (setq company-dabbrev-downcase 0)
-  (setq company-tooltip-align-annotations t)
-  (setq company-minimum-prefix-length 1)
-  (setq company-idle-delay 1)
+
   :config
-  (use-package company-emoji
-    :straight (company-emoji :type git :host github :repo "dunn/company-emoji" :branch "trunk"))
+
   ; Swap some keybindings
   (define-key evil-insert-state-map (kbd "C-@") 'company-complete)
   (define-key company-active-map (kbd "<backtab>") 'company-select-previous)
@@ -935,7 +937,21 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
        company-dabbrev-code
        company-keywords
        company-emoji
-       company-yasnippet)))
+       company-yasnippet )))
+
+(use-package company-emoji
+  :after company
+  :straight (company-emoji :type git :host github :repo "dunn/company-emoji" :branch "trunk"))
+
+(use-package company-lsp
+  :straight t
+  :after company
+  :custom
+  (company-lsp-filter-candidates nil)
+  (company-lsp-async t)
+  :init
+  (push 'company-lsp company-backends))
+
 
 (use-package ansi-color
   :config
