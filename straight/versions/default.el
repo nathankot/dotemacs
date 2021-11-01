@@ -57,7 +57,7 @@
  ("melpa" . "8c4760dcd5eeb18604676989e460cfe84af1c39a")
  ("origami.el" . "e558710a975e8511b9386edc81cd6bdd0a5bda74")
  ("pcache" . "893d2a637423bae2cc5e72c559e3a9d1518797c9")
- ("perspective-el" . "06e88e5d66e459d901d50ff620ad5e82410c3576")
+ ("perspective-el" . "ca6f778a3f1995600fc3d369bc636888812c80cc")
  ("php-mode" . "535aec81739e8e766e0420fda616efc8846f2911")
  ("pine-script-mode" . "1959d2d5e09fde5244f9f945fec043cdffd5d37e")
  ("pkg-info" . "76ba7415480687d05a4353b27fea2ae02b8d9d61")
