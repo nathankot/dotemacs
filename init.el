@@ -1077,6 +1077,8 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (lsp-ui-sideline-enable nil)
   (lsp-diagnostics-provider :none)
   (lsp-signature-render-documentation nil)
+  (lsp-signature-auto-activate nil)
+  (lsp-eldoc-enable-hover nil)
   ;; (lsp-log-io t "enable for debugging")
   ;; (lsp-log-max nil "disable logging")
 
