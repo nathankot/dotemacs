@@ -1051,7 +1051,6 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (lsp-print-performance nil)
   (lsp-auto-guess-root t)
   (lsp-enable-file-watchers nil)
-  (lsp-log-io nil)
   (lsp-headerline-breadcrumb-enable nil)
   (lsp-enable-symbol-highlighting nil)
   (lsp-ui-doc-enable nil)
@@ -1061,13 +1060,15 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (lsp-signature-render-documentation nil)
   (lsp-signature-auto-activate nil)
   (lsp-eldoc-enable-hover nil)
+  (lsp-log-io nil)
   ;; (lsp-log-io t "enable for debugging")
-  ;; (lsp-log-max nil "disable logging")
+  (lsp-log-max nil "disable logging")
 
   ;; Language-specific settings:
   (lsp-rust-server 'rust-analyzer)
   (lsp-go-hover-kind "NoDocumentation")
   ;; (lsp-go-gopls-server-args '("--debug=localhost:6060"))
+  (lsp-go-gopls-server-args '("-remote=auto"))
   (lsp-go-directory-filters [
     "-node_modules"
     "-bin"
