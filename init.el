@@ -177,6 +177,7 @@
   :init
   (setq evil-emacs-state-modes nil)
   (setq evil-motion-state-modes nil)
+  (setq evil-undo-system 'undo-tree)
 
   (setq
     evil-want-C-u-scroll t
@@ -255,6 +256,10 @@
   (define-key evil-motion-state-map (kbd "C-w") nil)
   (define-key evil-motion-state-map (kbd "TAB") nil)
   (define-key evil-emacs-state-map (kbd "C-w") nil)
+
+  ;; map undo to U rather than u
+  (define-key evil-normal-state-map (kbd "u") nil)
+  (define-key evil-normal-state-map (kbd "U") 'evil-undo)
 
   ;; Window management
   (global-set-key (kbd "C-q") 'delete-window)
