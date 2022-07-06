@@ -554,23 +554,24 @@
   :straight t
   :diminish undo-tree-mode)
 
-(use-package editorconfig
-  :straight t
-  :diminish editorconfig-mode
-  :config
-  (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-attr-indent-offset))
-  (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-attr-value-indent-offset))
-  (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-code-indent-offset))
-  (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-css-indent-offset))
-  (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-markup-indent-offset))
-  (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-sql-indent-offset))
-  (add-to-list 'editorconfig-indentation-alist '(web-mode js2-basic-offset))
-  (add-to-list 'editorconfig-indentation-alist '(js-mode js-indent-level js2-basic-offset))
-  (add-to-list 'editorconfig-indentation-alist '(js2-mode js-indent-level js2-basic-offset))
-  (add-to-list 'editorconfig-indentation-alist '(js2-minor-mode js-indent-level js2-basic-offset))
-  (add-to-list 'editorconfig-indentation-alist '(swift-mode swift-mode:basic-offset))
-  (add-to-list 'editorconfig-indentation-alist '(haskell-mode haskell-indent-spaces haskell-indent-offset))
-  (add-to-list 'editorconfig-indentation-alist '(evil-mode evil-shift-width)))
+;; (use-package editorconfig
+;;   :straight t
+;;   :diminish editorconfig-mode
+;;   :config
+;;   (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-attr-indent-offset))
+;;   (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-attr-value-indent-offset))
+;;   (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-code-indent-offset))
+;;   (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-css-indent-offset))
+;;   (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-markup-indent-offset))
+;;   (add-to-list 'editorconfig-indentation-alist '(web-mode web-mode-sql-indent-offset))
+;;   (add-to-list 'editorconfig-indentation-alist '(web-mode js2-basic-offset))
+;;   (add-to-list 'editorconfig-indentation-alist '(js-mode js-indent-level js2-basic-offset))
+;;   (add-to-list 'editorconfig-indentation-alist '(js2-mode js-indent-level js2-basic-offset))
+;;   (add-to-list 'editorconfig-indentation-alist '(js2-minor-mode js-indent-level js2-basic-offset))
+;;   (add-to-list 'editorconfig-indentation-alist '(swift-mode swift-mode:basic-offset))
+;;   (add-to-list 'editorconfig-indentation-alist '(haskell-mode haskell-indent-spaces haskell-indent-offset))
+;;   (add-to-list 'editorconfig-indentation-alist '(evil-mode evil-shift-width))
+;;   (editorconfig-mode 1))
 
 (use-package shell
   :functions shell-make
@@ -1409,7 +1410,6 @@ INITIAL will be used as the initial input, if given."
 (smartparens-global-mode t)
 (show-smartparens-global-mode t)
 (global-git-gutter-mode +1)
-(editorconfig-mode 1)
 (yas-global-mode 1)
 
 (popwin-mode 1)
