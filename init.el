@@ -1074,7 +1074,9 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (lsp-rust-server 'rust-analyzer)
   (lsp-go-hover-kind "NoDocumentation")
   ;; (lsp-go-gopls-server-args '("--debug=localhost:6060"))
-  (lsp-go-gopls-server-args '("-remote=auto"))
+  (lsp-go-codelenses nil)
+  (lsp-go-symbol-matcher "CaseInsensitive")
+
   (lsp-go-directory-filters [
     "-node_modules"
     "-bin"
