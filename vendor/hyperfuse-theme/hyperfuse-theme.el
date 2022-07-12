@@ -470,6 +470,9 @@ Also bind `class' to ((class color) (min-colors 89))."
 ;;;;; which-func-mode
    `(which-func ((t (:foreground ,hyperfuse-green))))
 
+;;;;; go-test
+   `(go-test--ok-face ((t (:foreground ,hyperfuse-green))))
+   `(go-test--error-face ((t (:foreground ,hyperfuse-red))))
 ))
 
 ;;; Theme Variables
