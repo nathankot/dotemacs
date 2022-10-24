@@ -44,7 +44,12 @@
 (straight-use-package 'use-package)
 
 (use-package dash :straight t)
-(use-package exec-path-from-shell :init (exec-path-from-shell-initialize) :straight t)
+
+(use-package exec-path-from-shell
+  :straight t
+  :init
+  (when (daemonp)
+    (exec-path-from-shell-initialize)))
 
 ;; Basic settings.
 ;; ================================================================================
