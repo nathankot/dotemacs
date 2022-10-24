@@ -1278,6 +1278,10 @@ INITIAL will be used as the initial input, if given."
       (kbd "<up>") 'haskell-interactive-mode-history-previous
       (kbd "<down>") 'haskell-interactive-mode-history-next)))
 
+(use-package python-mode
+  :mode "\\.python\\'"
+  :hook (python-mode . lsp-deferred))
+
 (use-package go-mode
   :straight t
   :mode "\\.go\\'"
