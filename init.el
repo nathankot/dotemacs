@@ -120,7 +120,10 @@
 
 (use-package undo-tree
   :straight t
-  :diminish undo-tree-mode)
+  :diminish undo-tree-mode
+  :config
+  ;; https://github.com/syl20bnr/spacemacs/issues/14064#issuecomment-723324830
+  (defun undo-tree-overridden-undo-bindings-p () nil))
 
 ;; EVIL
 ;; ================================================================================
