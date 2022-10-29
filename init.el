@@ -118,6 +118,10 @@
 
 (use-package diminish :straight t)
 
+(use-package undo-tree
+  :straight t
+  :diminish undo-tree-mode)
+
 ;; EVIL
 ;; ================================================================================
 
@@ -177,6 +181,7 @@
   (setq evil-emacs-state-modes nil)
   (setq evil-motion-state-modes nil)
   (setq evil-undo-system 'undo-tree)
+  (global-undo-tree-mode 1)
 
   (setq
     evil-want-C-u-scroll t
@@ -548,10 +553,6 @@
       (git-gutter-mode (* -1 arg))
       (display-line-numbers-mode (* -1 arg))
       (flycheck-mode (* -1 arg)))))
-
-(use-package undo-tree
-  :straight t
-  :diminish undo-tree-mode)
 
 (use-package editorconfig
   :straight t
@@ -1410,7 +1411,6 @@ INITIAL will be used as the initial input, if given."
 (show-paren-mode t) ;; Show matching parens
 (global-auto-revert-mode 1)
 (column-number-mode 1)
-(global-undo-tree-mode 1)
 
 (evil-mode 1)
 
