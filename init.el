@@ -1108,7 +1108,22 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
       (goto-char (point-min))
       (while (re-search-forward markdown-regex-link-inline nil t)
         (replace-match (replace-regexp-in-string "\n" "" (match-string 6))))))
-  (advice-add 'lsp--render-markdown :before #'markdown-raw-links))
+  (advice-add 'lsp--render-markdown :before #'markdown-raw-links)
+
+  ;; Fix for typescript lsp:
+  ;; https://github.com/typescript-language-server/typescript-language-server/issues/559#issuecomment-1259470791
+  ;; same definition as mentioned earlier
+  (advice-add 'json-parse-string :around
+    (lambda (orig string &rest rest)
+      (apply orig (s-replace "\\u0000" "" string)
+        rest)))
+  ;; minor changes: saves excursion and uses search-forward instead of re-search-forward
+  (advice-add 'json-parse-buffer :around
+    (lambda (oldfn &rest args)
+	    (save-excursion
+        (while (search-forward "\\u0000" nil t)
+          (replace-match "" nil t)))
+		  (apply oldfn args))))
 
 (use-package fish-mode
   :straight t
