@@ -12,14 +12,7 @@
  '(custom-safe-themes
     '("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))
  '(safe-local-variable-values
-    '((lsp-enabled-clients deno-ls)
-       (eval progn
-         (magit-disable-section-inserter 'magit-insert-tags-header)
-         (magit-disable-section-inserter 'magit-insert-unpushed-to-upstream-or-recent)
-         (magit-disable-section-inserter 'magit-insert-unpulled-from-upstream)
-         (magit-disable-section-inserter 'magit-insert-stashes)
-         (magit-disable-section-inserter 'magit-insert-unpulled-from-upstream)
-         (magit-disable-section-inserter 'magit-insert-untracked-files)))))
+    '((lsp-enabled-clients deno-ls))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -607,6 +600,8 @@
 
 (use-package perspective
   :straight t
+  :custom
+  (persp-mode-prefix-key (kbd "C-c M-p"))
   :init
   (define-key evil-normal-state-map (kbd "C-@") 'persp-switch)
   (evil-leader/set-key "p r" 'persp-rename)
