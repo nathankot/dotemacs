@@ -383,6 +383,10 @@
 
   (projectile-register-project-type 'go-make '("glide.yaml" "Makefile")
     :test "make test"
+    :test-suffix "_test")
+
+  (projectile-register-project-type 'deno '("deno.json")
+    :test "deno test"
     :test-suffix "_test"))
 
 (use-package origami
