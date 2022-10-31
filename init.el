@@ -312,7 +312,11 @@
 
   ;; Recreate unimpaired
   (define-key evil-normal-state-map (kbd "[ b") 'previous-buffer)
-  (define-key evil-normal-state-map (kbd "] b") 'next-buffer))
+  (define-key evil-normal-state-map (kbd "] b") 'next-buffer)
+
+  (eval-after-load "debugger"
+    '(progn (evil-set-initial-state 'debugger-mode 'emacs))))
+
 
 
 ;; Utilities
