@@ -266,8 +266,7 @@
   (define-key evil-motion-state-map (kbd "TAB") nil)
   (define-key evil-emacs-state-map (kbd "C-w") nil)
 
-  ;; map undo to U rather than u
-  (define-key evil-normal-state-map (kbd "u") nil)
+  (define-key evil-normal-state-map (kbd "u") 'evil-undo)
   (define-key evil-normal-state-map (kbd "U") 'evil-undo)
 
   ;; Window management
