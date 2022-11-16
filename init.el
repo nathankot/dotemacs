@@ -945,6 +945,13 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
       (ansi-color-apply-on-region (point-min) (point-max))))
   :hook (compilation-filter . colorize-compilation-buffer))
 
+(use-package prettier
+  :straight t
+  :diminish
+  :commands global-prettier-mode
+  :init
+  (global-prettier-mode))
+
 ;; LANGUAGE PACKS
 ;; ================================================================================
 
