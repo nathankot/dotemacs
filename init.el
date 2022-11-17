@@ -1061,6 +1061,11 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
           (emmet-expand-yas)
           (apply oldfun args)))))
 
+  (use-package lsp-tailwindcss
+    :straight t
+    :init
+    (setq lsp-tailwindcss-add-on-mode t))
+
   :config
   (add-hook 'web-mode-hook (lambda () (yas-activate-extra-mode 'js-mode)))
   (add-to-list 'flycheck-checkers 'jsxhint)
