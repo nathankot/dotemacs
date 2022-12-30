@@ -1210,14 +1210,17 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 (use-package swift-mode
   :straight t
   :mode "\\.swift\\'"
+  :hook (swift-mode . lsp-deferred)
+
   :init
-  (and (executable-find "sourcekittendaemon")
-    (use-package company-sourcekit
-      :straight t
-      :load-path "vendor/company-sourcekit"
-      :init (setq company-sourcekit-use-yasnippet t)
-      :config (add-to-list 'company-backends 'company-sourcekit)))
-  (add-to-list 'flycheck-checkers 'swift))
+  (add-to-list 'flycheck-checkers 'swift)
+
+  :config
+  (use-package lsp-sourcekit
+    :straight t
+    :after lsp-mode
+    :config
+    (setq lsp-sourcekit-executable (string-trim (shell-command-to-string "xcrun --find sourcekit-lsp")))))
 
 (use-package dockerfile-mode
   :straight t
