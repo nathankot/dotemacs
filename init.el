@@ -594,14 +594,13 @@
     (projectile-with-default-dir (projectile-project-root)
       (async-shell-command (format "make %s" command) (format "*shell:make %s*" command))))
 
-  :init
-  (evil-set-initial-state 'shell-mode 'emacs)
-
   :hook (shell-mode . ansi-color-for-comint-mode-on)
   :hook (shell-mode . read-only-mode)
   :hook (shell-mode . buffer-disable-undo)
   :hook (shell-mode . (lambda () (display-line-numbers-mode -1)))
+
   :config
+  (evil-set-initial-state 'shell-mode 'emacs)
   (add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
   ;; The assumption here is that I only use shell mode to run processes,
   ;; I don't use it for actuall shell access (have tmux for that.)
