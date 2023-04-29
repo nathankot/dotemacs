@@ -1341,9 +1341,16 @@ INITIAL will be used as the initial input, if given."
       (kbd "<up>") 'haskell-interactive-mode-history-previous
       (kbd "<down>") 'haskell-interactive-mode-history-next)))
 
-(use-package python-mode
-  :mode "\\.python\\'"
-  :hook (python-mode . lsp-deferred))
+(use-package python
+  :hook (python-mode . lsp-deferred)
+  :custom
+  (python-indent-offset 4)
+  (python-guess-indent-offset nil)
+  :init
+  (evil-leader/set-key-for-mode 'python-mode "pp" 'run-python)
+  (evil-leader/set-key-for-mode 'python-mode "pr" 'python-shell-send-region)
+  :config
+  (evil-set-initial-state 'inferior-python-mode 'emacs))
 
 (use-package go-mode
   :straight t
