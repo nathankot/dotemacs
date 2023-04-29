@@ -2,7 +2,7 @@
  ("coffee-mode" . "35a41c7d8233eac0b267d9593e67fb8b6235e134")
  ("company-emoji" . "9e2816ce9b5795bd0066f92d4f80d15ccf94ef36")
  ("company-mode" . "8a78f320019574bc35b5727f95b052b27918da20")
- ("compat" . "cd28402790821ce95ea4c3ea0de5c2d9dcfce31f")
+ ("compat" . "7ca7d300d1d256f674f83932d2918d8e70cd28f6")
  ("copilot.el" . "7cb7beda89145ccb86a4324860584545ec016552")
  ("counsel-dash" . "8decb980f111ebe7027361ee252279a9076da261")
  ("csv-mode" . "d190a479b4f36806b604da527e5d5a50909d3ceb")
