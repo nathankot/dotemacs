@@ -318,13 +318,23 @@
     '(progn (evil-set-initial-state 'debugger-mode 'emacs))))
 
 
-
 ;; Utilities
 ;; ================================================================================
 
 (use-package projectile
   :straight t
+  :preface
+  (defun update-exec-path-projectile ()
+    ;; Any relative exec paths should apply to the projectile root:
+    ;; This for example allows lsp-mode to find the correct pylsp package
+    ;; when a file is opened deep in the project hierarchy. Otherwise,
+    ;; pylsp would not be found or the incorrect (global) one would be used.
+    (dolist (path (seq-map (lambda (path) (concat (projectile-project-root) (substring path 2)))
+                    (seq-filter (lambda (path) (string-prefix-p "./" path)) exec-path)))
+      (push path exec-path)))
   :diminish projectile-mode
+  :hook (projectile-mode . update-exec-path-projectile)
+  :hook (projectile-after-switch-project . update-exec-path-projectile)
   :commands ( projectile-global-mode projectile-invalidate-cache
               projectile-find-other-file
               projectile-find-implementation-or-test
