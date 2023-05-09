@@ -987,6 +987,9 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :straight t
   :mode ("\\.csv\\'" . csv-mode))
 
+(use-package julia-mode
+  :straight t)
+
 (use-package js2-mode
   :straight t
   :diminish js2-minor-mode
