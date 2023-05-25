@@ -1352,6 +1352,7 @@ INITIAL will be used as the initial input, if given."
   :init
   (evil-leader/set-key-for-mode 'python-mode "pp" 'run-python)
   (evil-leader/set-key-for-mode 'python-mode "pr" 'python-shell-send-region)
+  (setq python-shell-interpreter-args "-i -m asyncio")
   :config
   (evil-set-initial-state 'inferior-python-mode 'emacs))
 
