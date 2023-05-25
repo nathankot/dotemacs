@@ -1464,22 +1464,6 @@ INITIAL will be used as the initial input, if given."
   (evil-define-key 'insert org-mode-map
     (kbd "M-RET") 'org-insert-heading))
 
-(use-package org-capture
-  :init
-  (setq org-default-notes-file "~/Google Drive/notes.org")
-  (evil-leader/set-key "c c" 'org-capture)
-  (evil-leader/set-key "c r" (lambda () (interactive) (find-file org-default-notes-file)))
-  (evil-leader/set-key "c n" (lambda () (interactive) (find-file org-default-notes-file)))
-  (evil-leader/set-key-for-mode 'org-mode "r" 'org-capture-refile)
-  (evil-leader/set-key-for-mode 'org-capture-mode "c" 'org-capture-finalize)
-  (evil-leader/set-key-for-mode 'org-capture-mode "w" 'org-capture-finalize)
-  (evil-leader/set-key-for-mode 'org-capture-mode "k" 'org-capture-kill)
-
-  (setq org-capture-templates '( ("t" "todo" entry (file+headline org-default-notes-file "Tasks")
-                                   "* TODO %? %U %a")
-                                 ("n" "note" entry (file+datetree org-default-notes-file)
-                                   "* %? :NOTE:\n%U\n%a\n"))))
-
 ;; Bootloader
 ;; ================================================================================
 
