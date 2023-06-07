@@ -1344,15 +1344,25 @@ INITIAL will be used as the initial input, if given."
       (kbd "<up>") 'haskell-interactive-mode-history-previous
       (kbd "<down>") 'haskell-interactive-mode-history-next)))
 
-(use-package python
-  :hook (python-mode . lsp-deferred)
+(use-package elpy
+  :hook (elpy-mode . lsp-deferred)
+  :hook (elpy-mode . flycheck-mode)
   :custom
   (python-indent-offset 4)
   (python-guess-indent-offset nil)
+  (elpy-shell-darwin-use-pty t)
+  :straight t
   :init
-  (evil-leader/set-key-for-mode 'python-mode "pp" 'run-python)
-  (evil-leader/set-key-for-mode 'python-mode "pr" 'python-shell-send-region)
-  (setq python-shell-interpreter-args "-i -m asyncio")
+  (elpy-enable)
+  (evil-leader/set-key-for-mode 'python-mode "pp" 'elpy-shell-switch-to-shell)
+  (evil-leader/set-key-for-mode 'python-mode "pr" 'elpy-shell--send-region-or-buffer-internal)
+  (evil-leader/set-key-for-mode 'python-mode "ps" 'elpy-shell-send-statement-and-step)
+  (setq elpy-modules (delq 'elpy-module-company elpy-modules))
+  (setq elpy-modules (delq 'elpy-module-eldoc elpy-modules))
+  (setq elpy-modules (delq 'elpy-module-django elpy-modules))
+  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+  (setq python-shell-interpreter "ipython")
+  (setq python-shell-interpreter-args "-i --simple-prompt")
   :config
   (evil-set-initial-state 'inferior-python-mode 'emacs))
 
