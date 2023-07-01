@@ -366,6 +366,7 @@
   (add-to-list 'projectile-globally-ignored-directories "tmp")
   (add-to-list 'projectile-globally-ignored-directories "node_modules")
   (add-to-list 'projectile-globally-ignored-directories "bower_components")
+  (add-to-list 'projectile-globally-ignored-directories "vendor")
                                         ; Register and support more project types
 
   ; Reset projectile project types (later has priority)
@@ -1084,6 +1085,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :straight t
   :commands (lsp-deferred lsp-goto-type-definition lsp-goto-implementation)
   :custom
+  (lsp-inlay-hint-enable nil)
   (lsp-response-timeout 10)
   (lsp-idle-delay 3)
   (lsp-prefer-flymake :none)
@@ -1104,13 +1106,17 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (lsp-log-max nil "disable logging")
 
   ;; Language-specific settings:
+
+  ;; rust
   (lsp-rust-server 'rust-analyzer)
   (lsp-go-hover-kind "NoDocumentation")
+  (lsp-rust-analyzer-rustfmt-extra-args ["+nightly"])
+
+  ;; golang
   ;; (lsp-go-gopls-server-args '("--debug=localhost:6060"))
   (lsp-go-gopls-server-args '("-remote=auto"))
   (lsp-go-codelenses nil)
   (lsp-go-symbol-matcher "CaseInsensitive")
-
   (lsp-go-directory-filters [
     "-node_modules"
     "-bin"
@@ -1261,14 +1267,20 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :mode "\\.kt\\'")
 
 (use-package rust-mode
+  :custom
+  (lsp-rust-analyzer-diagnostics-enable nil)
+  (lsp-rust-analyzer-proc-macro-enable nil)
+  (lsp-rust-analyzer-cargo-run-build-scripts nil)
+  :hook
+  (before-save . lsp-format-buffer)
   :init
-    (setq rust-format-on-save t)
+    ; formatting will be handled by lsp, NOT rust-mode
+    (setq rust-format-on-save nil)
     (add-hook 'rust-mode-hook #'lsp-deferred)
   :config
     (evil-leader/set-key-for-mode 'rust-mode "tt" 'rust-test)
-    (evil-leader/set-key-for-mode 'rust-mode "m r" (lambda () (interactive) (rust-run)))
-    (evil-leader/set-key-for-mode 'rust-mode "m b" (lambda () (interactive) (rust-compile)))
-    (evil-leader/set-key-for-mode 'rust-mode "m t" (lambda () (interactive) (rust-test)))
+    (evil-leader/set-key-for-mode 'rust-mode "m e" (lambda () (interactive) (lsp-rust-analyzer-expand-macro)))
+
   :straight t
   :mode "\\.rs\\'")
 
