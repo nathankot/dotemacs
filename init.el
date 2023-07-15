@@ -1135,6 +1135,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (evil-leader/set-key "ji" 'lsp-goto-implementation)
   (evil-leader/set-key "jd" 'lsp-find-definition)
   (evil-leader/set-key "jr" 'lsp-find-references)
+  (evil-leader/set-key "rr" 'lsp-rename)
   (evil-leader/set-key "?" 'lsp-describe-thing-at-point)
 
   ;; Workaround or doc links being removed:
@@ -1269,8 +1270,6 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 (use-package rust-mode
   :custom
   (lsp-rust-analyzer-diagnostics-enable nil)
-  (lsp-rust-analyzer-proc-macro-enable nil)
-  (lsp-rust-analyzer-cargo-run-build-scripts nil)
   :hook
   (before-save . lsp-format-buffer)
   :init
