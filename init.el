@@ -1085,7 +1085,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :straight t
   :commands (lsp-deferred lsp-goto-type-definition lsp-goto-implementation)
   :custom
-  (lsp-inlay-hint-enable nil)
+  (lsp-inlay-hint-enable t)
   (lsp-response-timeout 10)
   (lsp-idle-delay 3)
   (lsp-prefer-flymake :none)
@@ -1269,7 +1269,13 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 
 (use-package rust-mode
   :custom
+  ;; (lsp-rust-analyzer-display-reborrow-hints "always")
+  (lsp-rust-analyzer-display-parameter-hints t)
+  (lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
   (lsp-rust-analyzer-diagnostics-enable nil)
+  (lsp-rust-analyzer-max-inlay-hint-length 12)
+  ;; (lsp-rust-analyzer-server-command '("rust-analyzer" "+nightly"))
+
   :hook
   (before-save . lsp-format-buffer)
   :init
