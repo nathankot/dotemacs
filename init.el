@@ -1271,7 +1271,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :custom
   ;; (lsp-rust-analyzer-display-reborrow-hints "always")
   (lsp-rust-analyzer-display-parameter-hints t)
-  (lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
+  (lsp-rust-analyzer-display-lifetime-elision-hints-enable "always")
   (lsp-rust-analyzer-diagnostics-enable nil)
   (lsp-rust-analyzer-max-inlay-hint-length 12)
   ;; (lsp-rust-analyzer-server-command '("rust-analyzer" "+nightly"))
