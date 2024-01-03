@@ -959,9 +959,18 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 (use-package prettier
   :straight t
   :diminish
-  :commands global-prettier-mode
-  :init
-  (global-prettier-mode))
+  :mode ("\\.ts\\'" . prettier-mode)
+  :mode ("\\.js\\'" . prettier-mode)
+  :mode ("\\.mjs\\'" . prettier-mode)
+  :mode ("\\.cjs\\'" . prettier-mode)
+  :mode ("\\.jsx\\'" . prettier-mode)
+  :mode ("\\.tsx\\'" . prettier-mode)
+  :mode ("\\.css\\'" . prettier-mode)
+  :mode ("\\.less\\'" . prettier-mode)
+  :mode ("\\.scss\\'" . prettier-mode)
+  :mode ("\\.md\\'" . prettier-mode)
+  :mode ("\\.markdown\\'" . prettier-mode)
+  :commands prettier-mode)
 
 ;; LANGUAGE PACKS
 ;; ================================================================================
