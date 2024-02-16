@@ -12,7 +12,15 @@
  '(custom-safe-themes
     '("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))
  '(safe-local-variable-values
-    '((lsp-enabled-clients ruby-ls)
+    '((lsp-rust-analyzer-rustfmt-extra-args .
+        [])
+       (lsp-rust-analyzer-rustfmt-override-command .
+         ["leptosfmt"
+           (\, "--stdin")
+           (\, "--rustfmt")])
+       (lsp-rust-features .
+         ["ssr"])
+       (lsp-enabled-clients ruby-ls)
        (lsp-enabled-clients solargraph-ls)
        (lsp-enabled-clients solargraph)
        (lsp-enabled-clients deno-ls tailwindcss)
@@ -89,6 +97,8 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq large-file-warning-threshold 100000000)
 (setq truncate-lines t)
+;; allow remembering risky variables
+(defun risky-local-variable-p (sym &optional _ignored) nil)
 
 ;; Interactive helper functions.
 ;; ================================================================================
