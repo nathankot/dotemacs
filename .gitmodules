@@ -13,3 +13,6 @@
 [submodule "vendor/gocode"]
 	path = vendor/gocode
 	url = https://github.com/mdempsky/gocode.git
+[submodule "vendor/emacs-kanagawa-theme"]
+	path = vendor/emacs-kanagawa-theme
+	url = https://github.com/meritamen/emacs-kanagawa-theme.git

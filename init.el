@@ -10,7 +10,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-    '("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))
+    '("434f947950121d38d6246a4712014447a367a8e1b3a8c818c0b70e9a464147e7" "e70e87ad139f94d3ec5fdf782c978450fc2cb714d696e520b176ff797b97b8d2" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))
  '(safe-local-variable-values
     '((lsp-rust-analyzer-rustfmt-extra-args .
         [])
@@ -123,7 +123,14 @@
   :load-path "vendor/hyperfuse-theme"
   :init
   (require 'hyperfuse-theme)
-  (load-theme 'hyperfuse t))
+  ;; (load-theme 'hyperfuse t)
+  )
+
+(use-package kanagawa-theme
+  :load-path "vendor/emacs-kanagawa-theme"
+  :init
+  (require 'kanagawa-theme)
+  (load-theme 'kanagawa))
 
 (use-package randomize-region
   :load-path "vendor/randomize-region"
