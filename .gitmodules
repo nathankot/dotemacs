@@ -16,3 +16,6 @@
 [submodule "vendor/emacs-kanagawa-theme"]
 	path = vendor/emacs-kanagawa-theme
 	url = https://github.com/meritamen/emacs-kanagawa-theme.git
+[submodule "vendor/zenburn-emacs"]
+	path = vendor/zenburn-emacs
+	url = https://github.com/bbatsov/zenburn-emacs
