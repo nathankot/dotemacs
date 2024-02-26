@@ -999,8 +999,118 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :mode ("\\.markdown\\'" . prettier-mode)
   :commands prettier-mode)
 
-(use-package polymode :straight t)
+(use-package polymode
+  :straight t
+  :config
+  ;; LSP integration is too smart, disabling it seems to
+  ;; just use the host mode's LSP process for the entire buffer.
+  (setq polymode-lsp-integration nil))
+
 (use-package poly-markdown :straight t)
+
+(use-package lsp-mode
+  :straight t
+  :commands (lsp-deferred lsp-goto-type-definition lsp-goto-implementation)
+  :custom
+  (lsp-inlay-hint-enable t)
+  (lsp-response-timeout 10)
+  (lsp-idle-delay 3)
+  (lsp-prefer-flymake :none)
+  (lsp-print-performance nil)
+  (lsp-auto-guess-root t)
+  (lsp-enable-file-watchers nil)
+  (lsp-headerline-breadcrumb-enable nil)
+  (lsp-enable-symbol-highlighting t)
+  (lsp-ui-doc-enable nil)
+  (lsp-lens-enable nil)
+  (lsp-ui-sideline-enable nil)
+  (lsp-diagnostics-provider :none)
+  (lsp-signature-render-documentation t)
+  (lsp-signature-auto-activate t)
+  (lsp-eldoc-enable-hover t)
+  (lsp-log-io nil)
+  ;; (lsp-log-io t "enable for debugging")
+  (lsp-log-max nil "disable logging")
+
+  ;; Language-specific settings:
+
+  ;; rust
+  (lsp-rust-server 'rust-analyzer)
+  (lsp-go-hover-kind "NoDocumentation")
+  (lsp-rust-analyzer-rustfmt-extra-args ["+nightly"])
+
+  ;; golang
+  ;; (lsp-go-gopls-server-args '("--debug=localhost:6060"))
+  (lsp-go-gopls-server-args '("-remote=auto"))
+  (lsp-go-codelenses nil)
+  (lsp-go-symbol-matcher "CaseInsensitive")
+  (lsp-go-directory-filters [
+    "-node_modules"
+    "-bin"
+    "-docs"
+    "-node"
+    "-proto"
+    "-resources"
+    "-tmp"
+  ])
+
+  :init
+
+  :config
+
+  (evil-leader/set-key "jt" 'lsp-goto-type-definition)
+  (evil-leader/set-key "ji" 'lsp-goto-implementation)
+  (evil-leader/set-key "jd" 'lsp-find-definition)
+  (evil-leader/set-key "jr" 'lsp-find-references)
+  (evil-leader/set-key "rr" 'lsp-rename)
+  (evil-leader/set-key "?" 'lsp-describe-thing-at-point)
+
+  ;; Workaround or doc links being removed:
+  ;; https://github.com/emacs-lsp/lsp-ui/issues/452
+  (defun markdown-raw-links (&rest ignore)
+    "Convert link markup [ANCHOR](URL) to raw URL
+     so lsp-ui-doc--make-clickable-link can find it"
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward markdown-regex-link-inline nil t)
+        (replace-match (replace-regexp-in-string "\n" "" (match-string 6))))))
+  (advice-add 'lsp--render-markdown :before #'markdown-raw-links)
+
+  ;; Fix for typescript lsp:
+  ;; https://github.com/typescript-language-server/typescript-language-server/issues/559#issuecomment-1259470791
+  ;; same definition as mentioned earlier
+  (advice-add 'json-parse-string :around
+    (lambda (orig string &rest rest)
+      (apply orig (s-replace "\\u0000" "" string)
+        rest)))
+  ;; minor changes: saves excursion and uses search-forward instead of re-search-forward
+  (advice-add 'json-parse-buffer :around
+    (lambda (oldfn &rest args)
+	    (save-excursion
+        (while (search-forward "\\u0000" nil t)
+          (replace-match "" nil t)))
+		  (apply oldfn args)))
+
+  ;; support translating uris that begin with deno:/ into temporary
+  ;; files based on the response of deno/virtualTextDocument:
+  ;;
+  ;; https://deno.land/x/deno@v1.10.2/cli/lsp/README.md
+  (advice-add 'lsp--locations-to-xref-items :around
+    (lambda (oldfn &rest args)
+      (mapcar
+        (lambda (entry)
+          (if (string-prefix-p "deno:/" (gethash "targetUri" entry))
+            (let* ((uri (gethash "targetUri" entry))
+                    (cleanedUri (string-trim-left uri "deno://?"))
+                    (contents (lsp-request "deno/virtualTextDocument"
+                                (list :textDocument (list :uri uri)))))
+              (puthash
+                "targetUri"
+                (make-temp-file (file-name-base cleanedUri) nil nil contents)
+                entry))))
+        (car args))
+      (apply oldfn args))))
+
 
 ;; LANGUAGE PACKS
 ;; ================================================================================
@@ -1120,109 +1230,6 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   (define-key prog-mode-map (kbd "C-x /") 'web-mode-element-close)
   (define-key prog-mode-map (kbd "C-/")   'web-mode-element-close))
 
-(use-package lsp-mode
-  :straight t
-  :commands (lsp-deferred lsp-goto-type-definition lsp-goto-implementation)
-  :custom
-  (lsp-inlay-hint-enable t)
-  (lsp-response-timeout 10)
-  (lsp-idle-delay 3)
-  (lsp-prefer-flymake :none)
-  (lsp-print-performance nil)
-  (lsp-auto-guess-root t)
-  (lsp-enable-file-watchers nil)
-  (lsp-headerline-breadcrumb-enable nil)
-  (lsp-enable-symbol-highlighting t)
-  (lsp-ui-doc-enable nil)
-  (lsp-lens-enable nil)
-  (lsp-ui-sideline-enable nil)
-  (lsp-diagnostics-provider :none)
-  (lsp-signature-render-documentation t)
-  (lsp-signature-auto-activate t)
-  (lsp-eldoc-enable-hover t)
-  (lsp-log-io nil)
-  ;; (lsp-log-io t "enable for debugging")
-  (lsp-log-max nil "disable logging")
-
-  ;; Language-specific settings:
-
-  ;; rust
-  (lsp-rust-server 'rust-analyzer)
-  (lsp-go-hover-kind "NoDocumentation")
-  (lsp-rust-analyzer-rustfmt-extra-args ["+nightly"])
-
-  ;; golang
-  ;; (lsp-go-gopls-server-args '("--debug=localhost:6060"))
-  (lsp-go-gopls-server-args '("-remote=auto"))
-  (lsp-go-codelenses nil)
-  (lsp-go-symbol-matcher "CaseInsensitive")
-  (lsp-go-directory-filters [
-    "-node_modules"
-    "-bin"
-    "-docs"
-    "-node"
-    "-proto"
-    "-resources"
-    "-tmp"
-  ])
-
-  :init
-
-  :config
-
-  (evil-leader/set-key "jt" 'lsp-goto-type-definition)
-  (evil-leader/set-key "ji" 'lsp-goto-implementation)
-  (evil-leader/set-key "jd" 'lsp-find-definition)
-  (evil-leader/set-key "jr" 'lsp-find-references)
-  (evil-leader/set-key "rr" 'lsp-rename)
-  (evil-leader/set-key "?" 'lsp-describe-thing-at-point)
-
-  ;; Workaround or doc links being removed:
-  ;; https://github.com/emacs-lsp/lsp-ui/issues/452
-  (defun markdown-raw-links (&rest ignore)
-    "Convert link markup [ANCHOR](URL) to raw URL
-     so lsp-ui-doc--make-clickable-link can find it"
-    (save-excursion
-      (goto-char (point-min))
-      (while (re-search-forward markdown-regex-link-inline nil t)
-        (replace-match (replace-regexp-in-string "\n" "" (match-string 6))))))
-  (advice-add 'lsp--render-markdown :before #'markdown-raw-links)
-
-  ;; Fix for typescript lsp:
-  ;; https://github.com/typescript-language-server/typescript-language-server/issues/559#issuecomment-1259470791
-  ;; same definition as mentioned earlier
-  (advice-add 'json-parse-string :around
-    (lambda (orig string &rest rest)
-      (apply orig (s-replace "\\u0000" "" string)
-        rest)))
-  ;; minor changes: saves excursion and uses search-forward instead of re-search-forward
-  (advice-add 'json-parse-buffer :around
-    (lambda (oldfn &rest args)
-	    (save-excursion
-        (while (search-forward "\\u0000" nil t)
-          (replace-match "" nil t)))
-		  (apply oldfn args)))
-
-  ;; support translating uris that begin with deno:/ into temporary
-  ;; files based on the response of deno/virtualTextDocument:
-  ;;
-  ;; https://deno.land/x/deno@v1.10.2/cli/lsp/README.md
-  (advice-add 'lsp--locations-to-xref-items :around
-    (lambda (oldfn &rest args)
-      (mapcar
-        (lambda (entry)
-          (if (string-prefix-p "deno:/" (gethash "targetUri" entry))
-            (let* ((uri (gethash "targetUri" entry))
-                    (cleanedUri (string-trim-left uri "deno://?"))
-                    (contents (lsp-request "deno/virtualTextDocument"
-                                (list :textDocument (list :uri uri)))))
-              (puthash
-                "targetUri"
-                (make-temp-file (file-name-base cleanedUri) nil nil contents)
-                entry))))
-        (car args))
-      (apply oldfn args))))
-
 (use-package fish-mode
   :straight t
   :mode "\\.fish\\'")
@@ -1317,10 +1324,11 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 
   :hook
   (before-save . lsp-format-buffer)
+
   :init
   ;; formatting will be handled by lsp, NOT rust-mode
   (setq rust-format-on-save nil)
-  (add-hook 'rust-mode-hook #'lsp-deferred)
+  (add-hook 'poly-rust+web-mode-hook #'lsp-deferred)
   :config
   (evil-leader/set-key-for-mode 'rust-mode "tt" 'rust-test)
   (evil-leader/set-key-for-mode 'rust-mode "m e" (lambda () (interactive) (lsp-rust-analyzer-expand-macro)))
