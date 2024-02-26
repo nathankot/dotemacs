@@ -833,12 +833,6 @@
   (define-key evil-normal-state-map (kbd "] e") 'next-error)
   (define-key evil-normal-state-map (kbd "[ e") 'previous-error))
 
-(use-package turnip
-  :straight t
-  :commands turnip-send-region
-  :config
-  (evil-leader/set-key "ts" 'turnip-send-region))
-
 (use-package flyspell
   :straight t
   :hook (prog-mode . flyspell-prog-mode)
@@ -1004,6 +998,9 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :mode ("\\.md\\'" . prettier-mode)
   :mode ("\\.markdown\\'" . prettier-mode)
   :commands prettier-mode)
+
+(use-package polymode :straight t)
+(use-package poly-markdown :straight t)
 
 ;; LANGUAGE PACKS
 ;; ================================================================================
@@ -1250,8 +1247,8 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 
 (use-package markdown-mode
   :straight t
-  :mode "\\.md\\'"
-  :mode "\\.markdown\\'"
+  :mode ("\\.md\\'" . poly-markdown-mode)
+  :mode ("\\.markdown\\'" . poly-markdown-mode)
   :mode "^README\\'"
   :commands markdown-mode
   :config
@@ -1308,6 +1305,8 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :mode "\\.kt\\'")
 
 (use-package rust-mode
+  :straight t
+  :mode ("\\.rs\\'" . poly-rust+web-mode)
   :custom
   ;; (lsp-rust-analyzer-display-reborrow-hints "always")
   (lsp-rust-analyzer-display-parameter-hints t)
@@ -1319,15 +1318,24 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :hook
   (before-save . lsp-format-buffer)
   :init
-    ; formatting will be handled by lsp, NOT rust-mode
-    (setq rust-format-on-save nil)
-    (add-hook 'rust-mode-hook #'lsp-deferred)
+  ;; formatting will be handled by lsp, NOT rust-mode
+  (setq rust-format-on-save nil)
+  (add-hook 'rust-mode-hook #'lsp-deferred)
   :config
-    (evil-leader/set-key-for-mode 'rust-mode "tt" 'rust-test)
-    (evil-leader/set-key-for-mode 'rust-mode "m e" (lambda () (interactive) (lsp-rust-analyzer-expand-macro)))
+  (evil-leader/set-key-for-mode 'rust-mode "tt" 'rust-test)
+  (evil-leader/set-key-for-mode 'rust-mode "m e" (lambda () (interactive) (lsp-rust-analyzer-expand-macro)))
 
-  :straight t
-  :mode "\\.rs\\'")
+  (define-hostmode poly-rust-hostmode
+    :mode 'rust-mode)
+  (define-innermode poly-web-rust-innermode
+    :mode 'web-mode
+    :head-matcher "view! {"
+    :tail-matcher #'pm-forward-sexp-tail-matcher
+    :head-mode 'host
+    :tail-mode 'host)
+  (define-polymode poly-rust+web-mode
+    :hostmode 'poly-rust-hostmode
+    :innermodes '(poly-web-rust-innermode)))
 
 (use-package haskell-mode
   :straight t
