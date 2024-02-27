@@ -420,6 +420,11 @@
     '("package.json" "Makefile")
     :test "make test")
 
+  (projectile-register-project-type 'ruby-make
+    '("Gemfile" "Makefile")
+    :test-suffix "_spec"
+    :test "make test")
+
   (projectile-register-project-type 'go '("glide.yaml")
     :test-suffix "_test")
 
