@@ -1294,6 +1294,9 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :straight t
   :mode "\\.kt\\'")
 
+(use-package sqlformat
+  :straight t)
+
 (use-package rustic
   :straight t
   :mode ("\\.rs\\'" . poly-rust+web-mode)
