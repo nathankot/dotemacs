@@ -1295,7 +1295,9 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :mode "\\.kt\\'")
 
 (use-package sqlformat
-  :straight t)
+  :straight t
+  :init
+  (setq sqlformat-command 'pgformatter))
 
 (use-package rustic
   :straight t
