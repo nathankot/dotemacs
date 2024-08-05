@@ -1072,27 +1072,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 	    (save-excursion
         (while (search-forward "\\u0000" nil t)
           (replace-match "" nil t)))
-		  (apply oldfn args)))
-
-  ;; support translating uris that begin with deno:/ into temporary
-  ;; files based on the response of deno/virtualTextDocument:
-  ;;
-  ;; https://deno.land/x/deno@v1.10.2/cli/lsp/README.md
-  (advice-add 'lsp--locations-to-xref-items :around
-    (lambda (oldfn &rest args)
-      (mapcar
-        (lambda (entry)
-          (if (string-prefix-p "deno:/" (gethash "targetUri" entry))
-            (let* ((uri (gethash "targetUri" entry))
-                    (cleanedUri (string-trim-left uri "deno://?"))
-                    (contents (lsp-request "deno/virtualTextDocument"
-                                (list :textDocument (list :uri uri)))))
-              (puthash
-                "targetUri"
-                (make-temp-file (file-name-base cleanedUri) nil nil contents)
-                entry))))
-        (car args))
-      (apply oldfn args))))
+		  (apply oldfn args))))
 
 
 ;; LANGUAGE PACKS
@@ -1227,7 +1207,6 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 
 (use-package scss-mode
   :straight t
-  :mode "\\.sass\\'"
   :mode "\\.scss\\'"
   :init (setq scss-compile-at-save nil))
 
