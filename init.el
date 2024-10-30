@@ -12,8 +12,9 @@
  '(custom-safe-themes
     '("4c56af497ddf0e30f65a7232a8ee21b3d62a8c332c6b268c81e9ea99b11da0d3" "18cf5d20a45ea1dff2e2ffd6fbcd15082f9aa9705011a3929e77129a971d1cb3" "434f947950121d38d6246a4712014447a367a8e1b3a8c818c0b70e9a464147e7" "e70e87ad139f94d3ec5fdf782c978450fc2cb714d696e520b176ff797b97b8d2" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))
  '(safe-local-variable-values
-    '((lsp-rust-analyzer-checkonsave-features .
-        ["ssr"])
+    '((lsp-enabled-clients ruby-lsp-ls)
+       (lsp-rust-analyzer-checkonsave-features .
+         ["ssr"])
        (lsp-rust-analyzer-rustfmt-extra-args .
          [])
        (lsp-rust-analyzer-rustfmt-override-command .
@@ -1267,7 +1268,10 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :straight t
   :mode "\\.rb\\'"
   :init
-  (add-hook 'ruby-mode-hook #'lsp-deferred))
+  (add-hook 'ruby-mode-hook #'lsp-deferred)
+  :config
+  ;; lsp provides auto formatting:
+  (add-to-list 'flycheck-disabled-checkers 'ruby-rubocop))
 
 (use-package kotlin-mode
   :straight t
