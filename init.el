@@ -51,8 +51,6 @@
 
 (straight-use-package 'use-package)
 
-(use-package dash :straight t)
-
 (use-package exec-path-from-shell
   :straight t
   :init
@@ -368,6 +366,32 @@
     (dolist (path (seq-map (lambda (path) (concat (projectile-project-root) (substring path 2)))
                     (seq-filter (lambda (path) (string-prefix-p "./" path)) exec-path)))
       (push path exec-path)))
+
+  (defun file-name-extension-multi-ext (path)
+    (let ((splits (split-string (car (last (file-name-split path))) "\\.")))
+      (mapconcat #'identity (seq-subseq splits 1) ".")))
+
+  (defun file-name-base-multi-ext (path)
+    (let ((splits (split-string (car (last (file-name-split path))) "\\.")))
+      (car splits)))
+
+  (defun projectile-related-files-fn-multi-extensions (kind extensions)
+  "Generate a related-files-fn which relates as KIND for files having EXTENSIONS.
+   Supports multi-extensions like .html.erb.."
+  (lambda (path)
+    (let* ((ext (file-name-extension-multi-ext path))
+           (basename (file-name-base-multi-ext path))
+           (basename-regexp (regexp-quote basename)))
+      (when (member ext extensions)
+        (list kind (lambda (other-path)
+                     (and (string-match-p basename-regexp other-path)
+                          (equal basename (file-name-base-multi-ext other-path))
+                          (let ((other-ext (file-name-extension-multi-ext other-path)))
+                            (and (member other-ext extensions)
+                                 (not (equal other-ext ext)))))))))))
+
+
+
   :diminish projectile-mode
   :hook (projectile-mode . update-exec-path-projectile)
   :hook (projectile-after-switch-project . update-exec-path-projectile)
@@ -403,17 +427,8 @@
   (add-to-list 'projectile-globally-ignored-directories "node_modules")
   (add-to-list 'projectile-globally-ignored-directories "bower_components")
   (add-to-list 'projectile-globally-ignored-directories "vendor")
-                                        ; Register and support more project types
-
+  ; Register and support more project types
   ; Reset projectile project types (later has priority)
-
-  (projectile-register-project-type 'xcode
-    '("*.xcodeproj"))
-
-  (projectile-register-project-type 'xcode-make
-    '("Cartfile" "Makefile")
-    :test "make test"
-    :test-suffix "Spec")
 
   (projectile-register-project-type 'haskell
     '("stack.yaml")
@@ -423,16 +438,15 @@
     '("package.json" "Makefile")
     :test "make test")
 
-  (projectile-register-project-type 'ruby-make
-    '("Gemfile" "Makefile")
+  (projectile-register-project-type 'ruby-rails-rspec-components-make
+    '("Gemfile" "Makefile" "app" "lib" "db" "config" "spec" "app/components")
+    :project-file '("Gemfile" "Makefile")
     :test-suffix "_spec"
-    :test "make test")
-
-  (projectile-register-project-type 'go '("glide.yaml")
-    :test-suffix "_test")
-
-  (projectile-register-project-type 'go '("Gopkg.toml")
-    :test-suffix "_test")
+    :test-dir "spec/"
+    :test "make test"
+    :related-files-fn (list
+      (projectile-related-files-fn-multi-extensions :other '("rb" "html.erb" "scss"))
+      (projectile-related-files-fn-test-with-suffix "rb" "_spec")))
 
   (projectile-register-project-type 'go '("go.mod")
     :test-suffix "_test")
@@ -915,31 +929,6 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
     '("~/.emacs.d/.snippets/yasnippet-snippets"
        "~/.emacs.d/.snippets/personal")))
 
-(use-package counsel-dash
-  :straight t
-  :commands (counsel-dash
-              counsel-dash-set-local-docsets
-              counsel-dash-activate-local-docset
-              counsel-dash-activate-docset
-              counsel-dash-deactivate-docset
-              counsel-dash-install-docset)
-  :load-path "vendor/counsel-dash"
-  :init
-  (if (file-accessible-directory-p "/Volumes/Storage/.docset")
-    (setq counsel-dash-docsets-path "/Volumes/Storage/.docset")
-    (setq counsel-dash-docsets-path "~/.docset"))
-
-  (setq counsel-dash-browser-func 'eww)
-  (setq counsel-dash-common-docsets '("Emacs Lisp" "Swift" "iOS" "Javascript"))
-  (define-key evil-normal-state-map (kbd "C-f") 'counsel-dash)
-  (add-hook 'emacs-lisp-mode-hook (lambda () (setq-local counsel-dash-docsets '("Emacs Lisp"))))
-  (add-hook 'ruby-mode-hook (lambda () (setq-local counsel-dash-docsets '("Ruby"))))
-  (add-hook 'dockerfile-mode-hook (lambda () (setq-local counsel-dash-docsets '("Docker"))))
-  (add-hook 'js2-minor-mode-hook (lambda () (setq-local counsel-dash-docsets '("Javascript" "NodeJS"))))
-  (add-hook 'web-mode-hook (lambda () (setq-local counsel-dash-docsets '("Javascript" "HTML""CSS"))))
-  (add-hook 'scss-mode-hook (lambda () (setq-local counsel-dash-docsets '("CSS"))))
-  (add-hook 'swift-mode-hook (lambda () (setq-local counsel-dash-docsets '("iOS" "Swift")))))
-
 (use-package company
   :straight t
   :diminish
@@ -1208,7 +1197,7 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 
 (use-package scss-mode
   :straight t
-  :mode "\\.scss\\'"
+  :mode ("\\.scss\\'" . scss-mode)
   :init (setq scss-compile-at-save nil))
 
 (use-package php-mode
