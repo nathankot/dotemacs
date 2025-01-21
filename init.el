@@ -983,18 +983,9 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 (use-package prettier
   :straight t
   :diminish
-  :mode ("\\.ts\\'" . prettier-mode)
-  :mode ("\\.js\\'" . prettier-mode)
-  :mode ("\\.mjs\\'" . prettier-mode)
-  :mode ("\\.cjs\\'" . prettier-mode)
-  :mode ("\\.jsx\\'" . prettier-mode)
-  :mode ("\\.tsx\\'" . prettier-mode)
-  :mode ("\\.css\\'" . prettier-mode)
-  :mode ("\\.less\\'" . prettier-mode)
-  :mode ("\\.scss\\'" . prettier-mode)
-  :mode ("\\.md\\'" . prettier-mode)
-  :mode ("\\.markdown\\'" . prettier-mode)
-  :commands prettier-mode)
+  :commands prettier-mode
+  :config
+  (global-prettier-mode))
 
 (use-package polymode
   :straight t
@@ -1196,9 +1187,11 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
   :mode "\\.stylus\\'")
 
 (use-package scss-mode
-  :straight t
+  :no-require t
+  ;; :straight t
   :mode ("\\.scss\\'" . scss-mode)
-  :init (setq scss-compile-at-save nil))
+  :init
+  (setq scss-compile-at-save nil))
 
 (use-package php-mode
   :straight t
