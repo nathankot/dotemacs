@@ -445,7 +445,7 @@
     :test-dir "spec/"
     :test "make test"
     :related-files-fn (list
-      (projectile-related-files-fn-multi-extensions :other '("rb" "html.erb" "scss"))
+      (projectile-related-files-fn-multi-extensions :other '("rb" "html.erb" "scss" "yml" "en.yml" "es.yml"))
       (projectile-related-files-fn-test-with-suffix "rb" "_spec")))
 
   (projectile-register-project-type 'go '("go.mod")
