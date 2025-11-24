@@ -1055,6 +1055,10 @@ Otherwise deletes a character normally by calling `backward-delete-char'."
 ;; LANGUAGE PACKS
 ;; ================================================================================
 
+(use-package mermaid-mode
+  :straight t
+  :mode ("\\.mermaid\\'" . mermaid-mode))
+
 (use-package pine-script-mode
   :straight t
   :mode ("\\.pine\\'" . pine-script-mode)
