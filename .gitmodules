@@ -1,6 +1,3 @@
-[submodule "vendor/hc-zenburn-theme"]
-	path = vendor/hc-zenburn-theme
-	url = https://github.com/nathankot/hc-zenburn-emacs.git
 [submodule "vendor/company-sourcekit"]
 	path = vendor/company-sourcekit
 	url = https://github.com/nathankot/company-sourcekit.git
@@ -13,9 +10,3 @@
 [submodule "vendor/gocode"]
 	path = vendor/gocode
 	url = https://github.com/mdempsky/gocode.git
-[submodule "vendor/emacs-kanagawa-theme"]
-	path = vendor/emacs-kanagawa-theme
-	url = https://github.com/meritamen/emacs-kanagawa-theme.git
-[submodule "vendor/zenburn-emacs"]
-	path = vendor/zenburn-emacs
-	url = https://github.com/bbatsov/zenburn-emacs
